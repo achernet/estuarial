@@ -22,7 +22,7 @@ class Node():
             self._edge_labels[label].append(edge_out)
     
     def add_labels(self, labels):
-        self._labels = self._labels + labels
+        self._labels = self._labels + tuple(labels)
         
     def get_labels(self):
         return self._labels
@@ -48,7 +48,7 @@ class Edge(object):
     
     def add_labels(self, labels):
         if(self._labels is not None):
-            self._labels = self._labels + labels
+            self._labels = self._labels + tuple(labels)
            
 class TimeSeriesEdge(Edge):
     '''represents an edge between 2 nodes with timeseries weights'''   
@@ -134,20 +134,4 @@ if __name__ == '__main__':
     g = TSHyperGraph()
     g.add_node(node1)
     g.add_node(node2)
-    g.add_edge(node1,node2, None, None)    
-
-    # for i in range(1,1000000):
-    #     node = Node(["auto"],{"number":i})
-    #     g.add_node(node)
-
-    # <codecell>
-
-
-    # for i in range(1,1000000):
-    #     node = Node(["auto"],{"number":i})
-    #     g.add_node(node)
-    #     if(i % 2 == 0):
-    #         g.add_edge(node1,node,None,None)
-    #     else:
-    #         g.add_edge(node2,node,None,None)
-        
+    g.add_edge(node1,node2, None, None)
