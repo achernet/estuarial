@@ -1,30 +1,31 @@
 class Node():
     
     def __init__(self,labels,attributes):
-        self._attributes = {}
-        self._edges_in = []
-        self._edges_out = []
-        self._labels = []
-        self._edge_labels = []
+        self._edges_in = ()
+        self._edges_out = ()
+        self._labels = ()
+        self._edge_labels = {}
         
         self.add_labels(labels)
         self.attributes = attributes
     
     def add_edge_in(self, edge_in):
-        self._edges_in.append(edge_in)
+        self._edges_in = self._edges_in + (edge_in,)
+                
         for label in edge_in.get_labels():
             self._edge_labels[label].append(edge_in)
     
     def add_edge_out(self, edge_out):
-        self._edges_out.append(edge_out)
+        self._edges_out = self._edges_out + (edge_out,)
+        
         for label in edge_out.get_labels():
             self._edge_labels[label].append(edge_out)
     
     def add_labels(self, labels):
-        self._labels.extend(labels)
+        self._labels = self._labels + labels
         
     def get_labels(self):
-        return tuple(self._labels)
+        return self._labels
     
 class DataNode(Node):
     '''special node type representing a concrete source of raw data'''
@@ -32,7 +33,7 @@ class DataNode(Node):
 
 class Edge(object):
     '''represents an edge between 2 nodes'''
-
+  
     def __init__(self,start_node,end_node,wt,labels):
         self._start_node = start_node
         self._end_node = end_node
@@ -40,10 +41,14 @@ class Edge(object):
         self._wt = wt
         
     def get_labels(self):
-        return tuple(self._labels)
+        if(self._labels is not None):
+            return self._labels
+        else:
+            return ()
     
     def add_labels(self, labels):
-        self._labels.extend(labels)
+        if(self._labels is not None):
+            self._labels = self._labels + labels
            
 class TimeSeriesEdge(Edge):
     '''represents an edge between 2 nodes with timeseries weights'''   
@@ -81,7 +86,7 @@ class TSHyperGraph():
         start_node.add_edge_out(edge)
         end_node.add_edge_in(edge)
         
-        self._edges.append((start_node,end_node))
+        self._edges.append(edge)
     
     def add_ts_semihyperedge(self, start_node, end_node_list, wt_matrix, labels):
         hyperedge = TSSemiHyperEdge(start_node, end_node_list, wt_matrix, lables)
@@ -106,6 +111,8 @@ class TSHyperGraph():
                
             self._node_labels[label].append(node)
             
+    def get_all_nodes(self):
+        return self._nodes
             
     def get_nodes_by_label(self, label):
         if self._node_labels.has_key(label):
@@ -121,10 +128,26 @@ class TSHyperGraph():
     
 
 if __name__ == '__main__':
-    node1 = Node(["Node","1"],{"name":"node1_name"})
-    node2 = Node(["Node","2"],{"name":"node2_name"})
+    node1 = Node(("Node","1"),{"name":"node1_name"})
+    node2 = Node(("Node","2"),{"name":"node2_name"})
     
     g = TSHyperGraph()
     g.add_node(node1)
     g.add_node(node2)
-    g.add_edge(node1,node2,1,[])
+    g.add_edge(node1,node2, None, None)    
+
+    # for i in range(1,1000000):
+    #     node = Node(["auto"],{"number":i})
+    #     g.add_node(node)
+
+    # <codecell>
+
+
+    # for i in range(1,1000000):
+    #     node = Node(["auto"],{"number":i})
+    #     g.add_node(node)
+    #     if(i % 2 == 0):
+    #         g.add_edge(node1,node,None,None)
+    #     else:
+    #         g.add_edge(node2,node,None,None)
+        
