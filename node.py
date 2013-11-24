@@ -1,4 +1,4 @@
-class Node():
+class Node(object):
     
     def __init__(self,labels,attributes):
         self._edges_in = ()

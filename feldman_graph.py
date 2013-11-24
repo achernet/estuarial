@@ -1,7 +1,7 @@
 from node import Node
 from edge import Edge
 
-class TSHyperGraph():
+class TSHyperGraph(object):
     _nodes = []
     _edges = []
     _node_labels = {}
