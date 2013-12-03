@@ -39,8 +39,6 @@ class WSNDATA(base):
     seq_ = Column('Seq', Integer, primary_key=True)
     date_ = Column('Date_', SmallDateTime)
     value_ = Column('Value_', Float)
-    Index("pkey_Wsidata", 'Code', 'Item', 'Freq', 'Year_', 'Seq', mssql_clustered=True)
-
 
 class SECMAPX(base):
     __tablename__ = 'secmapx'
@@ -51,7 +49,6 @@ class SECMAPX(base):
     exchange = Column('Exchange', SmallInteger)
     startdate = Column('StartDate', DateTime)
     enddate = Column('EndDate', DateTime)
-    Index("pkey_SecCspChgX", 'SecCode', 'VenType', 'Rank', mssql_clustered=True)
 
     
 class WSFYE(base):
@@ -66,7 +63,6 @@ class WSFYE(base):
     code = Column('Code', Integer, primary_key=True)
     year_ = Column('Year_', SmallInteger, primary_key=True)
     date_ = Column('Date_', SmallDateTime)
-    Index('pkey_Wsfye', 'Code', 'Year_', mssql_clustered=True)
 
 
 query = session.query(WSNDATA).limit(50)
@@ -85,7 +81,7 @@ count = session.query(WSNDATA.year_, WSNDATA.seq_, WSNDATA.date_, WSNDATA.value_
 
 #Clean version of statement  
 '''SELECT
-    d.year_, d.seq, d.date_, value_, f.date_ 
+    d.year_, d.seq, d.date_, d.value_, f.date_ 
 FROM 
     wsndata d
 JOIN 
@@ -105,7 +101,6 @@ cursor = get_conn().cursor()
 cursor.execute(count_sql,36799,'1751','Q')
 print "Count for SQLALCHEMY: ", count, " Count from CURSOR: ", cursor.fetchall()[0][0]
 
-
 query = session.query(WSNDATA.year_, WSNDATA.seq_, WSNDATA.date_, WSNDATA.value_, WSFYE.date_).\
         join(SECMAPX, and_(SECMAPX.ventype == 10, SECMAPX.vencode == WSNDATA.code, SECMAPX.rank == 1)).\
         outerjoin(WSFYE, and_(WSFYE.code == WSNDATA.code, WSFYE.year_ == WSNDATA.year_)).\
@@ -114,7 +109,12 @@ query = session.query(WSNDATA.year_, WSNDATA.seq_, WSNDATA.date_, WSNDATA.value_
 
 data_records = [rec.__dict__ for rec in query.all()]
 df = pd.DataFrame.from_records(data_records)
-df = df = df.drop(['_labels'],axis=1)
+df = df.drop(['_labels'],axis=1)
+
+df.set_index(['date_'], inplace=True)
+
+print df.head(5)
+
 
 
 
