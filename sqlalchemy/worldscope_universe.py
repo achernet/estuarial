@@ -41,10 +41,11 @@ params = [IBM,GOOG,AAPL,NI,FREQ]
 
 cursor = get_conn().cursor()
 cursor.execute(sql,params)
+data = cursor.fetchdictarray()
 df = pd.DataFrame.from_dict(data)
 
 #select IBM
-df[df['seccode'] == IBM].head(5)
+df[df['seccode'] == int(IBM)].head(5)
 
 
 
@@ -100,5 +101,5 @@ df = pd.DataFrame.from_records(data_records)
 df = df.drop(['_labels'],axis=1)
 
 #select IBM
-df[df['seccode'] == IBM].head(5)
+df[df['seccode'] == int(IBM)].head(5)
 
