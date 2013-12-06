@@ -91,7 +91,7 @@ def get_props_foreach_ticker(entities, metrics):
     df_q2['ticker'] = df_q2['ticker'].astype('str')
     
     for code, tick in zip(seccodes, entities):
-        df_q2['ticker'].replace(code,tick,inplace=True)
+        df_q2['ticker'].replace(str(code),tick,inplace=True)
     
     return df_q2
 
@@ -109,7 +109,17 @@ print df[(df['ticker'] == 'IBM') & (df['item'] == NI)].head(5)
 
 
 
+'''
+Establish blaze array around worldscope and in array format 
 
+
+BLZ['SP500']['LIST OF ENTITIES']['LIST OF METRICS']
+
+BLZ['SP500'][['IBM','AAPL','MSFT']][[NI,TL,STD]]
+
+BLZ['SP500']['2010-10-09':'2013-12'05']
+
+'''
 
 
 
