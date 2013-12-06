@@ -24,7 +24,7 @@ def get_conn():
     conn = iopro.pyodbc.connect('Driver={%s};Server={%s};Database=qai;Uid={%s};Pwd={%s}'%(creds['driver'],creds['server'],creds['Uid'],creds['Pwd']))
     return conn
 
-def query(idx, entities, metrics):
+def get_props_foreach_ticker(entities, metrics):
 
     #default frequency to QUARTERLY
     FREQ = 'Q'
@@ -61,13 +61,13 @@ def query(idx, entities, metrics):
         '''
     cursor = get_conn().cursor()
     data = cursor.execute(sql,'2013-12-04','SPX_IDX').fetchdictarray()
-    df = pd.DataFrame.from_dict(data)
+    df_q1 = pd.DataFrame.from_dict(data)
 
     #find proper seccodes
-    seccodes = [df[df['TICKER'] == sec]['SECCODE'].values[0] for sec in entities]
+    seccodes = [df_q1[df_q1['TICKER'] == sec]['SECCODE'].values[0] for sec in entities]
 
-    #cursor doesn't like numpy.int32 convert to str
-    seccodes = [str(sec) for sec in seccodes]
+    #cursor doesn't like numpy.int32 convert to int
+    seccodes = [int(sec) for sec in seccodes]
 
     sql = '''
           select item, m.seccode, d.year_, d.seq, d.date_, d.value_, f.date_ from wsndata d
@@ -85,18 +85,18 @@ def query(idx, entities, metrics):
     params = seccodes+metrics+[FREQ]
     cursor.execute(sql,params)
     data = cursor.fetchdictarray()
-    df = pd.DataFrame.from_dict(data)
+    df_q2 = pd.DataFrame.from_dict(data)
 
-    df['ticker'] = df['seccode']
-    df['ticker'] = df['ticker'].astype('str')
+    df_q2['ticker'] = df_q2['seccode']
+    df_q2['ticker'] = df_q2['ticker'].astype('str')
     
     for code, tick in zip(seccodes, entities):
-        df['ticker'].replace(code,tick,inplace=True)
+        df_q2['ticker'].replace(code,tick,inplace=True)
     
-    return df
+    return df_q2
 
 
-df = query('SP500', ['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA])
+df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA])
 
 print df.head(5)
 
