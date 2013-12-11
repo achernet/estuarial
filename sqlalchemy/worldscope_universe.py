@@ -2,6 +2,7 @@ import iopro
 from iopro import pyodbc
 import pandas as pd
 import numpy as np
+import itertools
 
 creds = {
     "Uid": "qas_test",
@@ -24,7 +25,7 @@ def get_conn():
     conn = iopro.pyodbc.connect('Driver={%s};Server={%s};Database=qai;Uid={%s};Pwd={%s}'%(creds['driver'],creds['server'],creds['Uid'],creds['Pwd']))
     return conn
 
-def get_props_foreach_ticker(entities, metrics):
+def get_props_foreach_ticker(entities, metrics,dt_list=None):
 
     #default frequency to QUARTERLY
     FREQ = 'Q'
@@ -66,6 +67,8 @@ def get_props_foreach_ticker(entities, metrics):
     #find proper seccodes
     seccodes = [df_q1[df_q1['TICKER'] == sec]['SECCODE'].values[0] for sec in entities]
 
+    print seccodes
+
     #cursor doesn't like numpy.int32 convert to int
     seccodes = [int(sec) for sec in seccodes]
 
@@ -73,20 +76,35 @@ def get_props_foreach_ticker(entities, metrics):
           select item, m.seccode, d.year_, d.seq, d.date_, d.value_, f.date_ from wsndata d
           join secmapx m on m.ventype = 10 and m.vencode = d.code and rank = 1
           left outer join wsfye f on f.code = d.code and f.year_ = d.year_
-          where m.seccode in (%s) and item in (%s) and freq = ?
+          where m.seccode in (%s) and item in (%s) and freq = ? %s
           '''
-    
+    if not dt_list:
+        dts = ''
+        dt_list = []
+    else:
+        dts = ' and ('+' '.join(' (f.date_ >= ? and f.date_ <= ?) OR' for dt in dt_list)
+
+        # ( (f.date_ >= ? and f.date_ <= ?)  OR (f.date_ >= ? and f.date_ <= ?))
+        #slice off extra OR and add ending )
+        dts = dts[:-2]+')'
+
+        #flatten list of tuples
+        dt_list = list(itertools.chain.from_iterable(dt_list))
+
     secs = ', '.join('?' for sec in seccodes)
     mets = ', '.join('?' for m in metrics)
-    sql = sql % (secs,mets)
+    sql = sql % (secs,mets,dts)
 
     print sql
-
-    params = seccodes+metrics+[FREQ]
+    
+    params = seccodes+metrics+[FREQ]+dt_list
+    print params
     cursor.execute(sql,params)
-    data = cursor.fetchdictarray()
-    df_q2 = pd.DataFrame.from_dict(data)
-
+    
+    #swtich to fetchdictarry after fix for smalldatetime is finished
+    data = cursor.fetchall()
+    df_q2 = pd.DataFrame.from_records(data)
+    df_q2.columns = ['item','seccode','year', 'seq', 'date_','value','datetime']
     df_q2['ticker'] = df_q2['seccode']
     df_q2['ticker'] = df_q2['ticker'].astype('str')
     
@@ -96,7 +114,7 @@ def get_props_foreach_ticker(entities, metrics):
     return df_q2
 
 
-df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA])
+df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA],[('2001','2003'),('2007','2010')])
 
 print df.head(5)
 
@@ -120,10 +138,4 @@ BLZ['SP500'][['IBM','AAPL','MSFT']][[NI,TL,STD]]
 BLZ['SP500']['2010-10-09':'2013-12'05']
 
 '''
-
-
-
-
-
-
 
