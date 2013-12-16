@@ -20,10 +20,110 @@ LTD = 3251  # Long Term Debt
 TD = 3255   # Total Debt
 TA = 2999   # Total Assets
 
+# SECCODES
+# AAPL: 6027
+# IBM: 36799
+# MSFT: 46692
+
 
 def get_conn():
     conn = iopro.pyodbc.connect('Driver={%s};Server={%s};Database=qai;Uid={%s};Pwd={%s}'%(creds['driver'],creds['server'],creds['Uid'],creds['Pwd']))
     return conn
+
+def get_giccodes():
+    sql = '''select * from SPG2Code'''
+    cursor = get_conn().cursor()
+    
+    df = pd.DataFrame(cursor.execute(sql).fetchdictarray())
+
+    return df
+
+def get_giccode_by_seccode(seccode=None):
+    
+    sql = '''
+        SELECT S.ID
+        ,   S.CUSIP
+        ,   S.NAME
+        ,   G.SUBIND AS GIC_CODE
+        ,   C1.DESC_ AS SECTOR
+        ,   C2.DESC_ AS GROUP_
+        ,   C3.DESC_ AS INDUSTRY
+        ,   C4.DESC_ AS SUBINDUSTRY
+        ,   M.SECCODE
+        FROM         DBO.SECMSTRX S
+        JOIN     DBO.SECMAPX M
+            ON  M.SECCODE = S.SECCODE
+            AND M.VENTYPE = 18 -- S&P Gics Direct
+            AND M.RANK = 1
+        JOIN     DBO.SPGDGICS G
+            ON  G.GVKEY = M.VENCODE
+        JOIN     DBO.SPGCODE C1
+            ON  C1.CODE = LEFT(G.SUBIND,2)
+            AND C1.TYPE_ = 1 -- GICS Descriptions
+        JOIN     DBO.SPGCODE C2
+            ON  C2.CODE = LEFT(G.SUBIND,4)
+            AND C2.TYPE_ = 1 -- GICS Descriptions
+        JOIN     DBO.SPGCODE C3
+            ON  C3.CODE = LEFT(G.SUBIND,6)
+            AND C3.TYPE_ = 1 -- GICS Descriptions
+        JOIN     DBO.SPGCODE C4
+            ON  C4.CODE = G.SUBIND
+            AND C4.TYPE_ = 1 -- GICS Descriptions
+            WHERE M.SECCODE = ?
+        '''
+
+    cursor = get_conn().cursor()
+    data = cursor.execute(sql,seccode).fetchdictarray()
+    df_seccode = pd.DataFrame.from_dict(data)
+
+    print 'Returing giccodes dataframe'
+
+    return df_seccode
+
+
+def get_industry_by_giccode(code=None):
+    
+    sql = '''
+        SELECT  top 1000 S.ID
+        ,   S.CUSIP
+        ,   S.NAME
+        ,   G.SUBIND AS GIC_CODE
+        ,   C1.DESC_ AS SECTOR
+        ,   C2.DESC_ AS GROUP_
+        ,   C3.DESC_ AS INDUSTRY
+        ,   C4.DESC_ AS SUBINDUSTRY
+        ,   M.SECCODE
+        FROM         DBO.SECMSTRX S
+        JOIN     DBO.SECMAPX M
+            ON  M.SECCODE = S.SECCODE
+            AND M.VENTYPE = 18 -- S&P Gics Direct
+            AND M.RANK = 1
+        JOIN     DBO.SPGDGICS G
+            ON  G.GVKEY = M.VENCODE
+        JOIN     DBO.SPGCODE C1
+            ON  C1.CODE = LEFT(G.SUBIND,2)
+            AND C1.TYPE_ = 1 -- GICS Descriptions
+        JOIN     DBO.SPGCODE C2
+            ON  C2.CODE = LEFT(G.SUBIND,4)
+            AND C2.TYPE_ = 1 -- GICS Descriptions
+        JOIN     DBO.SPGCODE C3
+            ON  C3.CODE = LEFT(G.SUBIND,6)
+            AND C3.TYPE_ = 1 -- GICS Descriptions
+        JOIN     DBO.SPGCODE C4
+            ON  C4.CODE = G.SUBIND
+            AND C4.TYPE_ = 1 -- GICS Descriptions
+            WHERE G.SUBIND = ?
+            '''
+
+    cursor = get_conn().cursor()
+    data = cursor.execute(sql,code).fetchdictarray()
+    df_giccodes = pd.DataFrame.from_dict(data)
+
+    print 'Returing giccodes dataframe'
+
+    return df_giccodes
+
+
 
 def get_props_foreach_ticker(entities, metrics,dt_list=None):
 
@@ -116,6 +216,9 @@ def get_props_foreach_ticker(entities, metrics,dt_list=None):
 
 df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA],[('2001','2003'),('2007','2010')])
 
+#could also use pd.to_datetime()
+df['date_'] = df.date_.values.astype('datetime64[ns]')
+
 print df.head(5)
 
 #select IBM
@@ -125,6 +228,29 @@ print df[df['ticker'] == 'IBM'].head(5)
 print df[(df['ticker'] == 'IBM') & (df['item'] == NI)].head(5)
 
 
+#cache query in HDF5
+store = pd.HDFStore('query.h5')
+store.put('cache', df, table=True, data_columns=True) 
+store.flush()
+store.close()
+
+store = pd.HDFStore('query.h5')
+
+#select from table
+store.select('cache', where=[('ticker', ['MSFT','AAPL']), ('date_', '>', '2009-01-01')])
+
+#Get GICCODES for software
+gic_df = get_giccodes()
+print gic_df[gic_df['Desc_'].str.contains('Software')]
+
+#Get GICCODE for AAPL: 6027
+print get_giccode_by_seccode(6027)
+#returns 45202010 for Information Technology 
+
+software_df = get_industry_by_giccode(45202010)
+
+#pandas.join is a join on index
+#pandas.merge is a database-style join operation by
 
 
 '''
