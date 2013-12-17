@@ -32,8 +32,8 @@ def get_conn():
 
 def get_giccodes():
     sql = '''select * from SPG2Code'''
+
     cursor = get_conn().cursor()
-    
     df = pd.DataFrame(cursor.execute(sql).fetchdictarray())
 
     return df
@@ -213,6 +213,52 @@ def get_props_foreach_ticker(entities, metrics,dt_list=None):
     
     return df_q2
 
+def get_props_foreach_seccode(seccodes, metrics,dt_list=None):
+
+    #default frequency to QUARTERLY
+    FREQ = 'Q'
+
+    seccodes = [int(sec) for sec in seccodes]
+
+    sql = '''
+          select item, m.seccode, d.year_, d.seq, d.date_, d.value_, f.date_ from wsndata d
+          join secmapx m on m.ventype = 10 and m.vencode = d.code and rank = 1
+          left outer join wsfye f on f.code = d.code and f.year_ = d.year_
+          where m.seccode in (%s) and item in (%s) and freq = ? %s
+          '''
+    if not dt_list:
+        dts = ''
+        dt_list = []
+    else:
+        dts = ' and ('+' '.join(' (f.date_ >= ? and f.date_ <= ?) OR' for dt in dt_list)
+
+        # ( (f.date_ >= ? and f.date_ <= ?)  OR (f.date_ >= ? and f.date_ <= ?))
+        #slice off extra OR and add ending )
+        dts = dts[:-2]+')'
+
+        #flatten list of tuples
+        dt_list = list(itertools.chain.from_iterable(dt_list))
+
+    secs = ', '.join('?' for sec in seccodes)
+    mets = ', '.join('?' for m in metrics)
+    sql = sql % (secs,mets,dts)
+
+    print sql
+    
+    params = seccodes+metrics+[FREQ]+dt_list
+    print params
+    cursor = get_conn().cursor()
+    cursor.execute(sql,params)
+    
+    #swtich to fetchdictarry after fix for smalldatetime is finished
+    data = cursor.fetchall()
+    df_q2 = pd.DataFrame.from_records(data)
+    df_q2.columns = ['item','seccode','year', 'seq', 'date_','value','datetime']
+    df_q2['ticker'] = df_q2['seccode']
+    df_q2['ticker'] = df_q2['ticker'].astype('str')
+    
+    return df_q2
+
 
 df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA],[('2001','2003'),('2007','2010')])
 
@@ -249,9 +295,21 @@ print get_giccode_by_seccode(6027)
 
 software_df = get_industry_by_giccode(45202010)
 
+new_sec = set(software_df.SECCODE)
+old_sec = set(store['cache']['seccode'])
+
+#disjoin set of new and old
+new_sec.difference_update(old_sec)
+df = get_props_foreach_seccode(new_sec, [NI,CASH,TL,STD,TA],[('2001','2003'),('2007','2010')])
+
+
 #pandas.join is a join on index
 #pandas.merge is a database-style join operation by
 
+df_merge = pd.merge(df_query, df, on='SECCODE')
+
+#drop 'NA'
+df_merge.drop_duplicates(['SECCODE'],inplace=True)
 
 '''
 Establish blaze array around worldscope and in array format 
