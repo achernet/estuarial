@@ -46,8 +46,9 @@ def create_codes_temp_table(seccodes):
     #convert from numpy.int32 to int
     seccodes = [int(sec) for sec in seccodes]
 
-    cursor.execute('CREATE TABLE #tmp_codes (seccode CHAR(255))' )
-    cursor.executemany('INSERT INTO #tmp_codes VALUES (?)', [(sec,) for sec in seccodes])
+    cursor.execute('CREATE TABLE tmp_codes_bz (seccode INTEGER)' )
+    cursor.executemany('INSERT INTO tmp_codes_bz VALUES (?)',\
+                        [(sec,) for sec in seccodes])
 
 
 def get_giccode_by_seccode(seccodes=None):
