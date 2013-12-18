@@ -26,6 +26,7 @@ TA = 2999   # Total Assets
 # MSFT: 46692
 
 
+
 def get_conn():
     conn = iopro.pyodbc.connect('Driver={%s};Server={%s};Database=qai;Uid={%s};Pwd={%s}'%(creds['driver'],creds['server'],creds['Uid'],creds['Pwd']))
     return conn
@@ -38,8 +39,20 @@ def get_giccodes():
 
     return df
 
-def get_giccode_by_seccode(seccode=None):
-    
+def create_codes_temp_table(seccodes):
+   
+    cursor = get_conn().cursor()
+
+    #convert from numpy.int32 to int
+    seccodes = [int(sec) for sec in seccodes]
+
+    cursor.execute('CREATE TABLE #tmp_codes (seccode CHAR(255))' )
+    cursor.executemany('INSERT INTO #tmp_codes VALUES (?)', [(sec,) for sec in seccodes])
+
+
+def get_giccode_by_seccode(seccodes=None):
+             
+
     sql = '''
         SELECT S.ID
         ,   S.CUSIP
@@ -69,11 +82,22 @@ def get_giccode_by_seccode(seccode=None):
         JOIN     DBO.SPGCODE C4
             ON  C4.CODE = G.SUBIND
             AND C4.TYPE_ = 1 -- GICS Descriptions
-            WHERE M.SECCODE = ?
+            WHERE M.SECCODE in (select * in #tmp_codes) AND S.TYPE_ = 1
         '''
 
+    if not isinstance(seccodes,list):
+        seccodes = list(seccodes)
+
+    codes = ', '.join('?' for secs in seccodes)
+    sql = sql % (codes)
+
+    print sql   
     cursor = get_conn().cursor()
-    data = cursor.execute(sql,seccode).fetchdictarray()
+
+    #convert from numpy.int32 to int
+    seccodes = [int(sec) for sec in seccodes]
+
+    data = cursor.execute(sql,seccodes).fetchdictarray()
     df_seccode = pd.DataFrame.from_dict(data)
 
     print 'Returing giccodes dataframe'
@@ -97,7 +121,7 @@ def get_industry_by_giccode(code=None):
         JOIN     DBO.SECMAPX M
             ON  M.SECCODE = S.SECCODE
             AND M.VENTYPE = 18 -- S&P Gics Direct
-            AND M.RANK = 1
+            --AND M.RANK = 1
         JOIN     DBO.SPGDGICS G
             ON  G.GVKEY = M.VENCODE
         JOIN     DBO.SPGCODE C1
@@ -260,7 +284,8 @@ def get_props_foreach_seccode(seccodes, metrics,dt_list=None):
     return df_q2
 
 
-df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA],[('2001','2003'),('2007','2010')])
+df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA],\
+                              [('2001','2003'),('2007','2010')])
 
 #could also use pd.to_datetime()
 df['date_'] = df.date_.values.astype('datetime64[ns]')
@@ -283,7 +308,8 @@ store.close()
 store = pd.HDFStore('query.h5')
 
 #select from table
-store.select('cache', where=[('ticker', ['MSFT','AAPL']), ('date_', '>', '2009-01-01')])
+store.select('cache', where=[('ticker', ['MSFT','AAPL']), \
+            ('date_', '>', '2009-01-01')])
 
 #Get GICCODES for software
 gic_df = get_giccodes()
@@ -298,9 +324,10 @@ software_df = get_industry_by_giccode(45202010)
 new_sec = set(software_df.SECCODE)
 old_sec = set(store['cache']['seccode'])
 
-#disjoin set of new and old
+#disjoint set of new and old
 new_sec.difference_update(old_sec)
-df = get_props_foreach_seccode(new_sec, [NI,CASH,TL,STD,TA],[('2001','2003'),('2007','2010')])
+df = get_props_foreach_seccode(new_sec, [NI,CASH,TL,STD,TA], \
+                              [('2001','2003'),('2007','2010')])
 
 
 #pandas.join is a join on index
@@ -320,6 +347,7 @@ BLZ['SP500']['LIST OF ENTITIES']['LIST OF METRICS']
 BLZ['SP500'][['IBM','AAPL','MSFT']][[NI,TL,STD]]
 
 BLZ['SP500']['2010-10-09':'2013-12'05']
+BLZ['FTSE_100']['2010-10-09':'2013-12'05']
 
 '''
 
