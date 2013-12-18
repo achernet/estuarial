@@ -1,0 +1,36 @@
+{
+    "entity_source":[
+            {
+                "tablename":"RkdFndCmpRefIssue",
+                "schema":"dbo",
+                "ventype":26,
+                "entity_type": "Instrument",
+                "primary_key": "IssueID",
+                "resolving_properties":["sedol", "cusip", "isin", "exchange", "Ticker"]
+            },
+            {
+                "tablename":"RkdFndInfo",
+                "schema":"dbo",
+                "ventype":26,
+                "entity_type": "Organization"
+                "primary_key": "Code"
+            }
+        ]
+    "RKD_Fundamentals":{
+        "name":"RkdFndStdFinValExtra_v3017_1_3_1",
+        "schema":"palantir",
+        "ventype":26,
+        "column_aliases":{
+                       "VenCode": "code",
+                        "PrcIsrCode": "prcisrcode",
+                        "PeriodEndDate": "PerEndDt",
+                        "ReportDate": "SourceDt",                            
+                        "Value": "value_"
+                        },
+        "primary_key": "Code",
+        "date_columns": [
+                            "PeriodEndDate",
+                            "ReportDate"
+                         ]
+        }
+}

@@ -1,0 +1,30 @@
+{
+    "DS2EqMstr":{
+        "name": "DS2EqMstr_qadpy_2",
+        "schema":"trqa",
+         "column_aliases":{},
+         "primary_key": "infocode"
+    }
+
+    ,
+    "Ds2PrimQt":{
+        "name": "DS2PrimQtPrc",
+        "schema":"dbo",
+        "ventype": 33,
+        "column_aliases":{
+                            "VenCode": "InfoCode",
+                            "Date": "MarketDate",
+                            "Open": "Open_",
+                            "High": "High",
+                            "Low":  "Low",
+                            "Close": "Close_",
+                            "Volume": "Volume",
+                            "Currency": "ISOCurrCode",
+                            "LatestCurrency": "ISOCurrCode"
+                            },
+        "primary_key": "InfoCode",
+        "date_columns": [
+                            "Date"
+                         ]
+        }
+}

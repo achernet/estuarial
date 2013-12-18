@@ -1,0 +1,26 @@
+{
+    "type": "SQL",
+    "connection":   {
+					    "username": "qas_test",
+					    "password": "qasqasqas",
+					    "driver": "SQL Server Native Client 10.0",
+					    "server": "10.143.14.62",
+					    "port": "1433"
+			         },
+     "content_sets":    {
+                            "ds_equity_master": {
+                                                    "enabled": true,
+                                                    "entity_source": true
+                                                },
+                            "rkd":              {
+                                                    "enabled": true
+                                                },
+                            "ibes":              {
+                                                    "enabled": false
+                                                }
+                                               
+                        },
+                        
+    "db_object_suffix": "_1",
+    "writeable_schema": "trqa"
+}
