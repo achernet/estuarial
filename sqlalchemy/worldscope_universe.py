@@ -5,10 +5,10 @@ import numpy as np
 import itertools
 
 creds = {
-    "Uid": "qas_test",
-    "Pwd": "qasqasqas",
-    "driver": "/opt/microsoft/sqlncli/lib64/libsqlncli-11.0.so.1790.0",
-    "server": "10.143.14.62,1433"
+    "Uid": "bzaitlen",
+    "Pwd": "ZuLUpmxs",
+    "driver": "/usr/local/lib64/libsqlncli-11.0.so.1790.0",
+    "server": "107.21.201.126,2866"
 }
 
 
@@ -284,71 +284,72 @@ def get_props_foreach_seccode(seccodes, metrics,dt_list=None):
     
     return df_q2
 
-
-df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA],\
-                              [('2001','2003'),('2007','2010')])
-
-#could also use pd.to_datetime()
-df['date_'] = df.date_.values.astype('datetime64[ns]')
-
-print df.head(5)
-
-#select IBM
-print df[df['ticker'] == 'IBM'].head(5)
-
-#select IBM and Net Income
-print df[(df['ticker'] == 'IBM') & (df['item'] == NI)].head(5)
-
-
-#cache query in HDF5
-store = pd.HDFStore('query.h5')
-store.put('cache', df, table=True, data_columns=True) 
-store.flush()
-store.close()
-
-store = pd.HDFStore('query.h5')
-
-#select from table
-store.select('cache', where=[('ticker', ['MSFT','AAPL']), \
-            ('date_', '>', '2009-01-01')])
-
-#Get GICCODES for software
-gic_df = get_giccodes()
-print gic_df[gic_df['Desc_'].str.contains('Software')]
-
-#Get GICCODE for AAPL: 6027
-print get_giccode_by_seccode(6027)
-#returns 45202010 for Information Technology 
-
-software_df = get_industry_by_giccode(45202010)
-
-new_sec = set(software_df.SECCODE)
-old_sec = set(store['cache']['seccode'])
-
-#disjoint set of new and old
-new_sec.difference_update(old_sec)
-df = get_props_foreach_seccode(new_sec, [NI,CASH,TL,STD,TA], \
-                              [('2001','2003'),('2007','2010')])
-
-
-#pandas.join is a join on index
-#pandas.merge is a database-style join operation by
-
-df_merge = pd.merge(df_query, df, on='SECCODE')
-
-#drop 'NA'
-df_merge.drop_duplicates(['SECCODE'],inplace=True)
-
-'''
-Establish blaze array around worldscope and in array format 
-
-
-BLZ['SP500']['LIST OF ENTITIES']['LIST OF METRICS']
-
-BLZ['SP500'][['IBM','AAPL','MSFT']][[NI,TL,STD]]
-
-BLZ['SP500']['2010-10-09':'2013-12'05']
-BLZ['FTSE_100']['2010-10-09':'2013-12'05']
-
-'''
-
+if __name__ == '__main__':
+    
+    df = get_props_foreach_ticker(['IBM','AAPL','MSFT'], [NI,CASH,TL,STD,TA],\
+                                  [('2001','2003'),('2007','2010')])
+    
+    #could also use pd.to_datetime()
+    df['date_'] = df.date_.values.astype('datetime64[ns]')
+    
+    print df.head(5)
+    
+    #select IBM
+    print df[df['ticker'] == 'IBM'].head(5)
+    
+    #select IBM and Net Income
+    print df[(df['ticker'] == 'IBM') & (df['item'] == NI)].head(5)
+    
+    
+    #cache query in HDF5
+    store = pd.HDFStore('query.h5')
+    store.put('cache', df, table=True, data_columns=True) 
+    store.flush()
+    store.close()
+    
+    store = pd.HDFStore('query.h5')
+    
+    #select from table
+    store.select('cache', where=[('ticker', ['MSFT','AAPL']), \
+                ('date_', '>', '2009-01-01')])
+    
+    #Get GICCODES for software
+    gic_df = get_giccodes()
+    print gic_df[gic_df['Desc_'].str.contains('Software')]
+    
+    #Get GICCODE for AAPL: 6027
+    print get_giccode_by_seccode(6027)
+    #returns 45202010 for Information Technology 
+    
+    software_df = get_industry_by_giccode(45202010)
+    
+    new_sec = set(software_df.SECCODE)
+    old_sec = set(store['cache']['seccode'])
+    
+    #disjoint set of new and old
+    new_sec.difference_update(old_sec)
+    df = get_props_foreach_seccode(new_sec, [NI,CASH,TL,STD,TA], \
+                                  [('2001','2003'),('2007','2010')])
+    
+    
+    #pandas.join is a join on index
+    #pandas.merge is a database-style join operation by
+    
+    df_merge = pd.merge(df_query, df, on='SECCODE')
+    
+    #drop 'NA'
+    df_merge.drop_duplicates(['SECCODE'],inplace=True)
+    
+    '''
+    Establish blaze array around worldscope and in array format 
+    
+    
+    BLZ['SP500']['LIST OF ENTITIES']['LIST OF METRICS']
+    
+    BLZ['SP500'][['IBM','AAPL','MSFT']][[NI,TL,STD]]
+    
+    BLZ['SP500']['2010-10-09':'2013-12'05']
+    BLZ['FTSE_100']['2010-10-09':'2013-12'05']
+    
+    '''
+    
