@@ -9,9 +9,10 @@ from os.path import join as pjoin
 import os
 
 from feldman.arraymanagementclient import ArrayManagementClient
+from feldman.universe import Universe
 
 
-class universe_builder(ArrayManagementClient):
+class UniverseBuilder(ArrayManagementClient):
     """
     universe builder and pre-defined universes
     These funcs should belong in the catalogue?
@@ -26,14 +27,20 @@ class universe_builder(ArrayManagementClient):
         conn = ArrayManagementClient()
         arr = conn.aclient['UNIVERSE_SQL/country_universe.fsql']
         df = arr.select(and_(arr.CtryTradedIn=='US',arr.StatusCode=='A',arr.TypeCode=='EQ'))
-        return df
+        return Universe(df)
 
     @classmethod
     def can(self):
         conn = ArrayManagementClient()
         arr = conn.aclient['UNIVERSE_SQL/country_universe.fsql']
         df = arr.select(and_(arr.CtryTradedIn=='CA',arr.StatusCode=='A',arr.TypeCode=='EQ'))
-        return df
+        return Universe(df)
 
-
-us = fd.universe.us()
+    @classmethod
+    def spx_idx(self,dt):
+        conn = ArrayManagementClient()
+        spx = conn.aclient['/indexcomponents.sqlspec'].select(
+                iticker='SPX_IDX',
+                date_=dt,
+                )
+        return Universe(spx)

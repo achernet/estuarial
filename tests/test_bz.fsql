@@ -1,5 +1,3 @@
-DECLARE @ID     VARCHAR(20)
-SET     @ID     = 'MSFT' -- Microsoft
 
 SELECT          S.ID
         ,       S.CUSIP
@@ -18,5 +16,6 @@ FROM             DBO.SECMSTR S
                 UNION SELECT * FROM  DBO.DSQTRI5
                 UNION SELECT * FROM  DBO.DSQTRI6        ) R
                 ON      R.INFOCODE = M.VENCODE
-WHERE           S.ID = @ID
 ORDER BY        R.MARKETDATE
+---
+ID
