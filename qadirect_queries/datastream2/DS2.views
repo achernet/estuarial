@@ -1,0 +1,157 @@
+[trqa.Ds2ISINChg2]
+sql = 	SELECT 
+				s.PrimQtInfoCode AS InfoCode
+			,	i.StartDate
+			,	i.EndDate
+			,   i.ISIN 
+		FROM dbo.DS2ISINChg i 
+		INNER JOIN dbo.DS2Security s 
+		ON s.DsSecCode=i.DsSecCode 
+		WHERE i.ISIN IS NOT NULL 
+
+[trqa.DS2CapEventDesc]
+sql = 	SELECT 
+				e.InfoCode
+			,	e.EffectiveDate
+			,	convert(varchar, e.effectivedate, 102) + ' ' + x.Desc_ + 
+					CASE WHEN ActionTypeCode='SPLT' OR ActionTypeCode='REVS' THEN ' ' + cast(NumNewShares AS VARCHAR)+':'+cast(NumOldShares AS VARCHAR) 
+					ELSE CASE WHEN ActionTypeCode='SPNO' AND ResInfoCode IS NOT NULL THEN ' ' + (SELECT DsQtName FROM dbo.DS2CtryQtInfo WHERE InfoCode=e.ResInfoCode) 
+							ELSE '' END 
+						END AS Desc_ 
+		FROM dbo.ds2capevent e 
+		LEFT JOIN dbo.ds2xref x 
+		ON e.ActionTypeCode=x.Code 
+			AND x.type_=6 
+
+
+[trqa.Ds2DivCurrency]
+sql = 	SELECT 
+				div.InfoCode
+			,	div.ISOCurrCode 
+		FROM dbo.Ds2Div div 
+		INNER JOIN 
+			(SELECT 
+				div2.InfoCode
+				, MAX(div2.EffectiveDate) AS EffectiveDate 
+			FROM dbo.Ds2Div div2 
+			WHERE div2.DivTypeCode NOT IN ('STK', 'STO') 
+			GROUP BY div2.InfoCode) maxDivDate 
+		ON 
+			div.InfoCode = maxDivDate.InfoCode 
+			AND div.EffectiveDate = maxDivDate.EffectiveDate 
+		WHERE div.DivTypeCode NOT IN ('STK', 'STO') 
+
+[trqa.Ds2DivCurrencyNew]
+sql =	SELECT 
+				InfoCode
+			,	IsoCurrCode 
+		FROM dbo.Ds2ExchQtInfo qt
+		WHERE qt.IsPrimExchQt='Y' 
+			AND qt.IsoCurrCode IS NOT NULL 
+
+[trqa.Ds2DivSingleCurrency]
+sql = 	SELECT 
+			X.InfoCode
+			,	V.DivTypeCode
+			,	V.TaxMarker
+			,	V.PayDate
+			,	V.PayDateEstFlag
+			,	V.AnnouncedDate
+			,	V.AnnDateEstFlag
+			,	V.RecordDate
+			,	V.RecDateEstFlag
+			,	V.EffectiveDate
+			,	V.EffDateEstFlag
+			,	CASE R1.MIDRATE WHEN 0 THEN NULL 
+				ELSE ((V.DIVRATE / R1.MIDRATE) * R2.MIDRATE) END AS DivRate 
+		FROM dbo.Ds2Div V 
+		INNER JOIN trqa.Ds2DivCurrencyNew X 
+			ON V.INFOCODE = X.INFOCODE 
+		LEFT JOIN dbo.Ds2FxCode C1 
+			ON C1.FROMCURRCODE = V.ISOCURRCODE 
+			AND C1.TOCURRCODE = 'GBP' 
+			AND C1.RATETYPECODE = 'SPOT' 
+		LEFT JOIN dbo.Ds2FxRate R1 
+			ON R1.EXRATEINTCODE = C1.EXRATEINTCODE 
+			AND R1.EXRATEDATE = (SELECT MAX(EXRATEDATE) 
+									FROM dbo.Ds2FxRate 
+									WHERE EXRATEINTCODE = R1.EXRATEINTCODE 
+										AND EXRATEDATE <= V.EFFECTIVEDATE) 
+		LEFT JOIN dbo.Ds2FxCode C2 
+			ON C2.FROMCURRCODE = X.ISOCURRCODE 
+			AND C2.TOCURRCODE = 'GBP' 
+			AND C2.RATETYPECODE = 'SPOT' 
+		LEFT JOIN dbo.Ds2FxRate R2 
+			ON R2.EXRATEINTCODE = C2.EXRATEINTCODE 
+			AND R2.EXRATEDATE = (SELECT MAX(EXRATEDATE) 
+									FROM dbo.Ds2FxRate 
+									WHERE EXRATEINTCODE = R2.EXRATEINTCODE 
+										AND EXRATEDATE <= V.EFFECTIVEDATE) 
+
+[trqa.Ds2PrimQtInfo]
+sql =	SELECT 
+				info.InfoCode
+			,	exch.ExchMnem
+			,	exch.ExchCtryCode AS Country
+			,	mnem.Ticker
+			,	ctry.TypeCode
+			,	sed.Sedol 
+		FROM dbo.DS2ExchQtInfo AS info 
+		INNER JOIN (SELECT 
+							ExchMnem
+						,	ExchIntCode
+						,	CASE WHEN CtryCodeType = 2 and ExchCtryCode in ('ADH', 'DUB') THEN 'AE' 
+								 WHEN CtryCodeType = 1 THEN ExchCtryCode ELSE null 
+								 END as ExchCtryCode 
+					FROM dbo.ds2exchange) AS exch 
+			ON exch.ExchIntCode = info.ExchIntCode 
+			AND exch.ExchCtryCode IS NOT NULL 
+		LEFT OUTER JOIN (SELECT InfoCode, Ticker 
+							FROM dbo.Ds2MnemChg mnem2 
+							WHERE mnem2.EndDate >= '2060-01-01 00:00:00' 
+								AND mnem2.StartDate= (SELECT MAX(StartDate) 
+														FROM dbo.Ds2MnemChg 
+														WHERE (InfoCode = mnem2.InfoCode))) mnem 
+			ON mnem.InfoCode=info.InfoCode 
+		INNER JOIN dbo.DS2CtryQtInfo AS ctry 
+			ON ctry.InfoCode = info.InfoCode 
+		LEFT OUTER JOIN dbo.DS2SEDOLChg sed 
+			ON ctry.INFOCODE = sed.INFOCODE 
+			AND sed.STARTDATE = (SELECT MAX(STARTDATE) FROM dbo.DS2SEDOLCHG WHERE INFOCODE = Ctry.INFOCODE) 
+		WHERE info.IsPrimExchQt = 'Y' 
+
+[trqa.Ds2PrimQtInfoSimple]
+sql = 	SELECT 
+				info.InfoCode
+			,	info.DsQtName AS Name
+			,	info.ISOCurrCode
+			,	CASE WHEN info.PriceUnit IN('E02', 'E-02') THEN 0.01 ELSE 1.0 END AS Multiplier 
+		FROM dbo.DS2ExchQtInfo AS info 
+		WHERE info.IsPrimExchQt = 'Y' 
+
+[trqa.DS2RegionName]
+sql = 	SELECT 
+				InfoCode
+			,	r.Name_ AS RegionName 
+		FROM dbo.DS2CtryQtInfo c 
+		INNER JOIN dbo.DS2Region r 
+			ON c.RegCodeTypeId = r.RegCodeTypeId 
+			AND c.Region = r.Region 
+
+[trqa.Ds2StockDividends]
+sql = 	SELECT 
+				InfoCode
+			,	EventNum
+			,	ActionTypeCode
+			,	EffectiveDate
+			,	(NumNewShares / NumOldShares) AS Rate 
+		FROM dbo.Ds2CapEvent 
+		WHERE ActionTypeCode IN ('STKD') 
+			AND NumOldShares <> 0 
+
+[trqa.Ds2SecondaryExchanges]
+sql = 	SELECT DISTINCT InfoCode, ExchIntCode 
+		FROM dbo.Ds2ScdQtPrc 
+			UNION 
+		SELECT DISTINCT InfoCode, ExchIntCode 
+		FROM dbo.Ds2ScdQtRI 
