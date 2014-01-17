@@ -35,3 +35,11 @@ class Universe(ArrayManagementClient):
         arr  = self.aclient['worldscope_metrics/wsndata.fsql']
         eps = [arr.select(and_(arr.seccode.in_(chunk),arr.item==item,arr.freq==freq)) for chunk in chunks]
         return eps
+
+    @property
+    def ohlc(self):
+        '''
+
+        '''
+
+
