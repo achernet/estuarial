@@ -24,7 +24,7 @@ setup(
                                'SQL_DATA/*.bsqlspec',
                                'SQL_DATA/*.sqlspec',
                                'SQL_DATA/UNIVERSE_SQL/*',
-                               'SQL_DATA/WSNDATA/*',
+                               'SQL_DATA/WORLDSCOPE/*',
                                'SQL_DATA/datalib/*',
                                'trqadrc.ini']},
     zip_safe=False,

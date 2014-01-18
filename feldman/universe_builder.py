@@ -11,6 +11,15 @@ import os
 from feldman.arraymanagementclient import ArrayManagementClient
 from feldman.universe import Universe
 
+def lower_columns(df):
+        """
+        lower all column names
+        """
+
+        cols = [col.lower() for col in df.columns]
+        df.columns = cols
+        return df
+
 
 class UniverseBuilder(ArrayManagementClient):
     """
@@ -25,22 +34,26 @@ class UniverseBuilder(ArrayManagementClient):
     @classmethod
     def us(self):
         conn = ArrayManagementClient()
-        arr = conn.aclient['UNIVERSE_SQL/country_universe.fsql']
-        df = arr.select(and_(arr.CtryTradedIn=='US',arr.StatusCode=='A',arr.TypeCode=='EQ'))
+        arr = conn.aclient['/UNIVERSE_SQL/country_universe.fsql']
+        df = arr.select(and_(arr.ctrytradedin=='US',arr.statuscode=='A',arr.typecode=='EQ'))
+        df = lower_columns(df)
         return Universe(df)
 
     @classmethod
     def can(self):
         conn = ArrayManagementClient()
-        arr = conn.aclient['UNIVERSE_SQL/country_universe.fsql']
-        df = arr.select(and_(arr.CtryTradedIn=='CA',arr.StatusCode=='A',arr.TypeCode=='EQ'))
+        arr = conn.aclient['/UNIVERSE_SQL/country_universe.fsql']
+        df = arr.select(and_(arr.ctrytradedin=='CA',arr.statuscode=='A',arr.typecode=='EQ'))
+        df = lower_columns(df)
         return Universe(df)
 
     @classmethod
     def spx_idx(self,dt):
         conn = ArrayManagementClient()
-        spx = conn.aclient['/indexcomponents.sqlspec'].select(
-                iticker='SPX_IDX',
-                date_=dt,
-                )
-        return Universe(spx)
+        arr = conn.aclient['/UNIVERSE_SQL/spx_universe.fsql']
+
+        df = arr.select(and_(arr.iticker=='SPX_IDX',arr.date_==dt))
+        df = lower_columns(df)
+
+        return Universe(df)
+

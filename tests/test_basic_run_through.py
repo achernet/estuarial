@@ -17,4 +17,6 @@ TA = 2999   # Total Assets
 
 dt_list = (dt.datetime(2000,1,1), dt.datetime(2014,1,1))
 metrics = [NI,CASH,TL]
-tr.ws_meas(universe,metrics,dt_list)
+tr.worldscope(universe,metrics,dt_list)
+
+

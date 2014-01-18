@@ -1,0 +1,18 @@
+        SELECT item
+        ,   m.seccode
+        ,   d.year_
+        ,   d.seq
+        ,   d.value_
+        ,   d.date_ as ddate
+        ,   f.date_ as fdate
+        ,   freq
+        FROM    wsndata d
+        join    secmapx m
+            on m.ventype = 10
+            and m.vencode = d.code
+            and rank = 1
+        left outer join wsfye f
+            on f.code = d.code
+            and f.year_ = d.year_
+---
+seccode, item, freq
