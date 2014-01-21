@@ -1,10 +1,10 @@
 from __future__ import print_function, division, absolute_import
 
 from sqlalchemy.sql import column, and_, or_
-
+import datetime as dt
 from feldman.arraymanagementclient import ArrayManagementClient
+import feldman.indexing as indexing
 
-import pdb
 class Universe(ArrayManagementClient):
     """
     universe object
@@ -36,16 +36,28 @@ class Universe(ArrayManagementClient):
 
         arr  = self.aclient['/WORLDSCOPE/worldscope_metrics.fsql']
 
-        eps = [arr.select(and_(arr.seccode.in_(chunk),arr.item==item,arr.freq==freq)) for chunk in chunks]
-        return eps
+        ni = [arr.select(and_(arr.seccode.in_(chunk),arr.item==item,arr.freq==freq)) for chunk in chunks]
+        return ni
 
-    @property
-    def ohlc(self):
-        '''
+    
+    # fancy method of instantiating object
+    @classmethod
+    def _create_metrics(cls, name, metric):
+        """ create a metric like _name in the class """
 
-        '''
-        pass
+        if getattr(cls, name, None) is None:
+            iname = '_%s' % name
+            setattr(cls, iname, None)
+
+            def _metric(self):
+                i = getattr(self, iname)
+                if i is None:
+                    i = metric(self, name)
+                    setattr(self, iname, i)
+                return i
+
+            setattr(cls, name, property(_metric))
 
 
-
-
+for _name, _metric in indexing.get_metrics_list():
+    Universe._create_metrics(_name, _metric)

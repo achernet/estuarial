@@ -29,7 +29,7 @@ class UniverseBuilder(ArrayManagementClient):
     """
 
     def __init__(self):
-        super(universe_builder, self).__init__()
+        super(UniverseBuilder, self).__init__()
 
     @classmethod
     def us(self):
@@ -56,4 +56,15 @@ class UniverseBuilder(ArrayManagementClient):
         df = lower_columns(df)
 
         return Universe(df)
+
+    @classmethod
+    def spx_idx(self,dt):
+        conn = ArrayManagementClient()
+        arr = conn.aclient['/UNIVERSE_SQL/spx_universe.fsql']
+
+        df = arr.select(and_(arr.iticker=='SPX_IDX',arr.date_==dt))
+        df = lower_columns(df)
+
+        return Universe(df)
+
 

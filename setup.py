@@ -25,6 +25,7 @@ setup(
                                'SQL_DATA/*.sqlspec',
                                'SQL_DATA/UNIVERSE_SQL/*',
                                'SQL_DATA/WORLDSCOPE/*',
+                               'SQL_DATA/DataStream/*',
                                'SQL_DATA/datalib/*',
                                'trqadrc.ini']},
     zip_safe=False,

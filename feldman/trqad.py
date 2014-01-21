@@ -33,6 +33,7 @@ class TRQAD(ArrayManagementClient):
         :param entity:
 
         """
+
         secmstrx_df = self.aclient['/sec.fsql']
         if not entity:
             return secmstrx_df
@@ -71,13 +72,21 @@ class TRQAD(ArrayManagementClient):
 
         """
 
-        ws_data = self.aclient['/WSNDATA/wsndata.bsqlspec'].select(
+        ws_data = self.aclient['/WORLDSCOPE/wsndata.bsqlspec'].select(
                     seccode=universe,
                     item=metrics,
                     freq=freq,
                     fdate=[dt_list[0], dt_list[1]]
                     )
         return ws_data
+
+    def datastream(self,universe,metrics, dt_list):
+        """
+        :param: metrics: open, high, low, close, vwap, totalreturn, volume, bid, ask
+        mosttrdprc
+        consolvol
+        """
+
 
     def ds_meas_ohlc(self,universe,dt_list):
         """
@@ -151,6 +160,8 @@ class TRQAD(ArrayManagementClient):
         select * from secmstrx
         ---
         seccode, name
+
+        DEFAULT BEHAVIOR IS WRITING OVER FILE
         """
 
         declares, sets, fields, comments, output = self.tr_sql_parser(file_input)

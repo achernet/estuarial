@@ -20,3 +20,9 @@ metrics = [NI,CASH,TL]
 tr.worldscope(universe,metrics,dt_list)
 
 
+
+spx = fd.UniverseBuilder.spx_idx('2013-12-04')
+df =  spx.data
+spx.data = df[df.name.str.contains("Machine")]
+spx.ohlc['2009-01-01':'2014-01-01']
+spx.cash['2009-01-01':'2014-01-01']

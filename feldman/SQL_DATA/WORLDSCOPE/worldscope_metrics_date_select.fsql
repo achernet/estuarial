@@ -15,5 +15,4 @@
             on f.code = d.code
             and f.year_ = d.year_
 ---
-seccode, item, freq
----
+seccode, item, freq, fdate
