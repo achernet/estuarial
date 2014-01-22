@@ -27,10 +27,13 @@ class TRQAD(ArrayManagementClient):
     def find_entity(self,entity=None):
         """
         :type entity: int
-        :param entity:
+        :param entity: seccode to match on
 
         :type entity: string
-        :param entity:
+        :param entity: name to match on
+
+        :rtype: `pandas.DataFrame`
+        :return: DataFrame of match
 
         """
 
@@ -49,7 +52,7 @@ class TRQAD(ArrayManagementClient):
         codes = self.aclient['/gicsec'].select(where=[('INDUSTRY', name)])
         return codes
 
-    def ws_meas(self,universe, metrics,dt_list,freq='Q'):
+    def worldscope(self,universe, metrics,dt_list,freq='Q'):
         """
         Query the WorldScope DB for metrics defined by the user
         with a given universe.  Metrics are fundamentals commonly
@@ -85,13 +88,23 @@ class TRQAD(ArrayManagementClient):
         :param: metrics: open, high, low, close, vwap, totalreturn, volume, bid, ask
         mosttrdprc
         consolvol
+
+        :type universe: list
+        :param universe: list of securities
+
+        :type dt_list: list/tuple
+        :param dt_list: Beginning and end market dates for query
+
+        :rtype: `pandas.DataFrame`
+        :return: DataFrame of Securities with a TimeSeries of OHLC
+
         """
 
 
-    def ds_meas_ohlc(self,universe,dt_list):
+    def ds_ohlc(self,universe,dt_list):
         """
         Query the Datastream DB for Open, High, Low, Close
-        with a given universe
+        with a given universe (convenience function)
 
         :type universe: list
         :param universe: list of securities

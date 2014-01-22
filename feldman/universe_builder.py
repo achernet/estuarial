@@ -48,17 +48,28 @@ class UniverseBuilder(ArrayManagementClient):
         return Universe(df)
 
     @classmethod
-    def spx_idx(self,dt):
-        conn = ArrayManagementClient()
-        arr = conn.aclient['/UNIVERSE_SQL/spx_universe.fsql']
+    def djx_idx(self, dt):
+        """
 
-        df = arr.select(and_(arr.iticker=='SPX_IDX',arr.date_==dt))
+        :param dt: DateTime
+        :return: Dow Jones Universe on a given date
+        """
+
+        conn = ArrayManagementClient()
+        arr = conn.aclient['/UNIVERSE_SQL/dowjones_universe.fsql']
+
+        df = arr.select(and_(arr.iticker=='DJX_IDX',arr.date_==dt))
         df = lower_columns(df)
 
         return Universe(df)
 
     @classmethod
     def spx_idx(self,dt):
+        """
+        :param dt: DateTime
+        :return: SP500 Universe on a given date
+        """
+
         conn = ArrayManagementClient()
         arr = conn.aclient['/UNIVERSE_SQL/spx_universe.fsql']
 

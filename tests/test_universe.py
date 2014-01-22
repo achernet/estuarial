@@ -1,17 +1,9 @@
 import feldman as fd
 
 spx = fd.UniverseBuilder.spx_idx('2013-12-04')
+dow = fd.UniverseBuilder.djx_idx('2013-12-04')
 
-spx.NI
-spx.CASH
-spx.EPS
-spx.LTD
-spx.BLAHABLAHB
+dow.ohlc['2013-12-01':'2014-01-22']
 
-spx.ohlc
-
-spx.ohlc('')
-
-fd.ws_meas[begin:end](codes,[NI,CASH,EPS],,freq='Q')
 
 

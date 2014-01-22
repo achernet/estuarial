@@ -39,25 +39,26 @@ class Universe(ArrayManagementClient):
         ni = [arr.select(and_(arr.seccode.in_(chunk),arr.item==item,arr.freq==freq)) for chunk in chunks]
         return ni
 
-    
-    # fancy method of instantiating object
     @classmethod
-    def _create_metrics(cls, name, metric):
-        """ create a metric like _name in the class """
+    def _create_metrics(cls, name, metric_class):
+        """
+        fancy method of instantiating object
+
+        """
 
         if getattr(cls, name, None) is None:
-            iname = '_%s' % name
-            setattr(cls, iname, None)
+            underscore_name = '_%s' % name
+            setattr(cls, underscore_name, None)
 
-            def _metric(self):
-                i = getattr(self, iname)
+            def _metric_loader(self):
+                i = getattr(self, underscore_name)
                 if i is None:
-                    i = metric(self, name)
-                    setattr(self, iname, i)
+                    i = metric_class(self, name)
+                    setattr(self, underscore_name, i)
                 return i
 
-            setattr(cls, name, property(_metric))
+            setattr(cls, name, property(_metric_loader))
 
 
-for _name, _metric in indexing.get_metrics_list():
-    Universe._create_metrics(_name, _metric)
+for _name, _metric_class in indexing.get_metrics_list():
+    Universe._create_metrics(_name, _metric_class)
