@@ -52,6 +52,12 @@ class TRQAD(ArrayManagementClient):
         codes = self.aclient['/gicsec'].select(where=[('INDUSTRY', name)])
         return codes
 
+    def get_rkd_items(self):
+        '''retrieve rkd items dataframe and add enumeration'''
+        items = items = tr.aclient['/RKD/items'].select()
+        for item in items[index_name]:
+            setattr(items,item,items[items[index_name]==item].Item)
+
     def worldscope(self,universe, metrics,dt_list,freq='Q'):
         """
         Query the WorldScope DB for metrics defined by the user
