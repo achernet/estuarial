@@ -54,9 +54,31 @@ class TRQAD(ArrayManagementClient):
 
     def get_rkd_items(self):
         '''retrieve rkd items dataframe and add enumeration'''
-        items = items = tr.aclient['/RKD/items'].select()
-        for item in items[index_name]:
-            setattr(items,item,items[items[index_name]==item].Item)
+        index_name = 'COA'
+        items = self.aclient['/RKD/items'].select()
+        for i in items[index_name]:
+            thisitem = items[items[index_name]==i] 
+            setattr(items,i,thisitem)
+        return items
+
+    def get_ibes_measures(self):
+        index_name = 'Measure'
+        items = self.aclient['/IBES/items'].select()
+        for i in items[index_name]:
+            thisitem = items[items[index_name]==i] 
+            setattr(items,i,thisitem)
+        return items
+
+    def ibes_detail_actuals(self,universe,measures,dt_list,freq='Q'):
+
+        ibes_data = self.aclient['/IBES/ibd_actuals'].select(
+            code=universe,
+            measureCode=measures,
+            freq=freq,
+            fdate=[dt_list[0], dt_list[1]]
+            )
+        return ibes_data
+
 
     def worldscope(self,universe, metrics,dt_list,freq='Q'):
         """
