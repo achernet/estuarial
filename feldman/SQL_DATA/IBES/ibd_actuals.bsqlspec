@@ -1,0 +1,54 @@
+
+/*
+	I/B/E/S DETAIL HISTORY (ACTUALS)
+	--------------------------------------------
+	This query returns I/B/E/S actuals data back to 1976.
+	Report Dates are only available with a Detail license. 
+	
+	This query retrieves levels 1-3 (25+ measures).  Please comment out L2 or L3 if not entitled.  
+			
+*/
+
+SELECT		I.CODE, N.ITICKER, N.NAME, I.MEASURE, I.PERTYPE, 
+			CASE I.PERTYPE WHEN 'A' THEN 'ANNUAL' 
+			ELSE 'QUARTERLY' 
+			END [DESC_],
+			I.PERDATE, I.VALUE_, I.RPTDATE
+
+FROM		IBDACTL1 I
+
+JOIN		IBESINFO3 N
+ON			N.CODE = I.CODE
+
+UNION ALL
+
+SELECT		I.CODE, N.ITICKER, N.NAME, I.MEASURE, I.PERTYPE, 
+			CASE I.PERTYPE WHEN 'A' THEN 'ANNUAL' 
+			ELSE 'QUARTERLY' 
+			END [DESC_],
+			I.PERDATE, I.VALUE_, I.RPTDATE
+
+FROM		IBDACTL2 I
+
+JOIN		IBESINFO3 N
+ON			N.CODE = I.CODE
+
+UNION ALL
+
+SELECT		I.CODE, N.ITICKER, N.NAME, I.MEASURE, I.PERTYPE, 
+			CASE I.PERTYPE WHEN 'A' THEN 'ANNUAL' 
+			ELSE 'QUARTERLY' 
+			END [DESC_],
+			I.PERDATE, I.VALUE_, I.RPTDATE
+
+FROM		IBDACTL3 I
+
+JOIN		IBESINFO3 N
+ON			N.CODE = I.CODE
+
+---
+
+CODE, MEASURE, PERTYPE
+
+---
+RPTDATE

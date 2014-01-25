@@ -12,8 +12,8 @@ creds = {
     "Uid": "qas_test",
     "Pwd": "qasqasqas",
 }
-sql_alchemy_conn = "mssql+pyodbc://qas_test:qasqasqas@tdstest"
-connstring = 'DSN=tdstest;UID=%s;PWD=%s'%(creds['Uid'],creds['Pwd'])
+sql_alchemy_conn = "mssql+pyodbc://qas_test:qasqasqas@trqa62"
+connstring = 'DSN=trqa62;UID=%s;PWD=%s'%(creds['Uid'],creds['Pwd'])
 global_config = dict(
     is_dataset = False,
     csv_options = {},
