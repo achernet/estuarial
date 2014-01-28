@@ -29,7 +29,6 @@ package_data = dict(feldman=get_sql_files())
 package_data['feldman'].append('trqadrc.ini')
 
 __version__ = (0, 0, 1)
-changed SQL_DATA packaging to scan files and add files automatically rather than explicitly stating files in setup.py
 
 setup(
     name = 'feldman',
