@@ -67,7 +67,7 @@ class _CASHIndexer(_TRUniverseIndexer):
                                     arr.item==item,
                                     arr.freq==freq,
                                     arr.fdate >=start,
-                                    arr.fdate >=stop
+                                    arr.fdate <=stop
                                   )
                              )
             return cash
