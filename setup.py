@@ -1,4 +1,6 @@
 import sys
+import os
+from os.path import splitext, basename, join as pjoin
 
 if 'develop' in sys.argv:
     # Don't import setuptools unless the user is actively trying to do
@@ -9,7 +11,25 @@ else:
   from distutils.core import setup
   import sys
 
+curdir = os.path.abspath(os.path.dirname(__file__))
+
+suffix_list = ['*.sql','*.fsql','*.bsqlspec','*.sqlspec','*.py']
+def get_sql_files():
+    data_files = []
+    root = pjoin("feldman","SQL_DATA")
+
+    for r, ds, fs in os.walk(root):
+        path = r[r.find('SQL_DATA'):]
+        sql_files = [pjoin(path,suf) for suf in suffix_list]
+        data_files = data_files+sql_files
+    return data_files
+
+
+package_data = dict(feldman=get_sql_files())
+package_data['feldman'].append('trqadrc.ini')
+
 __version__ = (0, 0, 1)
+changed SQL_DATA packaging to scan files and add files automatically rather than explicitly stating files in setup.py
 
 setup(
     name = 'feldman',
@@ -19,15 +39,7 @@ setup(
     url = 'http://github.com/ContinuumIO/feldman',
     description = 'Python TRQAD API',
     packages = ['feldman'],
-    package_data = {'feldman':['SQL_DATA/*.sql',
-                               'SQL_DATA/*.fsql',
-                               'SQL_DATA/*.bsqlspec',
-                               'SQL_DATA/*.sqlspec',
-                               'SQL_DATA/UNIVERSE_SQL/*',
-                               'SQL_DATA/WORLDSCOPE/*',
-                               'SQL_DATA/DataStream/*',
-                               'SQL_DATA/datalib/*',
-                               'trqadrc.ini']},
+    package_data = package_data,
     zip_safe=False,
     install_requires=['pandas>=0.12.0','numpy>=1.7.1',
                       'scipy=>0.12.0','arraymanagement>0.0.1',
