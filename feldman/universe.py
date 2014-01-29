@@ -20,25 +20,6 @@ class Universe(ArrayManagementClient):
     def __str__(self):
         return ("TR Universe")
 
-    @property
-    def NI(self):
-        '''NET INCOME USED TO CALCULATE BASIC EARNINGS PER SHARE
-        problems, no arguments for freq, datetime
-        '''
-
-        universe = self.data.seccode.tolist()
-        chunksize = 2000
-        chunks  = [universe[start:start+chunksize] for start in range(0, len(universe), chunksize)]
-
-        # 5201 	EARNINGS PER SHARE
-        item = 1751
-        freq='Q'
-
-        arr  = self.aclient['/WORLDSCOPE/worldscope_metrics.fsql']
-
-        ni = [arr.select(and_(arr.seccode.in_(chunk),arr.item==item,arr.freq==freq)) for chunk in chunks]
-        return ni
-
     @classmethod
     def _create_metrics(cls, name, metric_class):
         """

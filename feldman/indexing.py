@@ -12,6 +12,7 @@ def get_metrics_list():
     return [
         ('ohlc', _OHLCIndexer),
         ('cash', _CASHIndexer),
+        ('ni', _NIIndexer),
     ]
 
 class _TRUniverseIndexer(ArrayManagementClient):
@@ -75,8 +76,27 @@ class _CASHIndexer(_TRUniverseIndexer):
             raise TypeError("index must be datetime slice")
 
 
+class _NIIndexer(_TRUniverseIndexer):
 
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            start = index.start
+            stop = index.stop
+            print("index is a slice")
 
+            universe = self.obj.data.seccode.tolist()
+            item = 1751 #net income
+            freq = 'Q' #Quarterly Maybe use step for this?
+            arr = self.obj.aclient['/WORLDSCOPE/worldscope_metrics_date_select.fsql']
 
-
+            cash = arr.select(and_(arr.seccode.in_(universe),
+                                    arr.item==item,
+                                    arr.freq==freq,
+                                    arr.fdate >=start,
+                                    arr.fdate <=stop
+                                  )
+                             )
+            return cash
+        else:
+            raise TypeError("index must be datetime slice")
 
