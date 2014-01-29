@@ -1,7 +1,7 @@
 import feldman
 import datetime as dt
 
-tr = feldman.TRQAD()
+trmeta = feldman.TRMETA()
 
 
-tr.to_fsql('tr_total_returns.sql','tr_total_returns.fsql')
+trmeta.to_fsql('tr_total_returns.sql','tr_total_returns.fsql')

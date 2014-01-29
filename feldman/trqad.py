@@ -16,58 +16,6 @@ class TRQAD(ArrayManagementClient):
     def __init__(self, path=None):
         super(TRQAD, self).__init__()
 
-    @property
-    def gics(self):
-
-        #empty select reads all
-        return self.aclient['/gicsec'].select()
-
-
-
-    def find_entity(self,entity=None):
-        """
-        :type entity: int
-        :param entity: seccode to match on
-
-        :type entity: string
-        :param entity: name to match on
-
-        :rtype: `pandas.DataFrame`
-        :return: DataFrame of match
-
-        """
-
-        secmstrx_df = self.aclient['/sec.fsql']
-        if not entity:
-            return secmstrx_df
-        else:
-            if isinstance(entity,int):
-                seccode_match = secmstrx_df.select(secmstrx_df.seccode==entity)
-                return seccode_match
-            else:
-                name_match = secmstrx_df.select(secmstrx_df.name.like('%%%s%%' % str(entity) ))
-                return name_match
-
-    def get_giccodes(self,name):
-        codes = self.aclient['/gicsec'].select(where=[('INDUSTRY', name)])
-        return codes
-
-    def get_rkd_items(self):
-        '''retrieve rkd items dataframe and add enumeration'''
-        index_name = 'COA'
-        items = self.aclient['/RKD/items'].select()
-        for i in items[index_name]:
-            thisitem = items[items[index_name]==i] 
-            setattr(items,i,thisitem)
-        return items
-
-    def get_ibes_measures(self):
-        index_name = 'Measure'
-        items = self.aclient['/IBES/items'].select()
-        for i in items[index_name]:
-            thisitem = items[items[index_name]==i] 
-            setattr(items,i,thisitem)
-        return items
 
     def ibes_detail_actuals(self,universe,measures,dt_list,freq='Q'):
 
@@ -152,66 +100,5 @@ class TRQAD(ArrayManagementClient):
                     )
 
         return ds_data
-
-    def tr_sql_parser(file_input):
-        """
-        Parses SQL statement into numerous lists
-        remove lines with declare, set, --, ORDERBY
-
-        :type file_input: string
-        :param file_input: Input file TR SQL query example
-
-        :rtype: list of strings
-        :return: A bunch of lists
-
-        """
-
-        declares = []
-        sets = []
-        wheres = []
-        comments = []
-        output = []
-        with open(file_input, "r") as f:
-            data = f.read()
-
-        for line in data.split('\n'):
-            if line.startswith('DECLARE'):
-                declares.append(line)
-            elif line.startswith('SET'):
-                sets.append(line)
-            elif line.startswith('WHERE'):
-                wheres.append(line)
-            elif line.startswith('--'):
-                comments.append(line)
-            else:
-                output.append(line)
-        fields = [field.split('@')[1] for field in wheres]
-
-        return declares, sets, fields, comments, output
-
-
-
-    def to_fsql(self,file_input, file_output):
-        """
-        Convert SQL to ArrayManagement SQL.
-
-        :type file_input: string
-        :param file_input: Input file TR SQL query example
-
-        select * from secmstrx
-        ---
-        seccode, name
-
-        DEFAULT BEHAVIOR IS WRITING OVER FILE
-        """
-
-        declares, sets, fields, comments, output = self.tr_sql_parser(file_input)
-        fsql_output = pjoin(self.basedir,file_output)
-        with open(fsql_output,'w') as f:
-            for line in output:
-                print(line,file=f)
-            print('---',file=f)
-            field_line =', '.join(fields)
-            print(field_line,file=f)
 
 
