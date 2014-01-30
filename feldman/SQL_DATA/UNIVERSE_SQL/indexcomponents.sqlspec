@@ -24,6 +24,6 @@
                             FROM     PRC.PRCDLY
                             WHERE   CODE = D.CODE
                             AND DATE_ <= N.DATE_    )
----
++++
 iticker, date_
----
++++

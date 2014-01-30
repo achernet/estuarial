@@ -14,6 +14,6 @@ LEFT JOIN	ShortInt2Code ex
 		ON		ex.code = d.exch
 		AND		ex.type_ = 1
 
----
++++
 
 ID, Date_, Exch

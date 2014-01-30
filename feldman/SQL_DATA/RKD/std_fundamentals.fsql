@@ -44,6 +44,6 @@ on f.currconvtocode = c.code
 and c.type_ = 58
 WHERE (Flash = 0 OR (Flash = 1 AND CompStmtCode = 1) OR FinalFiling = 1)
 
----
++++
 
 code, item, ReleaseDt

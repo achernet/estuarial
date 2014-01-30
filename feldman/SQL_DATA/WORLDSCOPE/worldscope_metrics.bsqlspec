@@ -14,6 +14,6 @@
         left outer join wsfye f
             on f.code = d.code
             and f.year_ = d.year_
----
++++
 seccode, item, freq
----
++++

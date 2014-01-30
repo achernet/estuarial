@@ -47,6 +47,6 @@ JOIN secmstrx i --GsecMstrx for Global Issue
 -- --and d.Desc_ in ('Positive Earnings Pre-Announcement','Share Repurchases') --Topic
 -- order by a.Siglevel, c.TopicCode, a.SrcDt desc
 
----
++++
 
 i.seccode, Siglevel

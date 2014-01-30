@@ -19,7 +19,7 @@ dt_list = (dt.datetime(2000,1,1), dt.datetime(2014,1,1))
 metrics = [NI,CASH,TL]
 tr.worldscope(universe,metrics,dt_list)
 
-spx = fd.UniverseBuilder.spx_idx('2013-12-04')
+#reduce universe to IBM
 df =  spx.data
 spx.data = df[df.name.str.contains("Machine")]
 spx.ohlc['2009-01-01':'2014-01-01']

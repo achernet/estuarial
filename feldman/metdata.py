@@ -136,7 +136,7 @@ class TRMETA(ArrayManagementClient):
         :param file_input: Input file TR SQL query example
 
         select * from secmstrx
-        ---
+        +++
         seccode, name
 
         DEFAULT BEHAVIOR IS WRITING OVER FILE
@@ -147,6 +147,6 @@ class TRMETA(ArrayManagementClient):
         with open(fsql_output,'w') as f:
             for line in output:
                 print(line,file=f)
-            print('---',file=f)
+            print('+++',file=f)
             field_line =', '.join(fields)
             print(field_line,file=f)

@@ -24,6 +24,6 @@ FROM 		 DBO.SECMSTRX S
 		ON	D.CODE = M.VENCODE
 ORDER BY	D.YEAR_, D.SEQ
 
----
++++
 S.ID, D.DATE_, D.FREQ
 D.ITEM = (select * from dbo.wsitem)

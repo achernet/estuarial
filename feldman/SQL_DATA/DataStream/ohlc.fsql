@@ -9,5 +9,5 @@ join ds2Adj a on a.infocode = q.infocode
            and q.marketdate between adjdate and isnull(endadjdate, '2079-06-06') and AdjType = 2
 join ds2exchqtinfo e on e.infocode = q.infocode
            and e.startdate < q.marketdate and q.exchintcode = e.exchintcode
----
++++
 seccode, marketdate
