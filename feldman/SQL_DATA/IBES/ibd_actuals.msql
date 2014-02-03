@@ -1,0 +1,53 @@
+SELECT		I.CODE, N.ITICKER, N.NAME, I.MEASURE, I.PERTYPE, 
+			CASE I.PERTYPE WHEN 'A' THEN 'ANNUAL'
+			ELSE 'QUARTERLY' 
+			END [DESC_],
+			I.PERDATE, I.VALUE_, I.RPTDATE
+
+FROM		IBDACTL1 I
+
+JOIN		IBESINFO3 N
+ON			N.CODE = I.CODE
+
+UNION ALL
+
+SELECT		I.CODE, N.ITICKER, N.NAME, I.MEASURE, I.PERTYPE, 
+			CASE I.PERTYPE WHEN 'A' THEN 'ANNUAL' 
+			ELSE 'QUARTERLY' 
+			END [DESC_],
+			I.PERDATE, I.VALUE_, I.RPTDATE
+
+FROM		IBDACTL2 I
+
+JOIN		IBESINFO3 N
+ON			N.CODE = I.CODE
+
+UNION ALL
+
+SELECT		I.CODE, N.ITICKER, N.NAME, I.MEASURE, I.PERTYPE, 
+			CASE I.PERTYPE WHEN 'A' THEN 'ANNUAL' 
+			ELSE 'QUARTERLY' 
+			END [DESC_],
+			I.PERDATE, I.VALUE_, I.RPTDATE
+
+FROM		IBDACTL3 I
+
+JOIN		IBESINFO3 N
+ON			N.CODE = I.CODE
+
++++
+
+{
+	"name": "ibes_detail_actuals",
+	"primary_id": "CODE",
+	"id_type": "IBES_CODE",
+	"date_columns": {
+						"report_dt": "RPTDATE",
+						"period_end_dt": "PERDATE"
+					},
+	"enum_params":	{
+						"Measure": "select Measure, MeasureCode, Desc_ from dbo.IBESMSRCODE",
+						"Frequency": ["QUARTERLY", "ANNUAL"]
+					},
+	"doc": "This query returns I/B/E/S actuals data back to 1976"
+}
