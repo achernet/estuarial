@@ -32,4 +32,5 @@ dow = fd.UniverseBuilder.djx_idx('2014-01-28')
 dow.cash['2012-12-01':'2014-01-22']
 dow.ohlc['2013-12-01':'2014-01-22']
 dow.ni['2013-12-01':'2014-01-22']
-dow.XXXXXX
+
+print fd.metrics.ws.CASH

@@ -13,7 +13,7 @@ else:
 
 curdir = os.path.abspath(os.path.dirname(__file__))
 
-suffix_list = ['*.sql','*.fsql','*.bsqlspec','*.sqlspec','*.py']
+suffix_list = ['*.sql','*.fsql','*.msql','*.bsqlspec','*.sqlspec','*.py']
 def get_sql_files():
     data_files = []
     root = pjoin("feldman","SQL_DATA")

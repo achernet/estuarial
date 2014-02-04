@@ -5,7 +5,8 @@ from arraymanagement.nodes.hdfnodes import PandasHDFNode
 from arraymanagement.nodes.sql import SimpleQueryTable
 from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable, 
                                               BulkParameterizedQueryTable,
-                                              FlexibleSqlCaching
+                                              FlexibleSqlCaching,
+                                              MetaSqlCaching
                                               )
 import pyodbc
 creds = {
@@ -35,7 +36,8 @@ global_config = dict(
         '*.sql' : SimpleQueryTable,
         "*.sqlspec" : DumbParameterizedQueryTable,
         "*.bsqlspec" : BulkParameterizedQueryTable,
-        "*.fsql" : FlexibleSqlCaching
+        "*.fsql" : FlexibleSqlCaching,
+        "*.msql" : MetaSqlCaching,
         },
     )            
 

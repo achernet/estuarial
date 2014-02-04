@@ -7,6 +7,8 @@ from sqlalchemy.sql import column, and_, or_
 import datetime as dt
 from os.path import join as pjoin
 import os
+import datetime as dt
+from dateutil import parser
 from feldman.arraymanagementclient import ArrayManagementClient
 
 
@@ -18,6 +20,17 @@ class TRQAD(ArrayManagementClient):
 
 
     def ibes_detail_actuals(self,universe,measures,dt_list,freq='Q'):
+
+        if isinstance(dt_list[0],dt.datetime):
+            pass
+        elif isinstance(dt_list[0],string):
+            dt1 = parser.parse(dt_list[0])
+            dt2 = parser.parse(dt_list[1])
+            dt_list = (dt1,dt2)
+        else:
+            raise TypeError("dt_list must be valid datetime string YEAR-MN-DY "
+                            "or datetime object")
+
 
         ibes_data = self.aclient['/IBES/ibd_actuals'].select(
             code=universe,

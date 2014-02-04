@@ -1,5 +1,6 @@
 from feldman.arraymanagementclient import ArrayManagementClient
 from sqlalchemy.sql import column, and_, or_
+import datetime
 
 
 '''
@@ -21,12 +22,21 @@ class _TRUniverseIndexer(ArrayManagementClient):
         self.obj = obj
         self.name = name
 
+    def _check_end(self,stop):
+        '''[X:] results in the two following possibilities'''
+
+        if stop == 9223372036854775807 or stop == None:
+            now = datetime.datetime.utcnow().strftime('%Y-%m-%d')
+            return now
+        else:
+            return stop
+
+
 
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = index.stop
-            print("index is a slice")
+            stop = self._check_end(index.stop)
             return start, stop
 
         else:
@@ -39,8 +49,7 @@ class _OHLCIndexer(_TRUniverseIndexer):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = index.stop
-            print("index is a slice")
+            stop = self._check_end(index.stop)
 
             universe = self.obj.data.seccode.tolist()
             arr = self.obj.aclient['/DataStream/ohlc.fsql']
@@ -56,8 +65,7 @@ class _CASHIndexer(_TRUniverseIndexer):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = index.stop
-            print("index is a slice")
+            stop = self._check_end(index.stop)
 
             universe = self.obj.data.seccode.tolist()
             item = 2001 #cash
@@ -81,8 +89,7 @@ class _NIIndexer(_TRUniverseIndexer):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = index.stop
-            print("index is a slice")
+            stop = self._check_end(index.stop)
 
             universe = self.obj.data.seccode.tolist()
             item = 1751 #net income
