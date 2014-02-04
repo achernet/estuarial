@@ -36,16 +36,22 @@ class UniverseBuilder(ArrayManagementClient):
         conn = ArrayManagementClient()
         arr = conn.aclient['/UNIVERSE_SQL/country_universe.fsql']
         df = arr.select(and_(arr.ctrytradedin=='US',arr.statuscode=='A',arr.typecode=='EQ'))
+        query = arr.query
         df = lower_columns(df)
-        return Universe(df)
+
+        return Universe(df,query)
+
 
     @classmethod
     def can(self):
         conn = ArrayManagementClient()
         arr = conn.aclient['/UNIVERSE_SQL/country_universe.fsql']
         df = arr.select(and_(arr.ctrytradedin=='CA',arr.statuscode=='A',arr.typecode=='EQ'))
+        query = arr.query
         df = lower_columns(df)
-        return Universe(df)
+
+        return Universe(df,query)
+
 
     @classmethod
     def djx_idx(self, dt):
@@ -59,9 +65,10 @@ class UniverseBuilder(ArrayManagementClient):
         arr = conn.aclient['/UNIVERSE_SQL/dowjones_universe.fsql']
 
         df = arr.select(and_(arr.iticker=='DJX_IDX',arr.date_==dt))
+        query = arr.query
         df = lower_columns(df)
 
-        return Universe(df)
+        return Universe(df,query)
 
     @classmethod
     def spx_idx(self,dt):
@@ -74,8 +81,10 @@ class UniverseBuilder(ArrayManagementClient):
         arr = conn.aclient['/UNIVERSE_SQL/spx_universe.fsql']
 
         df = arr.select(and_(arr.iticker=='SPX_IDX',arr.date_==dt))
+        query = arr.query
         df = lower_columns(df)
 
-        return Universe(df)
+        return Universe(df,query)
+
 
 

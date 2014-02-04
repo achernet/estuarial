@@ -10,9 +10,10 @@ class Universe(ArrayManagementClient):
     universe object
     """
 
-    def __init__(self,DataFrame):
+    def __init__(self,DataFrame,Query=None):
         super(Universe, self).__init__()
         self.data = DataFrame
+        self._sql = Query
 
     def __repr__(self):
         return ("TR Universe")
