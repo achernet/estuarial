@@ -10,7 +10,6 @@ class WS(ArrayManagementClient):
         df = arr.select()
 
         for t_metric in df.values:
-            print(t_metric[1])
 
             name = t_metric[1].translate(None,string.punctuation).replace(' ','_')
             value = t_metric[0]
