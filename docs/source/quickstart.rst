@@ -16,7 +16,7 @@ If you are using the `Anaconda Python distribution <http://continuum.io/anaconda
 
 
 or
-    $ pip install bokeh
+    $ pip install feldman
 
 
 To download from source, clone the `Feldman git repo <https://github.com/ContinuumIO/feldman>`_,
