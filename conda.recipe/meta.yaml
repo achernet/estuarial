@@ -1,0 +1,18 @@
+package:
+  name: feldman 
+  version: 0.0.1
+
+source:
+  git_url: git@github.com:ContinuumIO/feldman.git
+
+requirements:
+  build:
+    - python
+
+  run:
+    - python
+    - arraymanagement
+
+about:
+  home: https://github.com/ContinuumIO/feldman
+  license: BSD
