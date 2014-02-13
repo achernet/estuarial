@@ -15,10 +15,11 @@ except (AttributeError, ImportError):
   expanduser = (lambda x: x)
 
 # By default we use two locations for the feldman configurations,
-# /etc/trqadrc.ini and ~/.feldman/trqadrc.ini (which works on Windows and Unix).
-FeldmanConfigPath = '/etc/trqadrc.cfg'
+# /etc/odbc.ini and ~/.feldman/feldman.ini (which works on Windows and Unix).
+FeldmanConfigPath = '/etc/odbc.ini'
 FeldmanConfigLocations = [FeldmanConfigPath]
-UserConfigPath = pjoin(expanduser('~'),'.feldman', 'trqadrc.ini')
+UserConfigPath = pjoin(expanduser('~'),'.feldman', 'feldman.ini')
+UserConfigDir = pjoin(expanduser('~'),'.feldman')
 FeldmanConfigLocations.append(UserConfigPath)
 
 class Config(configparser.SafeConfigParser):
