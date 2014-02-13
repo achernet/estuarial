@@ -14,7 +14,7 @@
                 JOIN     PRC.IDXSEC S
                         ON      S.CODE = N.SECCODE
                         AND     S.VENDOR = 4 -- Dow Jones
-                JOIN     DBO.SECMAP M
+                JOIN     DBO.SECMAPX M
                         ON      M.SECCODE = S.PRCCODE
                         AND     M.VENTYPE = 14 -- IDC Pricing
                         AND     M.EXCHANGE = 1 -- US
