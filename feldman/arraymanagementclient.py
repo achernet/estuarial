@@ -4,6 +4,14 @@ from __future__ import print_function, division, absolute_import
 from arraymanagement.client import ArrayClient
 from os.path import join as pjoin
 import os
+from feldman.config import expanduser
+from feldman.config import UserConfigPath
+
+import os
+
+if not 'ODBCINI' in os.environ:
+    os.environ['ODBCINI'] = UserConfigPath
+
 
 class ArrayManagementClient(object):
     """
@@ -11,5 +19,6 @@ class ArrayManagementClient(object):
     """
 
     def __init__(self):
+        FeldmanDir = pjoin(expanduser('~'),'.feldman')
         self.basedir = pjoin(os.path.dirname(__file__),'SQL_DATA')
-        self.aclient = ArrayClient(self.basedir)
+        self.aclient = ArrayClient(basepath=self.basedir,localdatapath=FeldmanDir)

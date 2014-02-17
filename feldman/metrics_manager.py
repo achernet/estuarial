@@ -58,6 +58,26 @@ class WS(ArrayManagementClient):
 
         return found
 
+class DS(object):
+
+    columns = ['Open_',
+               'High',
+               'Low',
+               'Close_',
+               'Volume',
+               'Bid',
+               'Ask',
+               'VWAP',
+               'MostTrdPrc',
+               'ConsolVol',
+               'MostTrdVol',
+               ]
+
+    def __init__(self):
+        for val in self.columns:
+
+            name = val.translate(None,string.punctuation).replace('_','').upper()
+            setattr(self, name, val)
 
 
 
@@ -65,3 +85,4 @@ class MetricsManager(ArrayManagementClient):
     def __init__(self):
         super(MetricsManager, self).__init__()
         self.ws = WS()
+        self.ds = DS()

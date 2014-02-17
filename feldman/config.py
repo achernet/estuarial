@@ -20,7 +20,7 @@ FeldmanConfigPath = '/etc/odbc.ini'
 FeldmanConfigLocations = [FeldmanConfigPath]
 UserConfigPath = pjoin(expanduser('~'),'.feldman', 'feldman.ini')
 UserConfigDir = pjoin(expanduser('~'),'.feldman')
-FeldmanConfigLocations.append(UserConfigPath)
+FeldmanConfigLocations.insert(0,UserConfigPath)
 
 class Config(configparser.SafeConfigParser):
 

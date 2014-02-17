@@ -9,12 +9,15 @@ from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable,
                                               MetaSqlCaching
                                               )
 import pyodbc
-creds = {
-    "Uid": "qas_test",
-    "Pwd": "qasqasqas",
-}
-sql_alchemy_conn = "mssql+pyodbc://qas_test:qasqasqas@tdstest"
-connstring = 'DSN=tdstest;UID=%s;PWD=%s'%(creds['Uid'],creds['Pwd'])
+from feldman.config import Config
+config = Config()
+
+username = config.get('FELDMAN','UserName')
+passwd   = config.get('FELDMAN','Password')
+db   = config.get('FELDMAN','Database')
+
+sql_alchemy_conn = "mssql+pyodbc://%s:%s@feldman"%(username,passwd)
+connstring = 'DSN=feldman;UID=%s;PWD=%s'%(username,passwd)
 global_config = dict(
     is_dataset = False,
     csv_options = {},

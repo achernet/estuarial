@@ -74,9 +74,9 @@ class TRQAD(ArrayManagementClient):
 
     def datastream(self,universe,metrics, dt_list):
         """
-        :param: metrics: open, high, low, close, vwap, totalreturn, volume, bid, ask
-        mosttrdprc
-        consolvol
+        :param: metrics: open, high, low, close,
+                vwap, totalreturn, volume, bid,
+                ask, mosttrdprc, consolvol
 
         :type universe: list
         :param universe: list of securities
@@ -87,11 +87,15 @@ class TRQAD(ArrayManagementClient):
         :rtype: `pandas.DataFrame`
         :return: DataFrame of Securities with a TimeSeries of OHLC
 
+        fd.metric.
+
         """
 
 
     def ds_ohlc(self,universe,dt_list):
         """
+        Convenience method
+
         Query the Datastream DB for Open, High, Low, Close
         with a given universe (convenience function)
 
@@ -113,5 +117,29 @@ class TRQAD(ArrayManagementClient):
                     )
 
         return ds_data
+
+
+    def datastream(self,universe,dt_list):
+        """
+        Query the Datastream DB for Open, High, Low, Close
+        with a given universe (convenience function)
+
+        :type universe: list
+        :param universe: list of securities
+
+        :type dt_list: list/tuple
+        :param dt_list: Beginning and end market dates for query
+
+        :rtype: `pandas.DataFrame`
+        :return: DataFrame of Securities with a TimeSeries of OHLC
+
+        """
+
+        arr = self.aclient['/DataStream/datastream_basic.fsql']
+        start, stop = dt_list
+        df = arr.select(and_(arr.seccode.in_(universe),arr.marketdate >= start, \
+                                        arr.marketdate <= stop))
+
+        return df
 
 
