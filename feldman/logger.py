@@ -2,19 +2,26 @@ import logging
 import datetime
 import os
 from os.path import join as pjoin
+from os.path import join, dirname, split, realpath, exists
+import shutil
+
 
 
 log = logging.getLogger('feldman')
 log.setLevel(logging.DEBUG)
 
-#
-
-FELDMAN_DIR = '.feldman'
+USER=os.path.expanduser('~')
+FELDMAN_DIR = pjoin(USER,'.feldman')
 FELDMAN_LOG_DIR = pjoin(FELDMAN_DIR,'feldman-logs')
 now = datetime.datetime.utcnow().strftime('%Y-%m-%d')
 
+print FELDMAN_LOG_DIR
+datalibdir = pjoin(dirname(__file__),'SQL_DATA','datalib')
 
 if not os.path.exists(FELDMAN_LOG_DIR):
+    print pjoin(dirname(__file__))
+    shutil.copytree(datalibdir, pjoin(FELDMAN_DIR,'datalib'))
+    shutil.copyfile(pjoin(dirname(__file__),'feldman.ini'),pjoin(FELDMAN_DIR,'feldman.ini'))
     os.makedirs(FELDMAN_LOG_DIR)
 
 DEBUG_FILE = pjoin(FELDMAN_LOG_DIR, 'feldman-%s.log' % (now))

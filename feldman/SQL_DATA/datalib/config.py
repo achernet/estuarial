@@ -29,9 +29,6 @@ else:
     sql_alchemy_conn = "mssql+pyodbc://%s:%s@feldman"%(username,passwd)
     connstring = 'DSN=feldman;UID=%s;PWD=%s'%(username,passwd)
 
-print sql_alchemy_conn
-print connstring
-
 global_config = dict(
     is_dataset = False,
     csv_options = {},

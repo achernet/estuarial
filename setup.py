@@ -27,6 +27,7 @@ def get_sql_files():
 
 package_data = dict(feldman=get_sql_files())
 package_data['feldman'].append('trqadrc.ini')
+package_data['feldman'].append('feldman.ini')
 
 __version__ = (0, 0, 1)
 
