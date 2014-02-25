@@ -1,4 +1,5 @@
 import collections
+import os
 import datetime as dt
 from arraymanagement.nodes.csvnodes import PandasCSVNode
 from arraymanagement.nodes.hdfnodes import PandasHDFNode
@@ -15,9 +16,22 @@ config = Config()
 username = config.get('FELDMAN','UserName')
 passwd   = config.get('FELDMAN','Password')
 db   = config.get('FELDMAN','Database')
+server   = config.get('FELDMAN','Server')
+port   = config.get('FELDMAN','Port')
+driver   = config.get('FELDMAN','Driver')
 
-sql_alchemy_conn = "mssql+pyodbc://%s:%s@feldman"%(username,passwd)
-connstring = 'DSN=feldman;UID=%s;PWD=%s'%(username,passwd)
+if os.name == 'nt':
+    sql_alchemy_conn = "mssql+pyodbc://%s:%s@%s/%s"%(username,passwd,server,db)
+    connstring = 'Driver=%s;Database=%s;Server=%s;Port=%s;UID=%s;PWD=%s'%(driver,db,server,port,\
+                                                                            username,passwd)
+
+else:   
+    sql_alchemy_conn = "mssql+pyodbc://%s:%s@feldman"%(username,passwd)
+    connstring = 'DSN=feldman;UID=%s;PWD=%s'%(username,passwd)
+
+print sql_alchemy_conn
+print connstring
+
 global_config = dict(
     is_dataset = False,
     csv_options = {},
@@ -42,6 +56,7 @@ global_config = dict(
         "*.fsql" : FlexibleSqlCaching,
         "*.msql" : MetaSqlCaching,
         },
+    cache_dir = '~/.feldman/',
     )            
 
 local_config = {}
