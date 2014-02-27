@@ -2,6 +2,7 @@ import datetime as dt
 import feldman as fd
 
 tr = fd.TRQAD()
+
 spx = fd.UniverseBuilder.spx_idx('2013-12-04')
 spx = fd.UniverseBuilder.spx_idx(dt.datetime(2013, 12, 4))
 
@@ -25,6 +26,13 @@ df =  spx.data
 spx.data = df[df.name.str.contains("Machine")]
 spx.ohlc['2009-01-01':'2014-01-01']
 spx.cash['2009-01-01':'2014-01-01']
+
+trmeta =fd.TRMETA()
+trmeta.find_entity_name('BMW')
+trmeta.find_entity_id(36799)
+gics = trmeta.gics
+gics[gics.SECCODE==36799]
+
 
 us = fd.UniverseBuilder.us()
 can = fd.UniverseBuilder.can()

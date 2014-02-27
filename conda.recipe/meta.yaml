@@ -11,8 +11,7 @@ requirements:
 
   run:
     - python
-    - arraymanagement
-
-about:
-  home: https://github.com/ContinuumIO/feldman
-  license: BSD
+    - arraymanagement >= 0.1
+    - pydobc >= 3.0.7
+    - pytables == 3.0.0
+    - pandas == 0.12.0

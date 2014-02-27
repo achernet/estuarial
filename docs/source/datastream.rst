@@ -4,6 +4,6 @@
 Datastream
 ##########
 
+End of Day Data
 
-Datastream API
---------------
+

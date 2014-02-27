@@ -14,6 +14,14 @@ from feldman.arraymanagementclient import ArrayManagementClient
 
 
 class TRQAD(ArrayManagementClient):
+    '''
+    Functional style interface into TR's DB.  Most functions take 3 arguments:
+
+    - Universe (list of entities)
+    - Metrics (list of measurements)
+    - Date Range
+
+    '''
 
     def __init__(self, path=None):
         super(TRQAD, self).__init__()
@@ -74,6 +82,7 @@ class TRQAD(ArrayManagementClient):
 
     def datastream(self,universe,metrics, dt_list):
         """
+
         :param: metrics: open, high, low, close,
                 vwap, totalreturn, volume, bid,
                 ask, mosttrdprc, consolvol
