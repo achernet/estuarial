@@ -8,7 +8,11 @@ spx = fd.UniverseBuilder.spx_idx(dt.datetime(2013, 12, 4))
 
 
 universe = spx.data.seccode.tolist()[:20]
+
 IBM = 36799
+AAPL = 6027
+MSFT = 46692
+
 NI = 1751   # Net Income
 CASH = 2001 # Cash
 TL = 3351   # Total Liabilities
@@ -49,3 +53,4 @@ print fd.metrics.ds.OPEN
 dt_list = (dt.datetime(2014,2,12), dt.datetime(2014,2,13))
 df = tr.datastream(dow.data.seccode.tolist(),dt_list)
 print df.head()
+

@@ -7,7 +7,8 @@ from arraymanagement.nodes.sql import SimpleQueryTable
 from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable, 
                                               BulkParameterizedQueryTable,
                                               FlexibleSqlCaching,
-                                              MetaSqlCaching
+                                              MetaSqlCaching,
+                                              FlexibleSqlDateCaching,
                                               )
 import pyodbc
 from feldman.config import Config
@@ -52,6 +53,7 @@ global_config = dict(
         "*.bsqlspec" : BulkParameterizedQueryTable,
         "*.fsql" : FlexibleSqlCaching,
         "*.msql" : MetaSqlCaching,
+        "*.fdsql": FlexibleSqlDateCaching,
         },
     cache_dir = '~/.feldman/',
     )            

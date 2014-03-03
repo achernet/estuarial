@@ -10,6 +10,7 @@ import os
 import datetime as dt
 from dateutil import parser
 from feldman.arraymanagementclient import ArrayManagementClient
+from .munging import worldscope_align
 
 
 
@@ -49,7 +50,7 @@ class TRQAD(ArrayManagementClient):
         return ibes_data
 
 
-    def worldscope(self,universe, metrics,dt_list,freq='Q'):
+    def worldscope(self,universe, metrics,dt_list,freq='Q',align=False):
         """
         Query the WorldScope DB for metrics defined by the user
         with a given universe.  Metrics are fundamentals commonly
@@ -67,17 +68,37 @@ class TRQAD(ArrayManagementClient):
         :type freq: string
         :param freq: Frequency
 
+        :type align: bool
+        :param align: date align ddate
+
         :rtype: `pandas.DataFrame`
         :return: DataFrame of Securities with a TimeSeries of OHLC
 
+
         """
 
-        ws_data = self.aclient['/WORLDSCOPE/wsndata.bsqlspec'].select(
-                    seccode=universe,
-                    item=metrics,
-                    freq=freq,
-                    fdate=[dt_list[0], dt_list[1]]
-                    )
+         # ws_data = self.aclient['/WORLDSCOPE/wsndata.bsqlspec'].select(
+         #            seccode=universe,
+         #            item=metrics,
+         #            freq=freq,
+         #            fdate=[dt_list[0], dt_list[1]]
+         #            )
+
+        start = dt_list[0]
+        stop = dt_list[1]
+        arr = self.aclient['/WORLDSCOPE/worldscope_metrics_date_select.fdsql']
+
+        ws_data = arr.select(
+                        and_(arr.seccode.in_(universe),
+                                arr.item.in_(metrics),
+                                arr.freq==freq,
+                            ),
+                        date_1 =start,
+                        date_2 =stop
+                        )
+        if align:
+            ws_data = worldscope_align(ws_data)
+
         return ws_data
 
     def datastream(self,universe,metrics, dt_list):
