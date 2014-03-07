@@ -49,4 +49,5 @@ Once installed you can now easily query the TR database in two styles:
 Example IPython Notebooks
 -------------------------
 
+ - here is a pdf file :download:`notebook <../../examples/FeldmanIntroSlides.ipynb>`
 
