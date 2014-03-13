@@ -1,0 +1,17 @@
+package:
+  name: feldman 
+  version: 0.0.1
+
+source:
+  git_url: git@github.com:ContinuumIO/feldman.git
+
+requirements:
+  build:
+    - python
+
+  run:
+    - python
+    - arraymanagement >= 0.1
+    - pydobc >= 3.0.7
+    - pytables == 3.0.0
+    - pandas == 0.12.0
