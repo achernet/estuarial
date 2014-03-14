@@ -15,6 +15,10 @@ class ArrayManagementClient(object):
 
     def __init__(self):
         FeldmanDir = pjoin(expanduser('~'), '.feldman')
-        self.basedir = pjoin(os.path.dirname(__file__), 'SQL_DATA')
+        self.basedir = pjoin(os.path.dirname(__file__), 
+                             '..',
+                             'data', 
+                             'catalog', 
+                             'SQL_DATA')
         self.aclient = ArrayClient(basepath=self.basedir, 
                                    localdatapath=FeldmanDir)

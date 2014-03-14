@@ -34,7 +34,7 @@ class TRMETA(ArrayManagementClient):
         else:
             secmstrx_df = self.aclient['/SECCODES/gsec.fsql']
 
-        if isinstance(entity,int):
+        if isinstance(entity, int):
             seccode_match = secmstrx_df.select(secmstrx_df.seccode==entity)
             return seccode_match
         else:
@@ -57,7 +57,7 @@ class TRMETA(ArrayManagementClient):
         else:
             secmstrx_df = self.aclient['/SECCODES/gsec.fsql']
 
-        if isinstance(entity,str):
+        if isinstance(entity, str):
             name_match = secmstrx_df.select(
                 secmstrx_df.name.like('%%%s%%' % str(entity)))
             return name_match
