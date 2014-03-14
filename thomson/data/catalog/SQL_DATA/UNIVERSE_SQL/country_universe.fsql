@@ -1,0 +1,4 @@
+        SELECT  *
+        FROM        trqa.DS2EqMstr
++++
+statuscode, typecode, ctrytradedin
