@@ -28,8 +28,15 @@ if os.name == 'nt':
 
 else:   
     sql_alchemy_conn = "mssql+pyodbc://%s:%s@feldman"%(username,passwd)
-    connstring = 'DSN=feldman;UID=%s;PWD=%s'%(username,passwd)
-
+    
+    #check if using FREETDS
+    version = config.get('FELDMAN','TDS_VERSION')
+    if version:
+        connstring = 'Driver=%s;Server=%s;Database=qai;Uid=%s;Pwd=%s;TDS_VERSION=8.0;PORT=%s'%(driver, \
+                             server,username,passwd,port)
+    else:                        
+        connstring = 'DSN=feldman;UID=%s;PWD=%s'%(username,passwd)
+    
 global_config = dict(
     is_dataset = False,
     csv_options = {},
