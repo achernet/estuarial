@@ -12,11 +12,17 @@ tar xzvf freetds-stable.tgz
 
 cd freetds-0.XX/
 
+#linux
 `./configure --with-odbc=/usr --with-tdsver=8.0`
+
+#OSX
+`./configure --with-iodbc=/usr --with-tdsver=8.0`
+
 make -j4
 sudo make install```
 
-Driver will now be installed at `/usr/local/lib/libtdsodbc.so.0.0.0`
+Driver will now be installed at `/usr/local/lib/libtdsodbc.so.0.0.0` on **linux** or `/usr/local/lib/libtdsodbc.so` on 
+**OSX** 
 
 
 ###From DPKG Repo
