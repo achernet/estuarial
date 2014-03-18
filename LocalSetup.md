@@ -13,7 +13,7 @@ tar xzvf freetds-stable.tgz
 cd freetds-0.XX/
 
 #linux
-`./configure --with-odbc=/usr --with-tdsver=8.0`
+`./configure --with-unixodbc=/usr --with-tdsver=8.0`
 
 #OSX
 `./configure --with-iodbc=/usr --with-tdsver=8.0`
