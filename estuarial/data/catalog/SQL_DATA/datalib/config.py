@@ -11,15 +11,15 @@ from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable,
                                               FlexibleSqlDateCaching,
                                               )
 import pyodbc
-from estuary.config import Config
+from estuarial.config import Config
 config = Config()
 
-username = config.get('ESTUARY','UserName')
-passwd   = config.get('ESTUARY','Password')
-db   = config.get('ESTUARY','Database')
-server   = config.get('ESTUARY','Server')
-port   = config.get('ESTUARY','Port')
-driver   = config.get('ESTUARY','Driver')
+username = config.get('ESTUARIAL','UserName')
+passwd   = config.get('ESTUARIAL','Password')
+db   = config.get('ESTUARIAL','Database')
+server   = config.get('ESTUARIAL','Server')
+port   = config.get('ESTUARIAL','Port')
+driver   = config.get('ESTUARIAL','Driver')
 
 if os.name == 'nt':
     sql_alchemy_conn = "mssql+pyodbc://%s:%s@%s/%s"%(username,passwd,server,db)
@@ -27,8 +27,15 @@ if os.name == 'nt':
                                                                             username,passwd)
 
 else:   
-    sql_alchemy_conn = "mssql+pyodbc://%s:%s@estuary"%(username,passwd)
-    connstring = 'DSN=estuary;UID=%s;PWD=%s'%(username,passwd)
+    sql_alchemy_conn = "mssql+pyodbc://%s:%s@estuarial"%(username,passwd)
+
+    #check if using FREETDS
+    version = config.get('ESTUARIAL','TDS_VERSION')
+    if version:
+        connstring = 'Driver=%s;Server=%s;Database=qai;Uid=%s;Pwd=%s;TDS_VERSION=8.0;PORT=%s'%(driver, \
+                             server,username,passwd,port)
+    else:
+        connstring = 'DSN=estuarial;UID=%s;PWD=%s'%(username,passwd)
 
 global_config = dict(
     is_dataset = False,
@@ -55,7 +62,7 @@ global_config = dict(
         "*.msql" : MetaSqlCaching,
         "*.fdsql": FlexibleSqlDateCaching,
         },
-    cache_dir = '~/.estuary/',
+    cache_dir = '~/.estuarial/',
     )            
 
 local_config = {}

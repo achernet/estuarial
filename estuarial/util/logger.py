@@ -5,12 +5,12 @@ import datetime
 from os.path import join as pjoin
 from os.path import dirname, split, realpath, exists
 
-log = logging.getLogger('estuary')
+log = logging.getLogger('estuarial')
 log.setLevel(logging.DEBUG)
 
 USER = os.path.expanduser('~')
-ESTUARY_DIR = pjoin(USER, '.estuary')
-ESTUARY_LOG_DIR = pjoin(ESTUARY_DIR, 'estuary-logs')
+ESTUARY_DIR = pjoin(USER, '.estuarial')
+ESTUARY_LOG_DIR = pjoin(ESTUARY_DIR, 'estuarial-logs')
 now = datetime.datetime.utcnow().strftime('%Y-%m-%d')
 
 datalibdir = pjoin(dirname(__file__), 'SQL_DATA', 'datalib')
@@ -18,13 +18,13 @@ datalibdir = pjoin(dirname(__file__), 'SQL_DATA', 'datalib')
 if not os.path.exists(ESTUARY_DIR):
     print pjoin(dirname(__file__))
     shutil.copytree(datalibdir, pjoin(ESTUARY_DIR, 'datalib'))
-    shutil.copyfile(pjoin(dirname(__file__), 'estuary.ini'),
-                    pjoin(ESTUARY_DIR,'estuary.ini'))
+    shutil.copyfile(pjoin(dirname(__file__), 'estuarial.ini'),
+                    pjoin(ESTUARY_DIR,'estuarial.ini'))
 
 if not os.path.exists(ESTUARY_LOG_DIR):
     os.makedirs(ESTUARY_LOG_DIR)
 
-DEBUG_FILE = pjoin(ESTUARY_LOG_DIR, 'estuary-%s.log' % (now))
+DEBUG_FILE = pjoin(ESTUARY_LOG_DIR, 'estuarial-%s.log' % (now))
 
 #create file handler which logs even debug messages
 fh = logging.FileHandler(DEBUG_FILE)

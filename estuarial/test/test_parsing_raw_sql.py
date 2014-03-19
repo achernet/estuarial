@@ -1,5 +1,5 @@
 import datetime as dt
-from estuary.data.drilldown.metadata import TRMETA
+from estuarial.data.drilldown.metadata import TRMETA
 
 trmeta = TRMETA()
 trmeta.to_fsql('tr_total_returns.sql',

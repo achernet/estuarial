@@ -34,27 +34,27 @@ def get_sql_files():
 
     return data_files
 
-package_data = dict(estuary=get_sql_files())
-package_data['estuary'].append('trqadrc.ini')
-package_data['estuary'].append('estuary.ini')
+package_data = dict(estuarial=get_sql_files())
+package_data['estuarial'].append('trqadrc.ini')
+package_data['estuarial'].append('estuarial.ini')
 
 version = "0.0.1"
-setup(name='estuary',
+setup(name='estuarial',
       version=version,
       author='Continuum Analytics',
       author_email='info@continuum.io',
-      url='http://github.com/ContinuumIO/estuary',
+      url='http://github.com/ContinuumIO/estuarial',
       description='Python TRQAD API',
-      packages=['estuary',
-                'estuary.test',
-                'estuary.array',
-                'estuary.util',
-                'estuary.util.config',
-                'estuary.data',
-                'estuary.data.query',
-                'estuary.data.browse',
-                'estuary.data.catalog',
-                'estuary.data.drilldown'],
+      packages=['estuarial',
+                'estuarial.test',
+                'estuarial.array',
+                'estuarial.util',
+                'estuarial.util.config',
+                'estuarial.data',
+                'estuarial.data.query',
+                'estuarial.data.browse',
+                'estuarial.data.catalog',
+                'estuarial.data.drilldown'],
       package_data=package_data,
       zip_safe=False,
       install_requires=['pandas>=0.12.0',

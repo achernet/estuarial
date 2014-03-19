@@ -1,6 +1,6 @@
 import os
 import unittest
-from estuary.util.config.config import Config
+from estuarial.util.config.config import Config
 
 config_path = os.path.join(os.path.dirname(Config.__file__), 'trqadrc.ini')
 config = Config(config_path)

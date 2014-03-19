@@ -4,8 +4,8 @@ import os
 import datetime as dt
 from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
-from estuary.util.config.config import Config
-from estuary.array.arraymanagementclient import ArrayManagementClient
+from estuarial.util.config.config import Config
+from estuarial.array.arraymanagementclient import ArrayManagementClient
 
 class TRMETA(ArrayManagementClient):
 

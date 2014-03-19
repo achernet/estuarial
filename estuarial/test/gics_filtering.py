@@ -1,7 +1,7 @@
 import datetime as dt
-from estuary.data.browse.trqad import TRQAD
-from estuary.data.drilldown.metadata import TRMETA
-from estuary.data.browse.universe_builder import UniverseBuilder
+from estuarial.data.browse.trqad import TRQAD
+from estuarial.data.drilldown.metadata import TRMETA
+from estuarial.data.browse.universe_builder import UniverseBuilder
 
 # Parameters used for testing.
 IBM = 36799

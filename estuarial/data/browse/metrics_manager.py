@@ -3,7 +3,7 @@ from __future__ import print_function, division, absolute_import
 import string
 from collections import Counter
 from difflib import get_close_matches
-from estuary.array.arraymanagementclient import ArrayManagementClient
+from estuarial.array.arraymanagementclient import ArrayManagementClient
 
 class WS(ArrayManagementClient):
 

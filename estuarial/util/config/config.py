@@ -13,13 +13,13 @@ except (AttributeError, ImportError):
   # This is probably running on App Engine.
   expanduser = (lambda x: x)
 
-# By default we use two locations for the estuary configurations,
-# /etc/odbc.ini and ~/.estuary/estuary.ini (which works on Windows and Unix).
-EstuaryConfigPath = '/etc/odbc.ini'
-EstuaryConfigLocations = [EstuaryConfigPath]
-UserConfigPath = pjoin(expanduser('~'), '.estuary', 'estuary.ini')
-UserConfigDir = pjoin(expanduser('~'), '.estuary')
-EstuaryConfigLocations.insert(0, UserConfigPath)
+# By default we use two locations for the estuarial configurations,
+# /etc/odbc.ini and ~/.estuarial/estuarial.ini (which works on Windows and Unix).
+EstuarialConfigPath = '/etc/odbc.ini'
+EstuarialConfigLocations = [EstuarialConfigPath]
+UserConfigPath = pjoin(expanduser('~'), '.estuarial', 'estuarial.ini')
+UserConfigDir = pjoin(expanduser('~'), '.estuarial')
+EstuarialConfigLocations.insert(0, UserConfigPath)
 
 class Config(configparser.SafeConfigParser):
 
@@ -35,7 +35,7 @@ class Config(configparser.SafeConfigParser):
             self.read(path)
             self.file_path = path
         else:
-            f = self.read(EstuaryConfigLocations)
+            f = self.read(EstuarialConfigLocations)
             self.file_path = f[0]
 
     def get(self, section, name, default=None):
