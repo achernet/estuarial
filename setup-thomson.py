@@ -39,8 +39,6 @@ package_data = dict(thomson=get_sql_files())
 package_data['thomson'].append('trqadrc.ini')
 package_data['thomson'].append('feldman.ini')
 
-print package_data
-
 version = "0.0.1"
 setup(name='thomson',
       version=version,
