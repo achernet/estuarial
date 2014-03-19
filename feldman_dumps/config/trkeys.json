@@ -1,7 +1,0 @@
-{
-    "Uid": "qas_test",
-    "Pwd": "qasqasqas",
-    "driver": "SQL Server Native Client 10.0",
-    "Server": "10.143.14.62",
-    "Port": "1433"
-}
