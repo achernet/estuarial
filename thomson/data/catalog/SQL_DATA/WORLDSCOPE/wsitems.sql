@@ -1,0 +1,1 @@
+select Number, Name from WSITEM

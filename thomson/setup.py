@@ -2,12 +2,10 @@ import os
 import sys
 
 if 'develop' in sys.argv:
-    # Don't import setuptools unless the user is actively trying to do
-    # something that requires it.
+    # setuptools bad.
     from setuptools import setup
 else:
   from distutils.core import setup
-  import sys
 
 curdir = os.path.abspath(os.path.dirname(__file__))
 config_suffix_list = ["*.ini"]
@@ -47,11 +45,16 @@ setup(name='thomson',
       author_email='info@continuum.io',
       url='http://github.com/ContinuumIO/feldman',
       description='Python TRQAD API',
-      packages=['thomson', 
-                'thomson.data', 
-                'thomson.util', 
+      packages=['thomson',  
                 'thomson.test', 
-                'thomson.array'],
+                'thomson.array',
+                'thomson.util',
+                'thomson.util.config',
+                'thomson.data', 
+                'thomson.data.query',
+                'thomson.data.browse',
+                'thomson.data.catalog',
+                'thomson.data.drilldown'],
       package_data=package_data,
       zip_safe=False,
       install_requires=['pandas>=0.12.0',

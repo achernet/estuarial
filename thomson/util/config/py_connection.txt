@@ -1,0 +1,16 @@
+creds = {
+"Uid": "ely",
+"Pwd": "1234qwerASDF",
+"driver": "/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so",
+"server": "10.0.5.5",
+"port": "1433"
+}
+
+cstr = "Driver=%s;Server=%s;UID=%s;PWD=%s;PORT=%s;DATABASE=qai;DS_VERSION=8.0;"
+conn = pyodbc.connect( cstr % (
+     creds['driver'],
+     creds['server'],
+     creds['Uid'],
+     creds['Pwd'],
+     creds['port']))
+					)
