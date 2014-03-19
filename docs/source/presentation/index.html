@@ -1735,8 +1735,8 @@ text-align: inherit;
 <section>
     <section>
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="feldman">FELDMAN</h2>
-<p><strong>Feldman</strong> is an open-source API for Thomson Reuters’ QA Direct. The aim of Feldman is help quants, financial researchers, and other domain experts fetch data from the various DBs within QAD in a complete, expressible, and efficient manner through Python.</p>
+<h2 id="estuary">ESTUARY</h2>
+<p><strong>Estuary</strong> is an open-source API for Thomson Reuters’ QA Direct. The aim of Estuary is help quants, financial researchers, and other domain experts fetch data from the various DBs within QAD in a complete, expressible, and efficient manner through Python.</p>
 </div></section>
     </section><section>
     <section>
@@ -1746,8 +1746,8 @@ text-align: inherit;
 In&nbsp;[1]:
 </div>
 <div class="input_area box-flex1">
-<div class="highlight"><pre><span class="c">#Common Imports and Feldman</span>
-<span class="kn">import</span> <span class="nn">feldman</span> <span class="kn">as</span> <span class="nn">fd</span>
+<div class="highlight"><pre><span class="c">#Common Imports and Estuary</span>
+<span class="kn">import</span> <span class="nn">estuary</span> <span class="kn">as</span> <span class="nn">fd</span>
 <span class="kn">import</span> <span class="nn">datetime</span> <span class="kn">as</span> <span class="nn">dt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -1976,7 +1976,7 @@ In&nbsp;[3]:
     </section><section>
     <section>
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Feldman has a large and growing catalogue of sql queries additionally, when Feldman executes a query the returned data is cached (HDFT5). Let's re-run the previous query:</p>
+<p>Estuary has a large and growing catalogue of sql queries additionally, when Estuary executes a query the returned data is cached (HDFT5). Let's re-run the previous query:</p>
 </div><div class="fragment">
     
 <div class="cell border-box-sizing code_cell vbox">
@@ -2000,7 +2000,7 @@ In&nbsp;[4]:
 In&nbsp;[5]:
 </div>
 <div class="input_area box-flex1">
-<div class="highlight"><pre><span class="n">cache</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="s">&#39;/opt/wakari/.feldman/.cache/cache_spx_universe.fsql.hdf5&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span class="n">cache</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="s">&#39;/opt/wakari/.estuary/.cache/cache_spx_universe.fsql.hdf5&#39;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">cache</span><span class="p">[</span><span class="s">&#39;/spx_universe.fsql&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="n">cache</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -2485,7 +2485,7 @@ ERGRhvw/b6q+sS/UyGAAAAAASUVORK5CYII=
     </section><section>
     <section>
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Feldman also offers a number of methods to query the metadata of QAD. It can be difficult to remember the associate values for a given metric within QAD or you may want to backout a query to SEDOL/CUSIP vals. What are the entities in the previous plot?</p>
+<p>Estuary also offers a number of methods to query the metadata of QAD. It can be difficult to remember the associate values for a given metric within QAD or you may want to backout a query to SEDOL/CUSIP vals. What are the entities in the previous plot?</p>
 </div><div class="fragment">
     
 <div class="cell border-box-sizing code_cell vbox">

@@ -1,5 +1,5 @@
 import datetime as dt
-import feldman as fd
+import estuary as fd
 
 tr = fd.TRQAD()
 

@@ -3,13 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Feldman
+Estuary
 =======
 
 .. _about:
 
-Feldman is an open-source API for Thomson Reuters' `QA Direct
-<http://im.thomsonreuters.com/solutions/quantitative-research-tools/qa-direct/>`_.  The aim of Feldman is help
+Estuary is an open-source API for Thomson Reuters' `QA Direct
+<http://im.thomsonreuters.com/solutions/quantitative-research-tools/qa-direct/>`_.  The aim of Estuary is help
 quants, financial researchers, and other domain experts fetch data from the various DBs within QAD in a complete,
 expressible, and efficient manner through Python.
 
@@ -17,7 +17,7 @@ To get started quickly, follow the :ref:`quickstart`.
 
 A more detailed :ref:`detailed about`.
 
-Visit the source repository: `https://github.com/ContinuumIO/feldman <https://github.com/ContinuumIO/feldman>`_
+Visit the source repository: `https://github.com/ContinuumIO/estuary <https://github.com/ContinuumIO/estuary>`_
 
 
 CONTENTS

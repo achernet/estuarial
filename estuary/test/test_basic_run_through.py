@@ -1,8 +1,8 @@
 import datetime as dt
-from thomson.data.browse.trqad import TRQAD
-from thomson.data.drilldown.metadata import TRMETA
-from thomson.data.browse.metrics_manager import MetricsManager
-from thomson.data.browse.universe_builder import UniverseBuilder
+from estuary.data.browse.trqad import TRQAD
+from estuary.data.drilldown.metadata import TRMETA
+from estuary.data.browse.metrics_manager import MetricsManager
+from estuary.data.browse.universe_builder import UniverseBuilder
  
 qad = TRQAD()
 meta = TRMETA()

@@ -1,6 +1,6 @@
 import datetime
 from sqlalchemy.sql import column, and_, or_
-from thomson.array.arraymanagementclient import ArrayManagementClient
+from estuary.array.arraymanagementclient import ArrayManagementClient
 
 # the supported metrics
 def get_metrics_list():

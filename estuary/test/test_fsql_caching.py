@@ -1,6 +1,6 @@
-from thomson.data.browse.trqad import TRQAD
+from estuary.data.browse.trqad import TRQAD
 from sqlalchemy.sql import column, and_, or_
-from thomson.data.browse.universe_builder import UniverseBuilder
+from estuary.data.browse.universe_builder import UniverseBuilder
 
 tr = TRQAD()
 c = tr.aclient

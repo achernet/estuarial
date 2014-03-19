@@ -5,26 +5,26 @@ import datetime
 from os.path import join as pjoin
 from os.path import dirname, split, realpath, exists
 
-log = logging.getLogger('feldman')
+log = logging.getLogger('estuary')
 log.setLevel(logging.DEBUG)
 
 USER = os.path.expanduser('~')
-FELDMAN_DIR = pjoin(USER, '.feldman')
-FELDMAN_LOG_DIR = pjoin(FELDMAN_DIR, 'feldman-logs')
+ESTUARY_DIR = pjoin(USER, '.estuary')
+ESTUARY_LOG_DIR = pjoin(ESTUARY_DIR, 'estuary-logs')
 now = datetime.datetime.utcnow().strftime('%Y-%m-%d')
 
 datalibdir = pjoin(dirname(__file__), 'SQL_DATA', 'datalib')
 
-if not os.path.exists(FELDMAN_DIR):
+if not os.path.exists(ESTUARY_DIR):
     print pjoin(dirname(__file__))
-    shutil.copytree(datalibdir, pjoin(FELDMAN_DIR, 'datalib'))
-    shutil.copyfile(pjoin(dirname(__file__), 'feldman.ini'), 
-                    pjoin(FELDMAN_DIR,'feldman.ini'))
+    shutil.copytree(datalibdir, pjoin(ESTUARY_DIR, 'datalib'))
+    shutil.copyfile(pjoin(dirname(__file__), 'estuary.ini'),
+                    pjoin(ESTUARY_DIR,'estuary.ini'))
 
-if not os.path.exists(FELDMAN_LOG_DIR):
-    os.makedirs(FELDMAN_LOG_DIR)
+if not os.path.exists(ESTUARY_LOG_DIR):
+    os.makedirs(ESTUARY_LOG_DIR)
 
-DEBUG_FILE = pjoin(FELDMAN_LOG_DIR, 'feldman-%s.log' % (now))
+DEBUG_FILE = pjoin(ESTUARY_LOG_DIR, 'estuary-%s.log' % (now))
 
 #create file handler which logs even debug messages
 fh = logging.FileHandler(DEBUG_FILE)

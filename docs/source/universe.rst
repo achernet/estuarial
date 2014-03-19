@@ -14,7 +14,7 @@ accessors to help get you started.::
 
 
 
-Feldman Universe objects are built for easy exploration::
+Estuary Universe objects are built for easy exploration::
 
     dow.cash[dt1:dt2]
     dow.ohlc['2013-12-01':'2014-01-22']
@@ -22,6 +22,6 @@ Feldman Universe objects are built for easy exploration::
 
 Source
 ------
-.. autoclass:: feldman.UniverseBuilder
+.. autoclass:: estuary.UniverseBuilder
    :members:
    :undoc-members:

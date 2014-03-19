@@ -4,10 +4,10 @@ import os
 import datetime as dt
 from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
-from thomson.util.config.config import Config
+from estuary.util.config.config import Config
 from arraymanagement.client import ArrayClient
-from thomson.data.browse.universe import Universe
-from thomson.array.arraymanagementclient import ArrayManagementClient
+from estuary.data.browse.universe import Universe
+from estuary.array.arraymanagementclient import ArrayManagementClient
 
 def lower_columns(df):
         """

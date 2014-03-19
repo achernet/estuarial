@@ -33,7 +33,7 @@ Worldscope MetaData
 
 ::
 
-    feldman.metrics.ws.<tab><tab>
+    estuary.metrics.ws.<tab><tab>
     #or
     metrics.ws.find_metrics('DEBT')
              Number                                               Name

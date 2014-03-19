@@ -20,7 +20,7 @@ catalog_suffix_list = ('.sql',
 def get_sql_files():
     data_files = []
 
-    root = os.path.join("thomson","data", "catalog", "SQL_DATA")
+    root = os.path.join("estuary","data", "catalog", "SQL_DATA")
     install_folder = os.path.join("data", "catalog", "SQL_DATA")
 
     ##scan catalog for files with the above extensions and add to pkg_data_dirs
@@ -28,34 +28,34 @@ def get_sql_files():
         for fs in files:
             if fs.endswith(catalog_suffix_list):
 
-                #remove thomson from path name
+                #remove estuary from path name
                 install_path = '/'.join(path.split('/')[1:])
                 data_files.append(os.path.join(install_path,fs))
 
     return data_files
 
 
-package_data = dict(thomson=get_sql_files())
-package_data['thomson'].append('trqadrc.ini')
-package_data['thomson'].append('feldman.ini')
+package_data = dict(estuary=get_sql_files())
+package_data['estuary'].append('trqadrc.ini')
+package_data['estuary'].append('estuary.ini')
 
 version = "0.0.1"
-setup(name='thomson',
+setup(name='estuary',
       version=version,
       author='Continuum Analytics',
       author_email='info@continuum.io',
-      url='http://github.com/ContinuumIO/feldman',
+      url='http://github.com/ContinuumIO/estuary',
       description='Python TRQAD API',
-      packages=['thomson',  
-                'thomson.test', 
-                'thomson.array',
-                'thomson.util',
-                'thomson.util.config',
-                'thomson.data', 
-                'thomson.data.query',
-                'thomson.data.browse',
-                'thomson.data.catalog',
-                'thomson.data.drilldown'],
+      packages=['estuary',
+                'estuary.test',
+                'estuary.array',
+                'estuary.util',
+                'estuary.util.config',
+                'estuary.data',
+                'estuary.data.query',
+                'estuary.data.browse',
+                'estuary.data.catalog',
+                'estuary.data.drilldown'],
       package_data=package_data,
       zip_safe=False,
       install_requires=['pandas>=0.12.0',

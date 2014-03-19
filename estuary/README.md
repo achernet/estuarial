@@ -2,7 +2,7 @@
 
 ## Design
 
-thomson/
+estuary/
     test -- Unit testing
     array -- Two way interface adapter to array backends
     catalog -- Data access pattern and query format handler

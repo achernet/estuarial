@@ -11,15 +11,15 @@ from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable,
                                               FlexibleSqlDateCaching,
                                               )
 import pyodbc
-from feldman.config import Config
+from estuary.config import Config
 config = Config()
 
-username = config.get('FELDMAN','UserName')
-passwd   = config.get('FELDMAN','Password')
-db   = config.get('FELDMAN','Database')
-server   = config.get('FELDMAN','Server')
-port   = config.get('FELDMAN','Port')
-driver   = config.get('FELDMAN','Driver')
+username = config.get('ESTUARY','UserName')
+passwd   = config.get('ESTUARY','Password')
+db   = config.get('ESTUARY','Database')
+server   = config.get('ESTUARY','Server')
+port   = config.get('ESTUARY','Port')
+driver   = config.get('ESTUARY','Driver')
 
 if os.name == 'nt':
     sql_alchemy_conn = "mssql+pyodbc://%s:%s@%s/%s"%(username,passwd,server,db)
@@ -27,8 +27,8 @@ if os.name == 'nt':
                                                                             username,passwd)
 
 else:   
-    sql_alchemy_conn = "mssql+pyodbc://%s:%s@feldman"%(username,passwd)
-    connstring = 'DSN=feldman;UID=%s;PWD=%s'%(username,passwd)
+    sql_alchemy_conn = "mssql+pyodbc://%s:%s@estuary"%(username,passwd)
+    connstring = 'DSN=estuary;UID=%s;PWD=%s'%(username,passwd)
 
 global_config = dict(
     is_dataset = False,
@@ -55,7 +55,7 @@ global_config = dict(
         "*.msql" : MetaSqlCaching,
         "*.fdsql": FlexibleSqlDateCaching,
         },
-    cache_dir = '~/.feldman/',
+    cache_dir = '~/.estuary/',
     )            
 
 local_config = {}

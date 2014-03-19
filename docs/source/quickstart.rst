@@ -7,16 +7,16 @@ Quickstart
 Downloading/Installing
 ----------------------
 
-There are several ways to install Feldman:
+There are several ways to install Estuary:
 
 If you are using the `Anaconda Python distribution <http://continuum.io/anaconda>`_:
 ::
 
-    $ conda install feldman
-    $ pip install feldman
+    $ conda install estuary
+    $ pip install estuary
 
 
-To download from source, clone the `Feldman git repo <https://github.com/ContinuumIO/feldman>`_,
+To download from source, clone the `Estuary git repo <https://github.com/ContinuumIO/estuary>`_,
 then run:
 ::
 
@@ -24,7 +24,7 @@ then run:
 
 
 
-Using Feldman
+Using Estuary
 -------------
 
 Once installed you can now easily query the TR database in two styles:

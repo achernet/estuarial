@@ -3,7 +3,7 @@ from __future__ import print_function, division, absolute_import
 import os
 from os.path import join as pjoin
 from arraymanagement.client import ArrayClient
-from thomson.util.config.config import expanduser, UserConfigPath
+from estuary.util.config.config import expanduser, UserConfigPath
 
 if not 'ODBCINI' in os.environ:
     os.environ['ODBCINI'] = UserConfigPath
@@ -14,7 +14,7 @@ class ArrayManagementClient(object):
     """
 
     def __init__(self):
-        FeldmanDir = pjoin(expanduser('~'), '.feldman')
+        FeldmanDir = pjoin(expanduser('~'), '.estuary')
         self.basedir = pjoin(os.path.dirname(__file__), 
                              '..',
                              'data', 

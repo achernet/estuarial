@@ -5,9 +5,9 @@ import datetime as dt
 from dateutil import parser
 from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
-from thomson.util.config.config import Config
-from thomson.util.munging import worldscope_align
-from feldman.arraymanagementclient import ArrayManagementClient
+from estuary.util.config.config import Config
+from estuary.util.munging import worldscope_align
+from estuary.array.arraymanagementclient import ArrayManagementClient
 
 class TRQAD(ArrayManagementClient):
     '''

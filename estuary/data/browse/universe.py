@@ -1,9 +1,9 @@
 from __future__ import print_function, division, absolute_import
 
 import datetime as dt
-import thomson.util.indexing as indexing
+import estuary.util.indexing as indexing
 from sqlalchemy.sql import column, and_, or_
-from thomson.array.arraymanagementclient import ArrayManagementClient
+from estuary.array.arraymanagementclient import ArrayManagementClient
 
 class Universe(ArrayManagementClient):
     """
