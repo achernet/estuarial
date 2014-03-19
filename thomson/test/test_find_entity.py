@@ -12,3 +12,5 @@ meta.find_entity_name('BMW', origin='non-us')
 
 meta.find_entity_name('Bayerische')
 meta.find_entity_name('Bayerische', origin='non-us')
+
+
