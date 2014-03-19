@@ -1,11 +1,11 @@
 import os
 import unittest
 
-import estuary
-from estuary import Config
+import estuarial
+from estuarial import Config
 
 
-feldman_path = os.path.join(os.path.dirname(estuary.__file__),'trqadrc.ini')
+feldman_path = os.path.join(os.path.dirname(estuarial.__file__),'trqadrc.ini')
 config = Config(feldman_path)
 
 class TestConfig(unittest.TestCase):

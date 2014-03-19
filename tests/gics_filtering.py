@@ -1,5 +1,5 @@
 import datetime as dt
-import estuary as fd
+import estuarial as fd
 
 
 IBM = 36799

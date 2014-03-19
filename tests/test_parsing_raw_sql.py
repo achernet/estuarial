@@ -1,7 +1,7 @@
-import estuary
+import estuarial
 import datetime as dt
 
-trmeta = estuary.TRMETA()
+trmeta = estuarial.TRMETA()
 
 
 trmeta.to_fsql('tr_total_returns.sql','tr_total_returns.fsql')

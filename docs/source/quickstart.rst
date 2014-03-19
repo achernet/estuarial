@@ -7,16 +7,16 @@ Quickstart
 Downloading/Installing
 ----------------------
 
-There are several ways to install Estuary:
+There are several ways to install Estuarial:
 
 If you are using the `Anaconda Python distribution <http://continuum.io/anaconda>`_:
 ::
 
-    $ conda install estuary
-    $ pip install estuary
+    $ conda install estuarial
+    $ pip install estuarial
 
 
-To download from source, clone the `Estuary git repo <https://github.com/ContinuumIO/estuary>`_,
+To download from source, clone the `Estuarial git repo <https://github.com/ContinuumIO/estuarial>`_,
 then run:
 ::
 
@@ -24,7 +24,7 @@ then run:
 
 
 
-Using Estuary
+Using Estuarial
 -------------
 
 Once installed you can now easily query the TR database in two styles:

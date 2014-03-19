@@ -1,4 +1,4 @@
-estuary
+estuarial
 =======
 
-Private Estuary collaboration project with Thomson Reuters.
+Private Estuarial collaboration project with Thomson Reuters.

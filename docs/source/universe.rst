@@ -14,7 +14,7 @@ accessors to help get you started.::
 
 
 
-Estuary Universe objects are built for easy exploration::
+Estuarial Universe objects are built for easy exploration::
 
     dow.cash[dt1:dt2]
     dow.ohlc['2013-12-01':'2014-01-22']
@@ -22,6 +22,6 @@ Estuary Universe objects are built for easy exploration::
 
 Source
 ------
-.. autoclass:: estuary.UniverseBuilder
+.. autoclass:: estuarial.UniverseBuilder
    :members:
    :undoc-members:

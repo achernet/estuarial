@@ -4,14 +4,14 @@ import datetime as dt
 from arraymanagement.nodes.csvnodes import PandasCSVNode
 from arraymanagement.nodes.hdfnodes import PandasHDFNode
 from arraymanagement.nodes.sql import SimpleQueryTable
-from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable, 
+from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable,
                                               BulkParameterizedQueryTable,
                                               FlexibleSqlCaching,
                                               MetaSqlCaching,
                                               FlexibleSqlDateCaching,
                                               )
 import pyodbc
-from estuarial.config import Config
+from estuarial.util.config import Config
 config = Config()
 
 username = config.get('ESTUARIAL','UserName')
@@ -21,12 +21,13 @@ server   = config.get('ESTUARIAL','Server')
 port   = config.get('ESTUARIAL','Port')
 driver   = config.get('ESTUARIAL','Driver')
 
+
 if os.name == 'nt':
     sql_alchemy_conn = "mssql+pyodbc://%s:%s@%s/%s"%(username,passwd,server,db)
     connstring = 'Driver=%s;Database=%s;Server=%s;Port=%s;UID=%s;PWD=%s'%(driver,db,server,port,\
                                                                             username,passwd)
 
-else:   
+else:
     sql_alchemy_conn = "mssql+pyodbc://%s:%s@estuarial"%(username,passwd)
 
     #check if using FREETDS
@@ -45,7 +46,7 @@ global_config = dict(
     db_conn_args = (connstring,),
     db_conn_kwargs = {},
     sqlalchemy_args = [sql_alchemy_conn],
-    sqlalchemy_kwargs = {},
+        sqlalchemy_kwargs = {},
     col_types = {},
     min_itemsize = {},
     db_string_types = [str],
@@ -63,6 +64,6 @@ global_config = dict(
         "*.fdsql": FlexibleSqlDateCaching,
         },
     cache_dir = '~/.estuarial/',
-    )            
+    )
 
 local_config = {}

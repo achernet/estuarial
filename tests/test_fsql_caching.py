@@ -1,4 +1,4 @@
-import estuary as fd
+import estuarial as fd
 from sqlalchemy.sql import column, and_, or_
 
 tr = fd.TRQAD()

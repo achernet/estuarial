@@ -1,4 +1,4 @@
-import estuary as fd
+import estuarial as fd
 
 spx = fd.UniverseBuilder.spx_idx('2013-12-04')
 dow = fd.UniverseBuilder.djx_idx('2013-12-04')

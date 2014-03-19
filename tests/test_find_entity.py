@@ -1,4 +1,4 @@
-import estuary as fd
+import estuarial as fd
 
 trmeta = fd.TRMETA()
 

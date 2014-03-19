@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# estuary documentation build configuration file, created by
+# estuarial documentation build configuration file, created by
 # sphinx-quickstart on Sat Jan 11 16:24:07 2014.
 #
 # This file is execfile()d with the current directory set to its
@@ -53,7 +53,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'estuary'
+project = u'estuarial'
 copyright = u'2014, Continuum Analytics'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -279,7 +279,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'estuary.tex', u'estuary Documentation',
+  ('index', 'estuarial.tex', u'estuarial Documentation',
    u'Continuum Analytics', 'manual'),
 ]
 
@@ -309,7 +309,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'estuary', u'estuary Documentation',
+    ('index', 'estuarial', u'estuarial Documentation',
      [u'Continuum Analytics'], 1)
 ]
 
@@ -323,8 +323,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'estuary', u'estuary Documentation',
-   u'Continuum Analytics', 'estuary', 'Python API for QA Direct.',
+  ('index', 'estuarial', u'estuarial Documentation',
+   u'Continuum Analytics', 'estuarial', 'Python API for QA Direct.',
    'Miscellaneous'),
 ]
 

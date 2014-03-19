@@ -14,11 +14,11 @@ class ArrayManagementClient(object):
     """
 
     def __init__(self):
-        EstuaryDir = pjoin(expanduser('~'), '.estuarial')
+        EstuarialDir = pjoin(expanduser('~'), '.estuarial')
         self.basedir = pjoin(os.path.dirname(__file__), 
                              '..',
                              'data', 
                              'catalog', 
                              'SQL_DATA')
         self.aclient = ArrayClient(basepath=self.basedir,
-                                   localdatapath=EstuaryDir)
+                                   localdatapath=EstuarialDir)
