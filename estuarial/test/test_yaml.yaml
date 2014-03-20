@@ -1,7 +1,7 @@
 SQL:
     gicsec:
       type: 'raw'
-      
+      doc: 'Some docs for gicsec'
       query: >
           SELECT S.ID
           ,   S.CUSIP
@@ -36,6 +36,7 @@ SQL:
     # Query for country membership
     country_universe:
         type: 'conditional'
+	doc: 'Some docs for country_universe'
         conditionals:
            - statuscode
            - typecode
@@ -48,6 +49,7 @@ SQL:
     # Query for S&P 500 membership
     spx_universe:
         type: 'conditional'
+	doc: 'Some docs for spx_universe'
         conditionals: 
             - DATE_
             - ITICKER
