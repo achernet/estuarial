@@ -1,69 +1,77 @@
-import collections
 import os
+import pyodbc
+import collections
 import datetime as dt
+from estuarial.util.config import Config
+from arraymanagement.nodes.sql import SimpleQueryTable
 from arraymanagement.nodes.csvnodes import PandasCSVNode
 from arraymanagement.nodes.hdfnodes import PandasHDFNode
-from arraymanagement.nodes.sql import SimpleQueryTable
 from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable,
                                               BulkParameterizedQueryTable,
                                               FlexibleSqlCaching,
                                               MetaSqlCaching,
-                                              FlexibleSqlDateCaching,
-                                              )
-import pyodbc
-from estuarial.util.config import Config
+                                              FlexibleSqlDateCaching)
+
 config = Config()
-
-username = config.get('ESTUARIAL','UserName')
-passwd   = config.get('ESTUARIAL','Password')
-db   = config.get('ESTUARIAL','Database')
-server   = config.get('ESTUARIAL','Server')
-port   = config.get('ESTUARIAL','Port')
-driver   = config.get('ESTUARIAL','Driver')
-
+port = config.get('ESTUARIAL', 'Port')
+db = config.get('ESTUARIAL', 'Database')
+server = config.get('ESTUARIAL', 'Server')
+driver = config.get('ESTUARIAL', 'Driver')
+passwd = config.get('ESTUARIAL', 'Password')
+username = config.get('ESTUARIAL', 'UserName')
 
 if os.name == 'nt':
-    sql_alchemy_conn = "mssql+pyodbc://%s:%s@%s/%s"%(username,passwd,server,db)
-    connstring = 'Driver=%s;Database=%s;Server=%s;Port=%s;UID=%s;PWD=%s'%(driver,db,server,port,\
-                                                                            username,passwd)
+    sql_alchemy_conn = "mssql+pyodbc://{}:{}@{}/{}".format(username,
+                                                           passwd,
+                                                           server,
+                                                           db)
+
+    connstring = 'Driver={};Database={};Server={};Port={};UID={};PWD={}'.format(
+        driver,
+        db,
+        server,
+        port,
+        username,
+        passwd)
 
 else:
-    sql_alchemy_conn = "mssql+pyodbc://%s:%s@estuarial"%(username,passwd)
+    sql_alchemy_conn = "mssql+pyodbc://{}:{}@estuarial".format(username, 
+                                                               passwd)
 
-    #check if using FREETDS
-    version = config.get('ESTUARIAL','TDS_VERSION')
+    # if FreeTDS
+    version = config.get('ESTUARIAL', 'TDS_VERSION')
     if version:
-        connstring = 'Driver=%s;Server=%s;Database=qai;Uid=%s;Pwd=%s;TDS_VERSION=8.0;PORT=%s'%(driver, \
-                             server,username,passwd,port)
+        connstring = ('Driver={};Server={};Database=qai;Uid={};Pwd={};'
+                      'TDS_VERSION=8.0;PORT={}').format(driver,
+                                                        server,
+                                                        username,
+                                                        passwd,
+                                                        port)
     else:
-        connstring = 'DSN=estuarial;UID=%s;PWD=%s'%(username,passwd)
+        connstring = 'DSN=estuarial;UID={};PWD={}'.format(username, passwd)
 
-global_config = dict(
-    is_dataset = False,
-    csv_options = {},
-    datetime_type = 'datetime64[ns]',
-    db_module = pyodbc,
-    db_conn_args = (connstring,),
-    db_conn_kwargs = {},
-    sqlalchemy_args = [sql_alchemy_conn],
-        sqlalchemy_kwargs = {},
-    col_types = {},
-    min_itemsize = {},
-    db_string_types = [str],
-    db_datetime_types = [dt.date, dt.datetime],
-    loaders = {
-        '*.csv' : PandasCSVNode,
-        '*.CSV' : PandasCSVNode,
-        '*.hdf5' : PandasHDFNode,
-        '*.h5' : PandasHDFNode,
-        '*.sql' : SimpleQueryTable,
-        "*.sqlspec" : DumbParameterizedQueryTable,
-        "*.bsqlspec" : BulkParameterizedQueryTable,
-        "*.fsql" : FlexibleSqlCaching,
-        "*.msql" : MetaSqlCaching,
-        "*.fdsql": FlexibleSqlDateCaching,
-        },
-    cache_dir = '~/.estuarial/',
-    )
+global_config = dict(is_dataset=False,
+                     csv_options={},
+                     datetime_type='datetime64[ns]',
+                     db_module=pyodbc,
+                     db_conn_args=(connstring,),
+                     db_conn_kwargs={},
+                     sqlalchemy_args=[sql_alchemy_conn],
+                     sqlalchemy_kwargs={},
+                     col_types={},
+                     min_itemsize={},
+                     db_string_types=[str],
+                     db_datetime_types=[dt.date, dt.datetime],
+                     loaders={'*.csv':PandasCSVNode,
+                              '*.CSV':PandasCSVNode,
+                              '*.hdf5':PandasHDFNode,
+                              '*.h5':PandasHDFNode,
+                              '*.sql':SimpleQueryTable,
+                              "*.sqlspec":DumbParameterizedQueryTable,
+                              "*.bsqlspec":BulkParameterizedQueryTable,
+                              "*.fsql":FlexibleSqlCaching,
+                              "*.msql":MetaSqlCaching,
+                              "*.fdsql": FlexibleSqlDateCaching},
+                     cache_dir = '~/.estuarial/')
 
 local_config = {}
