@@ -1,4 +1,4 @@
-SQL:
+UniverseBuilder:
     gicsec:
       type: 'raw'
       doc: 'Some docs for gicsec'

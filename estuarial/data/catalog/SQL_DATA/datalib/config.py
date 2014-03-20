@@ -6,11 +6,7 @@ from estuarial.util.config import Config
 from arraymanagement.nodes.sql import SimpleQueryTable
 from arraymanagement.nodes.csvnodes import PandasCSVNode
 from arraymanagement.nodes.hdfnodes import PandasHDFNode
-from arraymanagement.nodes.sqlcaching import (DumbParameterizedQueryTable,
-                                              BulkParameterizedQueryTable,
-                                              FlexibleSqlCaching,
-                                              MetaSqlCaching,
-                                              FlexibleSqlDateCaching)
+from arraymanagement.nodes.sqlcaching import YamlSqlDateCaching
 
 config = Config()
 port = config.get('ESTUARIAL', 'Port')
@@ -50,6 +46,7 @@ else:
     else:
         connstring = 'DSN=estuarial;UID={};PWD={}'.format(username, passwd)
 
+loaders = collections.OrderedDict([("*.yaml", YamlSqlDateCaching)])
 global_config = dict(is_dataset=False,
                      csv_options={},
                      datetime_type='datetime64[ns]',
@@ -62,16 +59,7 @@ global_config = dict(is_dataset=False,
                      min_itemsize={},
                      db_string_types=[str],
                      db_datetime_types=[dt.date, dt.datetime],
-                     loaders={'*.csv':PandasCSVNode,
-                              '*.CSV':PandasCSVNode,
-                              '*.hdf5':PandasHDFNode,
-                              '*.h5':PandasHDFNode,
-                              '*.sql':SimpleQueryTable,
-                              "*.sqlspec":DumbParameterizedQueryTable,
-                              "*.bsqlspec":BulkParameterizedQueryTable,
-                              "*.fsql":FlexibleSqlCaching,
-                              "*.msql":MetaSqlCaching,
-                              "*.fdsql": FlexibleSqlDateCaching},
+                     loaders=loaders,
                      cache_dir = '~/.estuarial/')
 
 local_config = {}
