@@ -38,7 +38,7 @@ class _OHLCIndexer(_TRUniverseIndexer):
             start = index.start
             stop = self._check_end(index.stop)
             universe = self.obj.data.seccode.tolist()
-            arr = self.obj.aclient['/DataStream/ohlc.fsql']
+            arr = self.obj.aclient['/DataStream/ohlc.yaml']
             ohlc = arr.select(and_(arr.seccode.in_(universe),
                                    arr.marketdate >= start,
                                    arr.marketdate <= stop))
@@ -55,7 +55,7 @@ class _CASHIndexer(_TRUniverseIndexer):
             universe = self.obj.data.seccode.tolist()
             item = 2001 # cash
             freq = 'Q'  # Quarterly Maybe use step for this?
-            ws_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.fsql'
+            ws_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.yaml'
             arr = self.obj.aclient[ws_query_loc]
             cash = arr.select(and_(arr.seccode.in_(universe),
                                    arr.item == item,
@@ -75,7 +75,7 @@ class _NIIndexer(_TRUniverseIndexer):
             universe = self.obj.data.seccode.tolist()
             item = 1751 # net income
             freq = 'Q'  # Quarterly Maybe use step for this?
-            ni_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.fsql'
+            ni_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.yaml'
             arr = self.obj.aclient[ni_query_loc]
             cash = arr.select(and_(arr.seccode.in_(universe),
                                    arr.item == item,
