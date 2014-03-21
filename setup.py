@@ -15,7 +15,8 @@ catalog_suffix_list = ('.sql',
                        '.msql',
                        '.bsqlspec',
                        '.sqlspec',
-                       '.py')
+                       '.py',
+                       '.yaml')
 
 def get_sql_files():
     data_files = []
