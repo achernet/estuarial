@@ -1,0 +1,6 @@
+SQL:
+    item:
+        type: raw
+        query: >
+            SELECT *
+            FROM dbo.RKDFndStdItem items

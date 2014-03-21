@@ -148,7 +148,7 @@ class TRQAD(ArrayManagementClient):
 
         """
 
-        arr = self.aclient['/DataStream/datastream_basic.fsql']
+        arr = self.aclient['/DataStream/datastream_basic.yaml']
         start, stop = dt_list
         df = arr.select(and_(arr.seccode.in_(universe),
                              arr.marketdate >= start,

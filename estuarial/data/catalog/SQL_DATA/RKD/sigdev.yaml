@@ -1,0 +1,59 @@
+SQL:
+    sigdev:
+        type: conditional
+        conditionals:
+            - i.seccode
+            - Siglevel
+        query: >
+            SELECT a.Code
+            , a.RIC
+            , a.Ticker
+            , a.Name_
+            , a.SrcDt
+            , a.InitiationDt
+            , a.LastUpdDt
+            , a.SiGgLevel
+            , a.Headline
+            , d.Desc_ as Topic
+            , e.Desc_ as FieldCode
+            , f.Desc_ as SubFieldCode
+            , b.SubFieldValue as Value
+            , b.FieldValue as ValueUnit
+            , a.SigDesc
+            FROM RKDCmpSigDev a 
+            JOIN RKDSigTopics b
+                ON b.devid = a.devid 
+                AND b.code = a.code
+            JOIN RKDSigTopicMap c
+                ON c.mapid = b.mapid
+            LEFT JOIN RKDFndCode d
+                ON d.code = c.TopicCode 
+                AND d.Type_=91 --Topic
+            LEFT JOIN RKDFndCode e
+                ON e.code = c.FieldCode 
+                AND e.Type_=92 --Topic Supp1
+            LEFT JOIN RKDFndCode f
+                ON f.code = c.SubFieldCode 
+                AND f.Type_=93 --Topic Supp2
+            JOIN RKDFndCmpRefIssue g
+                ON g.code = a.code
+            JOIN secmapX h --secMapX for Global Issue
+                ON g.issuecode = h.vencode 
+                AND h.ventype= 26 
+                AND h.rank =1
+            JOIN secmstrx i --GsecMstrx for Global Issue
+                ON i.seccode = h.seccode
+
+            -- where i.ID = @ID 
+            -- --and a.Siglevel = 1 --Sig Level
+            -- --and d.Desc_ in ('Positive Earnings Pre-Announcement','Share Repurchases') 
+            -- Topic
+            -- order by a.Siglevel, c.TopicCode, a.SrcDt desc
+            /*
+             RKD SIGNIFICANT DEVELOPMENTS
+             --------------------------------------------
+             This query returns all significant developments with related 
+             topics and details
+            */
+
+

@@ -30,9 +30,9 @@ class TRMETA(ArrayManagementClient):
         """
 
         if origin == 'us':
-            secmstrx_df = self.aclient['/SECCODES/sec.fsql']
+            secmstrx_df = self.aclient['/SECCODES/sec.yaml']
         else:
-            secmstrx_df = self.aclient['/SECCODES/gsec.fsql']
+            secmstrx_df = self.aclient['/SECCODES/gsec.yaml']
 
         if isinstance(entity, int):
             seccode_match = secmstrx_df.select(secmstrx_df.seccode==entity)
@@ -53,9 +53,9 @@ class TRMETA(ArrayManagementClient):
         """
 
         if origin == 'us':
-            secmstrx_df = self.aclient['/SECCODES/sec.fsql']
+            secmstrx_df = self.aclient['/SECCODES/sec.yaml']
         else:
-            secmstrx_df = self.aclient['/SECCODES/gsec.fsql']
+            secmstrx_df = self.aclient['/SECCODES/gsec.yaml']
 
         if isinstance(entity, str):
             name_match = secmstrx_df.select(
@@ -71,7 +71,7 @@ class TRMETA(ArrayManagementClient):
     def get_rkd_items(self):
         '''retrieve rkd items dataframe and add enumeration'''
         index_name = 'COA'
-        items = self.aclient['/RKD/items.sql'].select()
+        items = self.aclient['/RKD/items.yaml'].select()
         for i in items[index_name]:
             thisitem = items[items[index_name]==i]
             setattr(items,i,thisitem)
@@ -79,7 +79,7 @@ class TRMETA(ArrayManagementClient):
 
     def get_ibes_measures(self):
         index_name = 'Measure'
-        items = self.aclient['/IBES/items.sql'].select()
+        items = self.aclient['/IBES/items.yaml'].select()
         for i in items[index_name]:
             thisitem = items[items[index_name]==i]
             setattr(items,i,thisitem)

@@ -1,0 +1,25 @@
+SQL:
+    test:
+        type: conditional
+        conditionals:
+            - ID
+
+        query: >
+            SELECT S.ID
+            , S.CUSIP
+            , S.NAME
+            , R.MARKETDATE
+            , R.RI
+            FROM DBO.SECMSTR S
+            JOIN DBO.SECMAP M
+                ON M.SECCODE = S.SECCODE
+                AND M.VENTYPE = 19 -- Datastream
+                AND M.RANK = 1
+            JOIN (SELECT * FROM  DBO.DSQTRI1
+                  UNION SELECT * FROM  DBO.DSQTRI2
+                  UNION SELECT * FROM  DBO.DSQTRI3
+                  UNION SELECT * FROM  DBO.DSQTRI4
+                  UNION SELECT * FROM  DBO.DSQTRI5
+                  UNION SELECT * FROM  DBO.DSQTRI6) R
+            ON R.INFOCODE = M.VENCODE
+            ORDER BY R.MARKETDATE

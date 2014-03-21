@@ -9,7 +9,7 @@ class WS(ArrayManagementClient):
 
     def __init__(self):
         super(WS, self).__init__()
-        arr = self.aclient['/WORLDSCOPE/wsitems.sql']
+        arr = self.aclient['/WORLDSCOPE/wsitems.yaml']
         df = arr.select()
         self.word_list = None
         for t_metric in df.values:
@@ -19,7 +19,7 @@ class WS(ArrayManagementClient):
             setattr(self, name, value)
 
     def _word_list(self):
-        arr = self.aclient['/WORLDSCOPE/wsitems.sql']
+        arr = self.aclient['/WORLDSCOPE/wsitems.yaml']
         df = arr.select()
         word_list = df.Name.values.tolist()
 
@@ -35,7 +35,7 @@ class WS(ArrayManagementClient):
         return common
 
     def find_metrics(self,name=None):
-        arr = self.aclient['/WORLDSCOPE/wsitems.sql']
+        arr = self.aclient['/WORLDSCOPE/wsitems.yaml']
         df = arr.select()
         if not self.word_list:
             self.word_list = self._word_list()

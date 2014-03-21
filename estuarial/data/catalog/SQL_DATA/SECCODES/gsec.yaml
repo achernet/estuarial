@@ -1,0 +1,9 @@
+SQL:
+    gsec:
+        type: conditional
+        conditionals:
+            - seccode
+            - name
+
+        query: >
+            select * from gsecmstrx

@@ -1,0 +1,9 @@
+SQL:
+    sec:
+        type: conditional
+        conditionals:
+            - seccode
+            - name
+
+        query: >
+            select * from secmstrx

@@ -1,0 +1,24 @@
+SQL:
+    short_interest:
+        type: conditional
+        conditionals:
+            - ID
+            - Date_
+            - Exch
+ 
+        query: >
+            SELECT m.ID
+            , m.Cusip
+            , m.Name
+            , d.Date_
+            , d.Shares
+            , d.Volume
+            , d.Exch
+            , ex.Desc_ as ExchDesc
+            FROM SecMstrx m
+            LEFT JOIN ShortInt2Data d
+                ON d.code = m.seccode
+                AND m.type_ = 1
+            LEFT JOIN ShortInt2Code ex
+                ON ex.code = d.exch
+                AND ex.type_ = 1
