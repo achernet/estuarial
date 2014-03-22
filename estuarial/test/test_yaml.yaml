@@ -36,7 +36,7 @@ UniverseBuilder:
     # Query for country membership
     country_universe:
         type: 'conditional'
-	doc: 'Some docs for country_universe'
+        doc: 'Some docs for country_universe'
         conditionals:
            - statuscode
            - typecode
@@ -49,22 +49,22 @@ UniverseBuilder:
     # Query for S&P 500 membership
     spx_universe:
         type: 'conditional'
-	doc: 'Some docs for spx_universe'
+        doc: 'Some docs for spx_universe'
         conditionals: 
             - DATE_
             - ITICKER
 
         query: >
             SELECT  I.NAME as INAME
-            ,   I.TICKER as ITICKER
-            ,   S.TICKER
-            ,   S.CUSIP
-            ,   S.NAME
-            ,   N.DATE_
-            ,   D.CLOSE_
-            ,   N.SHARES
-            ,   M.SECCODE
-            ,   D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
+            , I.TICKER as ITICKER
+            , S.TICKER
+            , S.CUSIP
+            , S.NAME
+            , N.DATE_
+            , D.CLOSE_
+            , N.SHARES
+            , M.SECCODE
+            , D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
             FROM     DBO.IDXSPCMP N
             JOIN     DBO.IDXINFO I
                 ON  I.CODE = N.IDXCODE
@@ -85,6 +85,7 @@ UniverseBuilder:
     # Query for Dow Jones membership
     dowjones_universe:
         type: 'conditional'
+        doc: 'Some doc for dow jones.'
         conditionals:
             - DATE_
             - ITICKER    
