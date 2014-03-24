@@ -84,47 +84,6 @@ class TRQAD(ArrayManagementClient):
             ws_data = worldscope_align(ws_data)
         return ws_data
 
-    def datastream(self, universe, metrics, dt_list):
-        """
-        :param: metrics: open, high, low, close,
-                vwap, totalreturn, volume, bid,
-                ask, mosttrdprc, consolvol
-
-        :type universe: list
-        :param universe: list of securities
-
-        :type dt_list: list/tuple
-        :param dt_list: Beginning and end market dates for query
-
-        :rtype: `pandas.DataFrame`
-        :return: DataFrame of Securities with a TimeSeries of OHLC
-
-        fd.metric.
-        """
-        pass
-
-    def ds_ohlc(self, universe, dt_list):
-        """
-        Convenience method
-
-        Query the Datastream DB for Open, High, Low, Close
-        with a given universe (convenience function)
-
-        :type universe: list
-        :param universe: list of securities
-
-        :type dt_list: list/tuple
-        :param dt_list: Beginning and end market dates for query
-
-        :rtype: `pandas.DataFrame`
-        :return: DataFrame of Securities with a TimeSeries of OHLC
-
-        """
-        ds_data = self.aclient['/DataStream/ohlcview.sqlspec'].select(
-            seccode=universe,
-            marketdate=[dt_list[0],
-                        dt_list[1]])
-        return ds_data
 
     def datastream(self,universe,dt_list):
         """
