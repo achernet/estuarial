@@ -1,0 +1,26 @@
+SQL:
+    wsndata:
+        type: conditional
+        conditionals:
+            - S.ID
+            - D.DATE_
+            - D.FREQ
+
+        query: >
+            SELECT S.ID
+            ,   S.CUSIP
+            ,       S.NAME
+            ,       D.FREQ
+            ,       D.SEQ
+            ,       D.YEAR_
+            ,       D.DATE_
+            ,       D.VALUE_
+            ,       D.ITEM
+            FROM DBO.SECMSTRX S
+            JOIN DBO.SECMAPX M
+               ON  M.SECCODE = S.SECCODE
+               AND M.VENTYPE = 10 -- Worldscope
+            JOIN DBO.WSNDATA D
+               ON D.CODE = M.VENCODE
+            ORDER BY D.YEAR_, D.SEQ
+            /* D.ITEM = (select * from dbo.wsitem) */

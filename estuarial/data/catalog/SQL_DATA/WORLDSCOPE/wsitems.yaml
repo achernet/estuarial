@@ -1,0 +1,5 @@
+SQL:
+    wsitems:
+        type: raw
+        query: >
+            select Number, Name from WSITEM

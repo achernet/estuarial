@@ -1,0 +1,11 @@
+SQL:
+    country_universe:
+        type: 'conditional'
+        conditionals:
+            - statuscode
+            - typecode
+            - ctrytradedin
+
+        query: >
+            SELECT *
+            FROM trqa.DS2EqMstr

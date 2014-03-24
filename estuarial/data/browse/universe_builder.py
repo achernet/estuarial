@@ -32,7 +32,7 @@ class UniverseBuilder(ArrayManagementClient):
     @classmethod
     def us(self):
         conn = ArrayManagementClient()
-        arr = conn.aclient['/UNIVERSE_SQL/country_universe.fsql']
+        arr = conn.aclient['/UNIVERSE_SQL/country_universe.yaml']
         df = arr.select(and_(arr.ctrytradedin=='US',
 			     arr.statuscode=='A',
 			     arr.typecode=='EQ'))
@@ -43,7 +43,7 @@ class UniverseBuilder(ArrayManagementClient):
     @classmethod
     def can(self):
         conn = ArrayManagementClient()
-        arr = conn.aclient['/UNIVERSE_SQL/country_universe.fsql']
+        arr = conn.aclient['/UNIVERSE_SQL/country_universe.yaml']
         df = arr.select(and_(arr.ctrytradedin=='CA',
 			     arr.statuscode=='A',
 			     arr.typecode=='EQ'))
@@ -58,7 +58,7 @@ class UniverseBuilder(ArrayManagementClient):
         :return: Dow Jones Universe on a given date
         """
         conn = ArrayManagementClient()
-        arr = conn.aclient['/UNIVERSE_SQL/dowjones_universe.fsql']
+        arr = conn.aclient['/UNIVERSE_SQL/dowjones_universe.yaml']
         df = arr.select(and_(arr.iticker=='DJX_IDX',arr.date_==dt))
         query = arr.query
         df = lower_columns(df)
@@ -71,7 +71,7 @@ class UniverseBuilder(ArrayManagementClient):
         :return: SP500 Universe on a given date
         """
         conn = ArrayManagementClient()
-        arr = conn.aclient['/UNIVERSE_SQL/spx_universe.fsql']
+        arr = conn.aclient['/UNIVERSE_SQL/spx_universe.yaml']
         df = arr.select(and_(arr.iticker=='SPX_IDX',arr.date_==dt))
         query = arr.query
         df = lower_columns(df)

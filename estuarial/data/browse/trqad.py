@@ -7,6 +7,7 @@ from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
 from estuarial.util.config.config import Config
 from estuarial.util.munging import worldscope_align
+from estuarial.util.dateparsing import parsedate
 from estuarial.array.arraymanagementclient import ArrayManagementClient
 
 class TRQAD(ArrayManagementClient):
@@ -69,16 +70,9 @@ class TRQAD(ArrayManagementClient):
 
         """
 
-         # ws_data = self.aclient['/WORLDSCOPE/wsndata.bsqlspec'].select(
-         #            seccode=universe,
-         #            item=metrics,
-         #            freq=freq,
-         #            fdate=[dt_list[0], dt_list[1]]
-         #            )
+        start,stop = parsedate(dt_list)
 
-        start = dt_list[0]
-        stop = dt_list[1]
-        arr = self.aclient['/WORLDSCOPE/worldscope_metrics_date_select.fdsql']
+        arr = self.aclient['/WORLDSCOPE/worldscope_metrics_date_select.yaml']
         ws_data = arr.select(
             and_(arr.seccode.in_(universe),
                  arr.item.in_(metrics),
@@ -148,8 +142,9 @@ class TRQAD(ArrayManagementClient):
 
         """
 
-        arr = self.aclient['/DataStream/datastream_basic.fsql']
-        start, stop = dt_list
+        arr = self.aclient['/DataStream/datastream_basic.yaml']
+        start,stop = parsedate(dt_list)
+
         df = arr.select(and_(arr.seccode.in_(universe),
                              arr.marketdate >= start,
                              arr.marketdate <= stop))

@@ -1,6 +1,7 @@
 import datetime
 from sqlalchemy.sql import column, and_, or_
 from estuarial.array.arraymanagementclient import ArrayManagementClient
+from estuarial.util.dateparsing import check_date
 
 # the supported metrics
 def get_metrics_list():
@@ -26,7 +27,8 @@ class _TRUniverseIndexer(ArrayManagementClient):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = self._check_end(index.stop)
+            stop = inde.stop
+            start, stop = check_date([start,stop])
             return start, stop
         else:
             raise TypeError("index must be datetime slice")
@@ -36,12 +38,16 @@ class _OHLCIndexer(_TRUniverseIndexer):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = self._check_end(index.stop)
+            stop = (index.stop)
+
+            start,stop = check_date([start,stop])
+
             universe = self.obj.data.seccode.tolist()
-            arr = self.obj.aclient['/DataStream/ohlc.fsql']
-            ohlc = arr.select(and_(arr.seccode.in_(universe),
-                                   arr.marketdate >= start,
-                                   arr.marketdate <= stop))
+            arr = self.obj.aclient['/DataStream/ohlc.yaml']
+            ohlc = arr.select(and_(arr.seccode.in_(universe)),
+                               date_1 = start,
+                               date_2 = stop,
+                               )
             return ohlc
         else:
             raise TypeError("index must be datetime slice")
@@ -51,17 +57,23 @@ class _CASHIndexer(_TRUniverseIndexer):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = self._check_end(index.stop)
+            stop = (index.stop)
+
+            start,stop = check_date([start,stop])
+
             universe = self.obj.data.seccode.tolist()
             item = 2001 # cash
             freq = 'Q'  # Quarterly Maybe use step for this?
-            ws_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.fsql'
+            ws_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.yaml'
             arr = self.obj.aclient[ws_query_loc]
+
             cash = arr.select(and_(arr.seccode.in_(universe),
                                    arr.item == item,
-                                   arr.freq == freq,
-                                   arr.fdate >= start,
-                                   arr.fdate <= stop))
+                                   arr.freq == freq
+                                  ),
+                               date_1 = start,
+                               date_2 = stop
+                             )
             return cash
         else:
             raise TypeError("index must be datetime slice")
@@ -71,17 +83,20 @@ class _NIIndexer(_TRUniverseIndexer):
     def __getitem__(self, index):
         if isinstance(index, slice):
             start = index.start
-            stop = self._check_end(index.stop)
+            stop = (index.stop)
+
+            start,stop = check_date([start,stop])
             universe = self.obj.data.seccode.tolist()
             item = 1751 # net income
             freq = 'Q'  # Quarterly Maybe use step for this?
-            ni_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.fsql'
+            ni_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.yaml'
             arr = self.obj.aclient[ni_query_loc]
             cash = arr.select(and_(arr.seccode.in_(universe),
                                    arr.item == item,
-                                   arr.freq == freq,
-                                   arr.fdate >= start,
-                                   arr.fdate <= stop))
+                                   arr.freq == freq,),
+                               date_1 = start,
+                               date_2 = stop,
+                             )
             return cash
         else:
             raise TypeError("index must be datetime slice")

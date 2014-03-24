@@ -8,8 +8,8 @@ qad = TRQAD()
 meta = TRMETA()
 metrics = MetricsManager()
 
-spx = fd.UniverseBuilder.spx_idx('2013-12-04')
-spx = fd.UniverseBuilder.spx_idx(dt.datetime(2013, 12, 4))
+spx = UniverseBuilder.spx_idx('2013-12-04')
+spx = UniverseBuilder.spx_idx(dt.datetime(2013, 12, 4))
 universe = spx.data.seccode.tolist()[:20]
 
 IBM = 36799
@@ -24,9 +24,9 @@ LTD = 3251  # Long Term Debt
 TD = 3255   # Total Debt
 TA = 2999   # Total Assets
 
-dt_list = (dt.datetime(2000,1,1), dt.datetime(2014,1,1))
-metrics = [NI, CASH, TL]
-qad.worldscope(universe,metrics,dt_list)
+dt_list = [dt.datetime(2000,1,1), dt.datetime(2014,1,1)]
+metrics_list = [NI, CASH, TL]
+qad.worldscope(universe,metrics_list,dt_list)
 
 #reduce universe to IBM
 df =  spx.data

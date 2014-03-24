@@ -1,0 +1,71 @@
+SQL:
+    econ_series_master:
+        type: raw
+	query: >
+            SELECT E.EcoSeriesID
+            , E.DSMNEMONIC
+            , E.DESC_ENGLISH
+            , E.IsForecast	
+            , E.ISKEYINDICATOR
+            , E.STARTDATE
+            , E.MKTCODE
+            , C1.DESCRIPTION AS MARKETDESC
+            , C2.DESCRIPTION AS UNITDESC
+            , E.SCALECODE
+            , C3.DESCRIPTION AS SCALEDESC
+            , STATCODE
+            , E.ISDATASETNATIONAL
+            , E.SERIESTYPECODE
+            , C4.DESCRIPTION AS SERIESTYPEDESC
+            , E.FREQCODE
+            , E.SRCCODE
+            , C5.DESCRIPTION AS SOURCEDESC
+            , E.DSLDBCODE
+            , C6.DESCRIPTION AS LICENSEDESC
+            , E.CNVCODE
+            , C7.DESCRIPTION AS CNVDESC
+            
+            FROM ECOINFO E
+            
+            JOIN ECOCODE C1 -- MARKET DESCRIPTION
+            	ON C1.CODE = E.MKTCODE 
+            	AND C1.TYPE_ = 5
+            
+            JOIN ECOCODE C2 -- UNIT DESCRIPTION
+            	ON C2.CODE = E.UNITCODE 
+            	AND C2.TYPE_ = 10
+            
+            JOIN ECOCODE C3 -- SCALE DESCRIPTION
+            	ON C3.CODE = E.SCALECODE 
+            	AND C3.TYPE_ = 6
+            
+            JOIN ECOCODE C4 -- SERIES TYPE DESCRIPTION
+            	ON C4.CODE = E.SERIESTYPECODE 
+            	AND C4.TYPE_ = 7
+            
+            JOIN ECOCODE C5 -- SOURCE DESCRIPTION
+            	ON C5.CODE = E.SRCCODE 
+            	AND C5.TYPE_ = 8
+            
+            JOIN ECOCODE C6 -- LICENSE DESCRIPTION
+            	ON C6.CODE = E.DSLDBCODE 
+            	AND C6.TYPE_ = 11
+            
+            JOIN ECOCODE C7 -- CNVCODE DESCRIPTION			
+            	ON C7.CODE = E.CNVCODE	-- CnvCode indicates the method used to calculate 
+                                        -- one periodic figure from another periodic
+            	AND C7.TYPE_ = 2        -- figure. For example, CnvCode describes how an
+                                        -- annual figure is calculated from a monthly 
+					-- figure, or how a quarterly figure is calculated 
+					-- from a monthly figure
+            ORDER BY MARKETDESC, E.DSMNEMONIC ASC
+            
+            /*
+            #### DATASTREAM ECONOMICS ###
+            
+            This query retrieves a list of all the economic series covered in QA Direct.   
+            
+            Date_       Author             Comments                    Edits
+            ----------------------------------------------------------------
+            Nov 2011    MARY ANN SERRAHN   CREATED
+            */
