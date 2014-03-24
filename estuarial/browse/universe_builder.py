@@ -1,12 +1,8 @@
 from __future__ import print_function, division, absolute_import
 
-import os
-import datetime as dt
-from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
-from estuarial.util.config.config import Config
 from arraymanagement.client import ArrayClient
-from estuarial.data.browse.universe import Universe
+from estuarial.browse.universe import Universe
 from estuarial.array.arraymanagementclient import ArrayManagementClient
 
 def lower_columns(df):

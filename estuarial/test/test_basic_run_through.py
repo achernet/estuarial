@@ -1,8 +1,8 @@
 import datetime as dt
-from estuarial.data.browse.trqad import TRQAD
-from estuarial.data.drilldown.metadata import TRMETA
-from estuarial.data.browse.metrics_manager import MetricsManager
-from estuarial.data.browse.universe_builder import UniverseBuilder
+from estuarial.query.trqad import TRQAD
+from estuarial.drilldown.metadata import TRMETA
+from estuarial.browse.metrics_manager import MetricsManager
+from estuarial.browse.universe_builder import UniverseBuilder
  
 qad = TRQAD()
 meta = TRMETA()

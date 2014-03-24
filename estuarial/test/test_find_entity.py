@@ -1,4 +1,4 @@
-from estuarial.data.drilldown.metadata import TRMETA
+from estuarial.drilldown.metadata import TRMETA
 
 meta = TRMETA()
 #ents = meta.find_entity_id()

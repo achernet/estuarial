@@ -1,4 +1,4 @@
-from estuarial.data.browse import (universe, 
+from estuarial.browse import (universe,
                                    metrics_manager,
                                    universe_builder)
 
