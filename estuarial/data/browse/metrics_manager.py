@@ -10,7 +10,7 @@ class WS(ArrayManagementClient):
     def __init__(self):
         super(WS, self).__init__()
         arr = self.aclient['/WORLDSCOPE/wsitems.yaml']
-        df = arr.select()
+        df = arr.select(query_filter=None)
         self.word_list = None
         for t_metric in df.values:
             name = t_metric[1].translate(None,
@@ -20,7 +20,7 @@ class WS(ArrayManagementClient):
 
     def _word_list(self):
         arr = self.aclient['/WORLDSCOPE/wsitems.yaml']
-        df = arr.select()
+        df = arr.select(query_filter=None)
         word_list = df.Name.values.tolist()
 
         #lots of cleanup :)

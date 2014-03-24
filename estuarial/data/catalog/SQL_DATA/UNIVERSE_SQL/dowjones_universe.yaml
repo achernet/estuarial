@@ -3,8 +3,8 @@ SQL:
     dowjones_universe:
         type: 'conditional'
         conditionals:
+            - ITICKER
             - DATE_
-            - ITICKER    
 
         query: >
             SELECT  I.NAME as INAME
