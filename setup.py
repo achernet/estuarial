@@ -9,13 +9,7 @@ else:
 
 curdir = os.path.abspath(os.path.dirname(__file__))
 config_suffix_list = ["*.ini"]
-catalog_suffix_list = ('.sql',
-                       '.fsql',
-                       '.fdsql',
-                       '.msql',
-                       '.bsqlspec',
-                       '.sqlspec',
-                       '.py',
+catalog_suffix_list = ('.py',
                        '.yaml')
 
 def get_sql_files():
