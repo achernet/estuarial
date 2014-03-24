@@ -1,5 +1,5 @@
 # Estuarial meeting 03/21/2014
-Participants: Daniel Meisner, Ben Zaitlen, and Ely Spears (notes taker)
+Participants: Daniel Meisner, Ben Zaitlen, and Ely Spears
 
 ## Topics and keywords
 estuarial, alpha-release, bug-fixes, calendar, point-in-time, entity, 
@@ -14,7 +14,7 @@ upcoming milestones:
 slated for the second week of April (targeting April 8).
 
 - Integration with blaze. This will be initially handled by Ben Z. as per 
-[this commentfrom @aterrel](
+[this comment from @aterrel](
 https://github.com/ContinuumIO/blaze/pull/196#issuecomment-38324632). The
 current design idea is to wrap estuarial's use of blaze inside of a query-
 handling layer. This will allow developer's to possibly swap out reliance on 
@@ -39,7 +39,8 @@ Wednesday, March 26, to prioritize these items for the first release.
 we move forward, with @spearsem and @quasiben adding points too:
 
 - How to manage multiple connections and connections to multiple sources?
-- How to extend query-handling to non-SQL based queries.
+- How to extend query-handling to non-SQL based queries. Note here: in the long
+  -run this will be a thin adapter around blaze DataShape.
 - How to expose multiple function signatures / interfaces for each query. For
   example, the query `select * from my_table` with conditionals `date` and
   `id` might need to auto-gen functions that allow the date to be selected
@@ -50,6 +51,14 @@ we move forward, with @spearsem and @quasiben adding points too:
 
       my_table_query(date=between(dt1, dt2), id=in_(list_of_ids))
       my_table_query(date=dt1, id=sample_id)
+      my_table_query(date=lt_('2012-12-31'), id=between(id1, id2))
+      ... etc.
+
+  Merely using the `where` function from a returned blaze array does not seem
+  sufficient for all of these kinds of operations, and may also disallow users
+  from specifying arguments that map to indices or keys and could make the
+  operations more efficient. The question is, how much of just a plain ORM API
+  do we want to expose? All of sqlalchemy?
 
 - Calendar objects and lookback options. @danmeisner mentioned that the API
   results will depend heavily on what kind of calendar alignment is desired by
@@ -89,7 +98,7 @@ we move forward, with @spearsem and @quasiben adding points too:
   updates his data quarterly. We could just take a single snapshot though and
   simply document that we provide French data as-of some date.
 
-- Some other questions: how will large queries be handles (e.g. where the
+- Some other questions: how will large queries be handled (e.g. where the
   number of tokens in an "in" statement is larger than the MSSQL limit)? How
   will table references be handled when they are part of an argument, such as
   "where Foo.Date = X' if the user does not want to rename "Foo.Date"?
