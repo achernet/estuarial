@@ -1,6 +1,5 @@
 UniverseBuilder:
     gicsec:
-      type: 'raw'
       doc: 'Some docs for gicsec'
       query: >
           SELECT S.ID
@@ -35,12 +34,11 @@ UniverseBuilder:
 
     # Query for country membership
     country_universe:
-        type: 'conditional'
         doc: 'Some docs for country_universe'
         conditionals:
-           - statuscode
-           - typecode
-           - ctrytradedin
+            statuscode:   Some statuscode docs
+            typecode:     Some typecode docs
+            ctrytradedin: Some ctrytradedin docs
            
         query: >
             SELECT *
@@ -48,11 +46,10 @@ UniverseBuilder:
 
     # Query for S&P 500 membership
     spx_universe:
-        type: 'conditional'
         doc: 'Some docs for spx_universe'
         conditionals: 
-            - DATE_
-            - ITICKER
+            DATE_:   Some DATE_ docs.
+            ITICKER: Some ITICKER docs.
 
         query: >
             SELECT I.NAME as INAME
@@ -84,11 +81,10 @@ UniverseBuilder:
 
     # Query for Dow Jones membership
     dowjones_universe:
-        type: 'conditional'
         doc: 'Some doc for dow jones.'
         conditionals:
-            - DATE_
-            - ITICKER    
+            DATE_:   Some DATE_ docs.
+            ITICKER: Some ITICKER docs.
 
         query: >
             SELECT I.NAME as INAME
