@@ -228,3 +228,12 @@ if __name__ == "__main__":
     ub.spx_universe() 
     print ub.__spx_universe_kwargs 
     print ub.__spx_universe_query 
+
+    # Example of actually perfomring a query (assumes TR VPN):
+    ex_date = '2013-12-31'
+    spx_arr = ub.spx_universe()
+    df = spx_arr.select(and_(spx_arr.date_ == ex_date, 
+                             spx_arr.iticker == 'SPX_IDX'))
+
+    print "Result for SPX IDX query for {}".format(ex_date)
+    print df.head()
