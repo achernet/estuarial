@@ -36,7 +36,7 @@ class WS(ArrayManagementClient):
 
     def find_metrics(self,name=None):
         arr = self.aclient['/FUNDAMENTALS/WORLDSCOPE/wsitems.yaml']
-        df = arr.select()
+        df = arr.select(query_filter=None)
         if not self.word_list:
             self.word_list = self._word_list()
 
@@ -58,22 +58,32 @@ class WS(ArrayManagementClient):
 
         return found
 
-class RKD(object):
+class RKD(ArrayManagementClient):
     def __init__(self):
         super(RKD, self).__init__()
-        arr = self.aclient['/FUNDAMENTALS/RKD/wsitems.yaml']
+        arr = self.aclient['/FUNDAMENTALS/RKD/rkditems.yaml']
         df = arr.select(query_filter=None)
         self.word_list = None
         for t_metric in df.values:
-            name = t_metric[1].translate(None,
-                                         string.punctuation).replace(' ','_')
+            try:
+                name = t_metric[1].translate(None,
+                                             string.punctuation).replace(' ','_')
+            except AttributeError:
+                #description is None and has been translated to NaN
+                #set name to COA
+
+                name = t_metric[0]
+
             value = t_metric[0]
             setattr(self, name, value)
 
     def _word_list(self):
-        arr = self.aclient['/FUNDAMENTALS/WORLDSCOPE/wsitems.yaml']
+        arr = self.aclient['/FUNDAMENTALS/RKD/rkditems.yaml']
         df = arr.select(query_filter=None)
-        word_list = df.Name.values.tolist()
+
+        #remove non null values
+        df = df[df.DESC_.notnull()]
+        word_list = df.DESC_.values.tolist()
 
         #lots of cleanup :)
         words = ' '.join(word_list)
@@ -87,13 +97,15 @@ class RKD(object):
         return common
 
     def find_metrics(self,name=None):
-        arr = self.aclient['/FUNDAMENTALS/WORLDSCOPE/wsitems.yaml']
-        df = arr.select()
+        arr = self.aclient['/FUNDAMENTALS/RKD/rkditems.yaml']
+        df = arr.select(query_filter=None)
         if not self.word_list:
             self.word_list = self._word_list()
 
         name = str(name)
-        found = df[df.Name.str.contains(name,case=False)]
+
+        df = df[df.DESC_.notnull()]
+        found = df[df.DESC_.str.contains(name,case=False)]
 
         if found.empty:
             close = get_close_matches(name, self.word_list)
@@ -136,3 +148,4 @@ class MetricsManager(ArrayManagementClient):
         super(MetricsManager, self).__init__()
         self.ws = WS()
         self.ds = DS()
+        self.rkd = RKD()

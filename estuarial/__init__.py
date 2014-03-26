@@ -1,1 +1,1 @@
-from . import data, util, test, array
+from . import data, util, test, array, browse, drilldown
