@@ -17,7 +17,9 @@ class KeywordHandler(object):
         "not_ilike":"notilike",
 
         "between":"between",
-        "startswith":"startswith"
+        "contains":"contains",
+        "endswith":"endswith",
+        "startswith":"startswith",
     }
 
     # Map of logicals supported from operator module.
