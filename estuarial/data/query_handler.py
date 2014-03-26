@@ -181,6 +181,7 @@ class QueryHandler(object):
                     kw_arg_responses[compound_arg] = (
                         kw_handler.op_bind(base_arg, op_name))
 
+            # To be used for more verbose documentation?
             all_possible_args = kw_arg_responses.keys()
 
             # Form the array backend object's connection.
@@ -199,8 +200,11 @@ class QueryHandler(object):
                     conditions.append(response_function(**val))
                 else:
                     conditions.append(response_function(val))
-                                
-            return arr.select(and_(*conditions))
+                    
+            # Handle case of no arguments.
+            select_arg = and_(*conditions) if conditions else None
+                    
+            return arr.select(select_arg)
         return function
 
     def create_type_from_yaml(self, class_url):
