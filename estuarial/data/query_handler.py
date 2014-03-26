@@ -3,6 +3,7 @@ import os
 from sqlalchemy.sql import and_
 from os.path import join as pjoin
 from estuarial.util.config.config import expanduser
+from estuarial.data.keyword_handler import KeywordHandler
 from estuarial.array.arraymanagementclient import ArrayManagementClient
 
 class QueryHandler(object):
@@ -153,24 +154,53 @@ class QueryHandler(object):
         """
         url = query_url.split(self.DATAROOT)[1]
         def function(self, **kwargs):                    
-            # Argument handling. Should use subset checking here
-            # so that partial keyword args are used.
-            #assert set(kwargs.keys()) == set(known_args)
-
-            # Form the array backend object's connection.
-            # This should be wrapped in a connection handling class.
             aclient = ArrayManagementClient()
             arr = aclient.aclient[url]
 
+            # Create a Keyword Handler.
+            kw_handler = KeywordHandler(arr)
+            op_names = kw_handler.supported_ops()
+            sql_names = kw_handler.supported_sql()
+
+            # For each arg in known_args, loop over each
+            # supported sql word and make a function that
+            # gets invoked on the kw val, <base_arg>_<sql_word>
+            kw_arg_responses = {}
+            for base_arg in known_args:
+                base_arg = base_arg.lower()
+                for sql_name in sql_names:
+                    compound_arg = base_arg + "_" + sql_name
+                    kw_arg_responses[compound_arg] = (
+                        kw_handler.sql_bind(base_arg, sql_name))
+
+                for op_name in op_names:
+                    if op_name == "":
+                        compound_arg = base_arg
+                    else:
+                        compound_arg = base_arg + "_" + op_name
+                    kw_arg_responses[compound_arg] = (
+                        kw_handler.op_bind(base_arg, op_name))
+
+            all_possible_args = kw_arg_responses.keys()
+
+            # Form the array backend object's connection.
+            # This should be wrapped in a connection handling class.
+
             # Form the conditions needed to communicate the
-            # logical request of the function's invoker. Should
-            # this be a full replication of the faculties of
-            # sql alchemy?
-            #conditions = [
-            #    getattr(arr, attr) == val # 
-            #    for attr, val in kwargs.iteritems()
-            #]
-            return arr
+            # logical request of the function's invoker.
+            none = lambda *args, **kwargs: None
+            conditions = []
+            for attr, val in kwargs.iteritems():
+                attr = attr.lower()
+                response_function = kw_arg_responses.get(attr, none)
+                if isinstance(val, (tuple, list, set)):
+                    conditions.append(response_function(*val))
+                elif isinstance(val, dict):
+                    conditions.append(response_function(**val))
+                else:
+                    conditions.append(response_function(val))
+                                
+            return arr.select(and_(*conditions))
         return function
 
     def create_type_from_yaml(self, class_url):
@@ -220,20 +250,18 @@ if __name__ == "__main__":
     ub = UniverseBuilder()
 
     # Inferred 'gicsec' query API:
-    ub.gicsec()              # <--- Callable. No args at the moment just for testing.
+    #ub.gicsec()             # <--- Callable. No args at the moment just for testing.
     print ub.__gicsec_kwargs # <--- Function signature for this query.
     print ub.__gicsec_query  # <--- Query saved as a string from file.
 
     # Inferred 'spx' query API:
-    ub.spx_universe() 
+    #ub.spx_universe() 
     print ub.__spx_universe_kwargs 
     print ub.__spx_universe_query 
 
     # Example of actually perfomring a query (assumes TR VPN):
     ex_date = '2013-12-31'
-    spx_arr = ub.spx_universe()
-    df = spx_arr.select(and_(spx_arr.date_ == ex_date, 
-                             spx_arr.iticker == 'SPX_IDX'))
+    df = ub.spx_universe(DATE_=ex_date, ITICKER='SPX_IDX')
 
     print "Result for SPX IDX query for {}".format(ex_date)
     print df.head()
