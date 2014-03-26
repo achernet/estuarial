@@ -26,7 +26,7 @@ TA = 2999   # Total Assets
 
 dt_list = [dt.datetime(2000,1,1), dt.datetime(2014,1,1)]
 metrics_list = [NI, CASH, TL]
-qad.worldscope(universe,metrics_list,dt_list)
+qad.fundamentals(universe,metrics_list,dt_list,DB="WORLDSCOPE")
 
 #reduce universe to IBM
 df =  spx.data
