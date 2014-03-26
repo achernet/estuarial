@@ -1,6 +1,7 @@
 from __future__ import print_function, division, absolute_import
 
 import os
+import sys
 import datetime as dt
 from dateutil import parser
 from os.path import join as pjoin
@@ -43,9 +44,9 @@ class TRQAD(ArrayManagementClient):
 
         return ibes_data
 
-    def worldscope(self, universe, metrics,dt_list, freq='Q', align=False):
+    def fundamentals(self, universe, metrics, dt_list, DB, freq='Q', align=False):
         """
-        Query the WorldScope DB for metrics defined by the user
+        Query A Fundmentals DB for metrics defined by the user
         with a given universe.  Metrics are fundamentals commonly
         found in balance sheets for equities data.
 
@@ -58,6 +59,9 @@ class TRQAD(ArrayManagementClient):
         :type dt_list: list/tuple
         :param dt_list: Beginning and end market dates for query
 
+        :type DB: string
+        :param DB: Name of the fundamentals database -- Worldscope, RKD, etc
+
         :type freq: string
         :param freq: Frequency
 
@@ -69,10 +73,24 @@ class TRQAD(ArrayManagementClient):
 
 
         """
+        db_dict = {"WORLDSCOPE":"worldscope_fundamentals.yaml",
+                     "RKD":"rkd_fundamentals.yaml"
+                    }
 
-        start,stop = parsedate(dt_list)
 
-        arr = self.aclient['/FUNDAMENTALS/WORLDSCOPE/worldscope_metrics_date_select.yaml']
+        DB = DB.upper()
+
+        valid_dbs = db_dict.keys()
+
+        if not DB in valid_dbs:
+            dbs = ' '.join(valid_dbs)
+            raise KeyError("Not a valid Database please use an approved DB: {}".format(dbs))
+
+        start, stop = parsedate(dt_list)
+        df_file = db_dict[DB]
+        url = pjoin('/FUNDAMENTALS',DB,df_file)
+        arr = self.aclient[url]
+
         ws_data = arr.select(
             and_(arr.seccode.in_(universe),
                  arr.item.in_(metrics),
