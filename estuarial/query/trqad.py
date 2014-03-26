@@ -72,7 +72,7 @@ class TRQAD(ArrayManagementClient):
 
         start,stop = parsedate(dt_list)
 
-        arr = self.aclient['/WORLDSCOPE/worldscope_metrics_date_select.yaml']
+        arr = self.aclient['/FUNDAMENTALS/WORLDSCOPE/worldscope_metrics_date_select.yaml']
         ws_data = arr.select(
             and_(arr.seccode.in_(universe),
                  arr.item.in_(metrics),

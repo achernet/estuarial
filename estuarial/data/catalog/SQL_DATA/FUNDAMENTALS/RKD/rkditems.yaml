@@ -1,0 +1,4 @@
+SQL:
+    wsitems:
+        query: >
+            select COA, DESC_ from rkdfndstditem

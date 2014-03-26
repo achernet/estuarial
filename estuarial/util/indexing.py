@@ -64,7 +64,7 @@ class _CASHIndexer(_TRUniverseIndexer):
             universe = self.obj.data.seccode.tolist()
             item = 2001 # cash
             freq = 'Q'  # Quarterly Maybe use step for this?
-            ws_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.yaml'
+            ws_query_loc = '/FUNDAMENTALS/WORLDSCOPE/worldscope_metrics_date_select.yaml'
             arr = self.obj.aclient[ws_query_loc]
 
             cash = arr.select(and_(arr.seccode.in_(universe),
@@ -89,7 +89,7 @@ class _NIIndexer(_TRUniverseIndexer):
             universe = self.obj.data.seccode.tolist()
             item = 1751 # net income
             freq = 'Q'  # Quarterly Maybe use step for this?
-            ni_query_loc = '/WORLDSCOPE/worldscope_metrics_date_select.yaml'
+            ni_query_loc = '/FUNDAMENTALS/WORLDSCOPE/worldscope_metrics_date_select.yaml'
             arr = self.obj.aclient[ni_query_loc]
             cash = arr.select(and_(arr.seccode.in_(universe),
                                    arr.item == item,
