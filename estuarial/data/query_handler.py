@@ -233,7 +233,7 @@ class QueryHandler(object):
 
         Returns
         -------
-        As a 5-tuple:
+        As a 4-tuple:
         query_files: List of the written single-query yamls.
 
         type_name: Top-level data key from the yaml, used as the name of the
