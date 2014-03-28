@@ -6,6 +6,7 @@ Author: Ben Zaitlen and Ely Spears
 """
 import re
 import yaml
+import types
 import keyword
 
 class YamlHandler(object):
@@ -24,12 +25,11 @@ class YamlHandler(object):
     _OPTIONAL_QUERY_ITEMS = {"conditionals":(dict,)}
 
     # Required names and types in SQL yaml.
-    _REQUIRED_QUERY_ITEMS = {"doc":(str, unicode), 
-                             "query":(str, unicode)}
+    _REQUIRED_QUERY_ITEMS = {"doc":(str, unicode), "query":(str, unicode)}
 
     # Types permitted for the keys and values of the 'conditionals' section.
     _CONDITIONAL_KEY_TYPES = (str, unicode)
-    _CONDITIONAL_VALUE_TYPES = (str, unicode, None)
+    _CONDITIONAL_VALUE_TYPES = (str, unicode, types.NoneType)
 
     def __init__(self):
         """
