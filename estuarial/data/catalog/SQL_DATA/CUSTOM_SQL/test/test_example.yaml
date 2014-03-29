@@ -1,0 +1,32 @@
+AccountingData:
+    inventory:
+        doc: This is a query for inventory.
+        conditionals:
+            account_id: A customer's account number.
+            shipping_date: The shipping date.
+        query: >
+            SELECT 
+                  a.account_id as account_id
+                , b.shipping_id as shipping_id
+                , a.customer_name
+                , b.shipping_date
+                , b.order_volume
+                , b.total_sales
+            FROM account_table a
+            JOIN shipping_table b
+                ON a.account_id = b.shipping_id
+
+    payroll:
+        doc: This is a payroll query.
+        conditionals:
+            branch_id: A branch id number
+            city: A city name
+        query: >
+            SELECT
+                  a.branch_id
+                , b.city
+                , a.total_payroll as branch_payroll
+                , b.total_payroll as city_payroll
+            FROM branch_table a
+            JOIN branch_location_table b
+                ON a.branch_id = b.branch_id

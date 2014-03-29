@@ -22,46 +22,43 @@ class QueryHandler(object):
     arguments given in the yaml, as well as augmented keyword arguments that
     allow for SQL operations to be performed on the conditional argument names.
 
-    For example, consider the following sample composite query file which might
-    be saved in some file called "accounting_data.yaml".
-
-    (The #'s below are just to delimit the example file and are not part of the
-    yaml file itself.)
+    For example, consider the following sample composite query file which is
+    saved in "/test/test_example.yaml" relative to QueryHandler._FILE_DIR.
     
-    #####
-    #AccountingData:
-    #    inventory:
-    #        doc: This is a query for inventory.
-    #        conditionals:
-    #            account_id: A customer's account number.
-    #            shipping_date: The shipping date.
-    #        query: >
-    #            SELECT 
-    #                  a.account_id as account_id
-    #                , b.shipping_id as shipping_id
-    #                , a.customer_name
-    #                , b.shipping_date
-    #                , b.order_volume
-    #                , b.total_sales
-    #            FROM account_table a
-    #            JOIN shipping_table b
-    #                ON a.account_id = b.shipping_id
-    #
-    #    payroll:
-    #        doc: This is a payroll query.
-    #        conditionals:
-    #            branch_id: A branch id number
-    #            city: A city name
-    #        query: >
-    #            SELECT
-    #                  a.branch_id
-    #                , b.city
-    #                , a.total_payroll as branch_payroll
-    #                , b.total_payroll as city_payroll
-    #            FROM branch_table a
-    #            JOIN branch_location_table b
-    #                ON a.branch_id = b.branch_id
-    #####
+    #######################################################
+    #AccountingData:                                      #
+    #    inventory:                                       #
+    #        doc: This is a query for inventory.          #
+    #        conditionals:                                #
+    #            account_id: A customer's account number. #
+    #            shipping_date: The shipping date.        #
+    #        query: >                                     #
+    #            SELECT                                   #
+    #                  a.account_id as account_id         #
+    #                , b.shipping_id as shipping_id       #
+    #                , a.customer_name                    #
+    #                , b.shipping_date                    #
+    #                , b.order_volume                     #
+    #                , b.total_sales                      #
+    #            FROM account_table a                     #
+    #            JOIN shipping_table b                    #
+    #                ON a.account_id = b.shipping_id      #
+    #                                                     #
+    #    payroll:                                         #
+    #        doc: This is a payroll query.                #
+    #        conditionals:                                #
+    #            branch_id: A branch id number            #
+    #            city: A city name                        #
+    #        query: >                                     #
+    #            SELECT                                   #
+    #                  a.branch_id                        #
+    #                , b.city                             #
+    #                , a.total_payroll as branch_payroll  #
+    #                , b.total_payroll as city_payroll    #
+    #            FROM branch_table a                      #
+    #            JOIN branch_location_table b             #
+    #                ON a.branch_id = b.branch_id         #
+    #######################################################
 
     The QueryHandler.create_type_from_yaml function will create a new Python
     class, AccountingData that has two functions:
@@ -217,6 +214,10 @@ class QueryHandler(object):
     _QUERY = "query"               # raw query string from yaml
     _CONDITIONALS = "conditionals" # keyword arg names from yaml
     _KW_DELIMITER = "_"            # Used when augmenting keyword arg names.
+
+    # Label for raised exception displayed when generated functions encounter
+    # invalid keyword arguments.
+    _INVALID_KWARG_MSG = "[unsupported] "
 
     
     def _path_sanitizer(self, some_path):
@@ -392,10 +393,10 @@ class QueryHandler(object):
         # Ensure that the url is relative to QueryHandler._DATA_ROOT.
         url = query_url.split(self._DATA_ROOT)[1]
         
-        # Grab the QueryHandler delimiter since 'self' must be used as an 
-        # argument for the created method below. In the scope of the created
-        # method, 'self' can't refer to QueryHandler.
+        # Grab needed QueryHandler constants since referring to 'self' won't
+        # refer to QueryHandler in the function body below.
         KW_DELIMITER = self._KW_DELIMITER
+        INVALID_KWARG_MSG = self._INVALID_KWARG_MSG
 
         def function(self, **kwargs):                    
             kwarg_responses = {}                   # Contain alchemy functions
@@ -439,9 +440,15 @@ class QueryHandler(object):
             # supplied value. This generates a bound alchemy WHERE conditon.
             # Accumulate all such WHERE conditions for passing into select.
             for user_supplied_kw, user_supplied_val in kwargs.iteritems():
+                lower_kw = user_supplied_kw.lower()
 
                 # Fetch the function to use in response to this keyword.
-                response_function = kwarg_responses[user_supplied_kw.lower()]
+                try:
+                    response_function = kwarg_responses[lower_kw]
+                except KeyError as key_error:
+                    message = (INVALID_KWARG_MSG + 
+                               "unrecognized keyword argument '{}'")
+                    raise TypeError(message.format(lower_kw))
 
                 # Depending on what type of sequence the user supplied value
                 # is, call the response function on the value's contents.
@@ -515,24 +522,31 @@ class QueryHandler(object):
         
 if __name__ == "__main__":
 
-    test_query_url = "test/test_yaml.yaml"
-    qh = QueryHandler()
-    UniverseBuilder = qh.create_type_from_yaml(test_query_url)
-    ub = UniverseBuilder()
 
-    # Inferred 'gicsec' query API:
-    #ub.gicsec()             # <--- Callable. No args at the moment just for testing.
-    #print ub.__gicsec_kwargs # <--- Function signature for this query.
-    #print ub.__gicsec_query  # <--- Query saved as a string from file.
+    if False:
+        test_query_url = "test/test_example.yaml"
+        qh = QueryHandler()
+        AccountingData = qh.create_type_from_yaml(test_query_url)
+        ad = AccountingData()
+    else:
+        test_query_url = "test/test_composite.yaml"
+        qh = QueryHandler()
+        UniverseBuilder = qh.create_type_from_yaml(test_query_url)
+        ub = UniverseBuilder()
 
-    # Inferred 'spx' query API:
-    #ub.spx_universe() 
-    #print ub.__spx_universe_kwargs 
-    #print ub.__spx_universe_query 
+        # Inferred 'gicsec' query API:
+        #ub.gicsec()             # <--- Callable. No args at the moment just for testing.
+        #print ub.__gicsec_kwargs # <--- Function signature for this query.
+        #print ub.__gicsec_query  # <--- Query saved as a string from file.
 
-    # Example of actually perfomring a query (assumes TR VPN):
-    ex_date = '2013-12-31'
-    df = ub.spx_universe(DATE_=ex_date, ITICKER='SPX_IDX')
+        # Inferred 'spx' query API:
+        #ub.spx_universe() 
+        #print ub.__spx_universe_kwargs 
+        #print ub.__spx_universe_query 
 
-    print "Result for SPX IDX query for {}".format(ex_date)
-    print df.head()
+        # Example of actually perfomring a query (assumes TR VPN):
+        ex_date = '2013-12-31'
+        df = ub.spx_universe(DATE_=ex_date, ITICKER='SPX_IDX')
+
+        print "Result for SPX IDX query for {}".format(ex_date)
+        print df.head()
