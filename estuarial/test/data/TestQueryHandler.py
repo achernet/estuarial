@@ -5,10 +5,9 @@ Author: Ben Zaitlen and Ely Spears
 """
 import os
 import yaml
+import types
 import shutil
-import operator
 import unittest
-import functools
 from os.path import join as pjoin
 from estuarial.data.yaml_handler import YamlHandler
 from estuarial.data.query_handler import QueryHandler
@@ -73,6 +72,10 @@ class TestQueryHandler(unittest.TestCase):
              self.query_handler._AUTOGEN_SUFFIX)
         )
 
+        # Expected class attributes created for each autogen function.
+        self.expected_file_attr = self.query_handler._FILE_ATTR
+        self.expected_query_attr = self.query_handler._QUERY_ATTR
+        self.expected_kwargs_attr = self.query_handler._KWARGS_ATTR
 
     def safe_remove(self, dir_name):
         """
@@ -351,13 +354,85 @@ class TestQueryHandler(unittest.TestCase):
         the loaded yaml data directly and compare the class's attributes with
         those expected from the yaml document.
         """
+        # First get the raw Yaml data, for comparing the contents of the created
+        # class
+        (query_files, # Dict of (function name, autogen file) pairs. 
+         type_name,   # Name of the created class.
+         type_data,   # Contents of the original composite yaml.
+         func_names   # List of function names from the yaml file.
+         ) = self.query_handler._publish_queries(self.custom_sql_test_file)
 
-        # Validate the function's name and docstring.
-        self.assertEqual(test_function.__name__, f_name)
-        self.assertEqual(test_function.__doc__, function_doc)
-        pass
+        # Create the desired class.
+        created_class = self.query_handler.create_type_from_yaml(
+            self.custom_sql_test_file
+        )
+
+        self.assertIsInstance(created_class, types.TypeType)
+
+        # Check that class's name matches the top-level composite yaml key.
+        class_name = created_class.__name__
+        message = ("Expected created class to have name '{}' from yaml, but "
+                   "found '{}' instead.").format(type_name, class_name)
+        self.assertEqual(type_name, class_name, message)
+        
+        
+        # For each function required of the class, validate that it is created
+        # and has the required contents.
+        for f_name in func_names:
+
+            # Ensure that the created class has the function.
+            test_function = getattr(created_class, f_name)
+            self.assertIsInstance(test_function, types.MethodType)
+
+            # Validate the function's name and docstring.
+            args, docs = self.query_handler._publish_docstring(
+                type_data[f_name]
+            )
+            self.assertEqual(test_function.__doc__, docs)
+            self.assertEqual(test_function.__name__, f_name)
+
+            # Bind the specific function name into the expected formatted 
+            # class attribute names, for e.g. gile locations.
+            file_attr, query_attr, kwargs_attr = map(
+                lambda x: x.format(f_name),
+                (self.expected_file_attr,
+                 self.expected_query_attr,
+                 self.expected_kwargs_attr)
+            )
+            
+            # Check for this function name that all of the expected hidden
+            # class attributes that were created for it.
+            has_file_attr = hasattr(created_class, file_attr)
+            has_query_attr = hasattr(created_class, query_attr)
+            has_kwargs_attr = hasattr(created_class, kwargs_attr)
+            all_attrs = (has_file_attr, has_query_attr, has_kwargs_attr)
+            has_all_attrs = all(all_attrs)
+
+            message = ("Expected class attributes '{}' to exist, but "
+                       "'hasattr' returns '{}' when checking for them.")
+
+            self.assertTrue(
+                has_all_attrs, 
+                message.format(
+                    (file_attr, query_attr, kwargs_attr), 
+                    all_attrs
+                )
+            )
+                            
+            # Check that formatted class attributes contain the expected 
+            # content.
+            self.assertEqual(getattr(created_class, file_attr),
+                             query_files[f_name])
+
+            self.assertEqual(getattr(created_class, query_attr),
+                             type_data[f_name][self.query_handler._QUERY])
+
+            self.assertEqual(set(getattr(created_class, kwargs_attr)),
+                             set(args))
 
 
+        # Clean up the created autogen files.
+        self.safe_remove(self.expected_autogen_directory)
 
 if __name__ == "__main__":
     unittest.main()
