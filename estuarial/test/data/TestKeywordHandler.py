@@ -26,6 +26,8 @@ class TestKeywordHandler(unittest.TestCase):
           4. The connected array client object, which is needed for the 
              constructor of KeywordHandler.
         """
+        # TODO: Create mock objects to isolate testing these away from any
+        # connection-specific issues. Can also refer to the /test yaml dir.
         self.aclient = ArrayManagementClient()
         self.example_url = '/UNIVERSE_SQL/dowjones_universe.yaml'
         self.example_keywords = ("date_", "iticker")

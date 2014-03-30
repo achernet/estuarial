@@ -8,6 +8,7 @@ import re
 import yaml
 import types
 import keyword
+import __builtin__
 
 class YamlHandler(object):
     """
@@ -19,7 +20,11 @@ class YamlHandler(object):
     _SQL_SENTINEL = "SQL"
 
     # Regexp to match valid strings for Python variable names.
-    _PYTHON_NAMING_REGEXP = "[_A-Za-z][_a-zA-Z0-9]*"
+    _PYTHON_NAMING_REGEXP = "[_A-Za-z][_a-zA-Z0-9]*$"
+
+    # Disallowed names because of the risk of overwriting / confusing with
+    # the default Python literals for these names.
+    _BOOL_NONE_NAMES = ("True", "False", "None", "true", "false", "none", "")
 
     # Names and types for optional data in SQL yaml
     _OPTIONAL_QUERY_ITEMS = {"conditionals":(dict,)}
@@ -67,8 +72,13 @@ class YamlHandler(object):
         """
         is_valid_string = re.match(self._PYTHON_NAMING_REGEXP, variable) 
         is_not_reserved_keyword = (not keyword.iskeyword(variable))
-        is_not_builtin = (variable not in dir( __builtins__ ))
-        valid = all((is_valid_string, is_not_reserved_keyword, is_not_builtin))
+        is_not_builtin = (variable not in dir( __builtin__ ))
+        is_not_bool_none = (variable not in self._BOOL_NONE_NAMES)
+
+        valid = all((is_valid_string, 
+                     is_not_reserved_keyword, 
+                     is_not_builtin,
+                     is_not_bool_none))
         
         # If the variable name is not valid, raise an exception.
         if not valid:
@@ -181,8 +191,16 @@ class YamlHandler(object):
 
             raise ValueError(message.format(len(function_level_keys)))
 
+        # Check that the function-level key is a valid Python identifier.
+        f_key = function_level_keys[0]
+        if not self.valid_variable(f_key):
+            raise NameError(
+                "Function name from yaml must be a valid Python "
+                "variable identifier, but received: '{}'".format(f_key)
+            )
+
         # Get query-level data and keys and ensure no duplicates.
-        query_level_data = function_level_data[function_level_keys[0]]
+        query_level_data = function_level_data[f_key]
         query_level_keys = query_level_data.keys()
 
         no_duplicates = (len(set(query_level_keys)) == len(query_level_keys))

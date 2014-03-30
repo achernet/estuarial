@@ -12,7 +12,6 @@ from os.path import join as pjoin
 from estuarial.data.yaml_handler import YamlHandler
 from estuarial.data.query_handler import QueryHandler
 from estuarial.data.keyword_handler import KeywordHandler
-from estuarial.array.arraymanagementclient import ArrayManagementClient
 
 class TestQueryHandler(unittest.TestCase):
     """
@@ -134,7 +133,7 @@ class TestQueryHandler(unittest.TestCase):
         )
 
         for class_constant in required_class_constants:
-            has_constant = hasattr(self.query_handler, class_constant)
+            has_constant = hasattr(QueryHandler, class_constant)
             message = "Failed to find required class constant '{}'"
             self.assertTrue(has_constant, message.format(class_constant))
 
@@ -347,6 +346,7 @@ class TestQueryHandler(unittest.TestCase):
             
         # Clean up the created autogen files.
         self.safe_remove(self.expected_autogen_directory)
+
 
     def test_create_type_from_yaml(self):
         """
