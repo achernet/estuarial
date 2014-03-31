@@ -1,0 +1,116 @@
+ConstituentQueries:
+    gicsec:
+      doc: 'Some docs for gicsec'
+      query: >
+          SELECT S.ID
+              ,S.CUSIP
+              ,S.NAME
+              ,G.SUBIND AS GIC_CODE
+              ,C1.DESC_ AS SECTOR
+              ,C2.DESC_ AS GROUP_
+              ,C3.DESC_ AS INDUSTRY
+              ,C4.DESC_ AS SUBINDUSTRY
+              ,M.SECCODE
+          FROM DBO.SECMSTRX S
+          JOIN DBO.SECMAPX M
+              ON  M.SECCODE = S.SECCODE
+              AND M.VENTYPE = 18 -- S&P Gics Direct
+              AND M.RANK = 1
+          JOIN DBO.SPGDGICS G
+              ON  G.GVKEY = M.VENCODE
+          JOIN DBO.SPGCODE C1
+              ON  C1.CODE = LEFT(G.SUBIND,2)
+              AND C1.TYPE_ = 1 -- GICS Descriptions
+          JOIN DBO.SPGCODE C2
+              ON  C2.CODE = LEFT(G.SUBIND,4)
+              AND C2.TYPE_ = 1 -- GICS Descriptions
+          JOIN DBO.SPGCODE C3
+              ON  C3.CODE = LEFT(G.SUBIND,6)
+              AND C3.TYPE_ = 1 -- GICS Descriptions
+          JOIN DBO.SPGCODE C4
+              ON  C4.CODE = G.SUBIND
+              AND C4.TYPE_ = 1 -- GICS Descriptions
+              WHERE S.TYPE_ = 1
+
+    # Query for country membership
+    country_universe:
+        doc: 'Some docs for country_universe'
+        conditionals:
+            statuscode:   
+            typecode:     Some typecode docs
+            ctrytradedin: Some ctrytradedin docs
+           
+        query: >
+            SELECT *
+            FROM trqa.DS2EqMstr
+
+    # Query for S&P 500 membership
+    spx_universe:
+        doc: 'Some docs for spx_universe'
+        conditionals: 
+            DATE_:   Some DATE_ docs.
+            ITICKER: Some ITICKER docs.
+
+        query: >
+            SELECT I.NAME as INAME
+                ,I.TICKER as ITICKER
+                ,S.TICKER
+                ,S.CUSIP
+                ,S.NAME
+                ,N.DATE_
+                ,D.CLOSE_
+                ,N.SHARES
+                ,M.SECCODE
+                ,D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
+            FROM DBO.IDXSPCMP N
+            JOIN DBO.IDXINFO I
+                ON  I.CODE = N.IDXCODE
+            JOIN PRC.IDXSEC S
+                ON  S.CODE = N.SECCODE
+                AND S.VENDOR = 1 -- S&P
+            JOIN DBO.SECMAP M
+                ON  M.SECCODE = S.PRCCODE
+                AND M.VENTYPE = 14 -- IDC Pricing
+                AND M.EXCHANGE = 1 -- US
+            JOIN PRC.PRCDLY D
+                ON  D.CODE = M.VENCODE
+                AND D.DATE_ =(SELECT  MAX(DATE_)
+                              FROM    PRC.PRCDLY
+                              WHERE   CODE = D.CODE
+                              AND     DATE_ <= N.DATE_)   
+
+    # Query for Dow Jones membership
+    dowjones_universe:
+        doc: 'Some doc for dow jones.'
+        conditionals:
+            DATE_:   Some DATE_ docs.
+            ITICKER: Some ITICKER docs.
+
+        query: >
+            SELECT I.NAME as INAME
+                ,I.TICKER as ITICKER
+                ,S.TICKER
+                ,S.CUSIP
+                ,S.NAME
+                ,N.DATE_
+                ,D.CLOSE_
+                ,N.SHARES
+                ,M.SECCODE
+                ,D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
+            FROM DBO.IDXDJCMP N
+            JOIN DBO.IDXINFO I
+                ON I.CODE = N.IDXCODE
+            JOIN PRC.IDXSEC S
+                ON  S.CODE = N.SECCODE
+                AND S.VENDOR = 4 -- Dow Jones
+            JOIN DBO.SECMAPX M
+                ON  M.SECCODE = S.PRCCODE
+                AND M.VENTYPE = 14 -- IDC Pricing
+                AND M.EXCHANGE = 1 -- US
+            JOIN PRC.PRCDLY D
+                ON  D.CODE = M.VENCODE
+                AND D.DATE_ =(SELECT MAX(DATE_)
+                              FROM   PRC.PRCDLY
+                              WHERE  CODE = D.CODE
+                              AND    DATE_ <= N.DATE_)
+
