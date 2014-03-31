@@ -87,7 +87,13 @@ def target_getitem(function_name, api_mapper=None):
             # Get a handle to the target function, sanitize arguments, and
             # return the result of the dispatcher function.
             dispatcher = getattr(self, function_name)
-            sanitized_args = sanitizer(slice_args)
+
+            #need to unpack if not using api_mapper AND tuple argument
+            if isinstance(slice_args, tuple):
+                sanitized_args = sanitizer(*slice_args)
+            else:
+                sanitized_args = sanitizer(slice_args)
+
             return dispatcher(*sanitized_args)
 
         # Patch this version of `__getitem__` onto the class and return the
@@ -97,3 +103,14 @@ def target_getitem(function_name, api_mapper=None):
 
     # Return the decorator that performs the above `__getitem__` modifications.
     return decorator
+
+
+if __name__ == "__main__":
+
+    @target_getitem('bar')
+    class Foo(object):
+        def bar(self, x, y1, y2):
+            return [x + y for y in range(y1, y2)]
+
+    f = Foo()
+    assert [3] == f[1, 2, 3] # returns [3]
