@@ -4,6 +4,7 @@ import os
 from os.path import join as pjoin
 from arraymanagement.client import ArrayClient
 from estuarial.util.config.config import expanduser, UserConfigPath
+from estuarial.util.logger import log
 
 if not 'ODBCINI' in os.environ:
     os.environ['ODBCINI'] = UserConfigPath
@@ -22,3 +23,4 @@ class ArrayManagementClient(object):
                              'SQL_DATA')
         self.aclient = ArrayClient(basepath=self.basedir,
                                    localdatapath=EstuarialDir)
+        self.aclient.set_logging(log)
