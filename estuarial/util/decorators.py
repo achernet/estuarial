@@ -76,8 +76,6 @@ def target_getitem(function_name, api_mapper=None):
     """
     def decorator(klass):
         def __getitem__(self, slice_args):
-
-            # Get a handle to any argument sanitizer if given.
             if api_mapper is None:
                 # If no sanitizer is given, then it's expected that whatever
                 # is passed directly to __getitem__ can be passed directly
@@ -86,13 +84,10 @@ def target_getitem(function_name, api_mapper=None):
             else:
                 sanitizer = getattr(self, api_mapper)
 
-            # Get a handle to the target function.
+            # Get a handle to the target function, sanitize arguments, and
+            # return the result of the dispatcher function.
             dispatcher = getattr(self, function_name)
-
-            # Get sanitized arguments
             sanitized_args = sanitizer(slice_args)
-
-            # Return dispatcher result on sanitized arguments
             return dispatcher(*sanitized_args)
 
         # Patch this version of `__getitem__` onto the class and return the
