@@ -6,6 +6,7 @@ from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
 from estuarial.util.config.config import Config
 from estuarial.array.arraymanagementclient import ArrayManagementClient
+from estuarial.util.munging import lower_columns
 
 class TRMETA(ArrayManagementClient):
 
@@ -111,7 +112,7 @@ class TRMETA(ArrayManagementClient):
                 and_(arr.ticker.in_(tickers),
                      arr.cntrycode==CntryCode),
                     )
-
+        data = lower_columns(data)
         return data
 
     def tr_sql_parser(file_input):

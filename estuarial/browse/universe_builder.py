@@ -4,16 +4,7 @@ from sqlalchemy.sql import column, and_, or_
 from arraymanagement.client import ArrayClient
 from estuarial.browse.universe import Universe
 from estuarial.array.arraymanagementclient import ArrayManagementClient
-
-def lower_columns(df):
-        """
-        lower all column names
-        """
-
-        cols = [col.lower() for col in df.columns]
-        df.columns = cols
-        return df
-
+from estuarial.util.munging import lower_columns
 
 class UniverseBuilder(ArrayManagementClient):
     """
