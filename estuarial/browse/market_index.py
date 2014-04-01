@@ -81,14 +81,14 @@ class MarketIndex(object):
 
             if start_period is None or end_period is None:
                 message = ("Unbounded date indexing is not supported.")
-                raise ValueError(message)
+                raise IndexError(message)
 
             # TODO: Add support for what happens with step (does this mean
             # the returns data is sorted different? Can start be greater than
             # stop?
 
         except AttributeError:
-            start_preiod = slice_args[1]
+            start_period = slice_args[1]
             end_period = slice_args[1]
 
         return (index, start_period, end_period)
@@ -117,6 +117,7 @@ class MarketIndex(object):
         function_handle = getattr(self._constituent_queries, index_function)
         return function_handle(date__between=(start_period, end_period),
                                iticker=index_iticker)
+
 
 if __name__ == "__main__":
     m = MarketIndex()
