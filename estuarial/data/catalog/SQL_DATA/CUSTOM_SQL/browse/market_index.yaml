@@ -101,3 +101,47 @@ ConstituentQueries:
                 ON I.SECCODE = N.SECCODE
             JOIN DBO.IdxBMIInfo S
                 ON S.IDXCODE = I.IDXCODE
+
+
+    # Query for Russell index membership
+    russell_universe:
+        doc: >
+            Parameterized query to select from many Russell indices from 
+            several tables, including IdxBMISecDaily, IdxBMIConst, IdxInfo, 
+            SECMAPX, PRC.IDXSEC, and PRC.PRCDLY.
+
+        conditionals: 
+            DATE_: Date of constituent membership.
+            ITICKER: Mnemonic identifying which Russell index to query.
+
+        query: >            
+            SELECT I.NAME as INAME
+                , I.TICKER as ITICKER
+                , S.TICKER
+                , S.CUSIP
+                , S.NAME
+                , N.DATE_
+                , D.CLOSE_
+                , N.SHARES
+                , M.SECCODE
+                , D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
+            FROM DBO.IDXRLCMP N
+            JOIN DBO.IDXINFO I
+                ON I.CODE = N.IDXCODE
+            JOIN PRC.IDXSEC S
+                ON  S.CODE = N.SECCODE
+                AND S.VENDOR = 2 -- Russell
+            JOIN DBO.SECMAPX M
+                ON  M.SECCODE = S.PRCCODE
+                AND M.VENTYPE = 14 -- IDC Pricing
+                AND M.EXCHANGE = 1 -- US
+            JOIN PRC.PRCDLY D
+                ON  D.CODE = M.VENCODE
+                AND D.DATE_ =(SELECT MAX(DATE_)
+                              FROM   PRC.PRCDLY
+                              WHERE  CODE = D.CODE
+                              AND    DATE_ <= N.DATE_)
+        
+
+
+
