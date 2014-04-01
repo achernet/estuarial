@@ -80,19 +80,27 @@ def target_getitem(function_name, api_mapper=None):
                 # If no sanitizer is given, then it's expected that whatever
                 # is passed directly to __getitem__ can be passed directly
                 # to the target function.
-                sanitizer = lambda *args: args
+                sanitizer = lambda args: args
             else:
                 sanitizer = getattr(self, api_mapper)
 
             # Get a handle to the target function, sanitize arguments, and
             # return the result of the dispatcher function.
             dispatcher = getattr(self, function_name)
+            sanitized_args = sanitizer(slice_args)
 
-            #need to unpack if not using api_mapper AND tuple argument
-            if isinstance(slice_args, tuple):
-                sanitized_args = sanitizer(*slice_args)
-            else:
-                sanitized_args = sanitizer(slice_args)
+            # When sanitized_args is returned as a `tuple` it is assumed that
+            # the `tuple` serves as `*args` for the dispatcher. If it's not
+            # returned as a `tuple` then it is cast into a single-element
+            # `tuple`. This covers cases where a singleton is returned. 
+            if not isinstance(sanitized_args, tuple):
+                sanitized_args = (sanitized_args,)
+                # Note: this means that if `slice_args` is directly a `tuple`,
+                # instead of merely being cast into a `tuple` as part of the
+                # delivery to `__getitem__` there is no way to know, and the
+                # elements of that `tuple` will be treated as `*args`. So,
+                # functions that require the single argument index to
+                # `__getitem__` to be a `tuple` will not be supported.
 
             return dispatcher(*sanitized_args)
 
