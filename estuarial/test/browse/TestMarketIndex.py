@@ -105,8 +105,8 @@ class TestMarketIndex(unittest.TestCase):
         """
         #TODO: this really needs a good mocking framework so that we don't
         # rely on open DB connections to perform the test. 
-        spx_data = self.m.constituents('SP500', '2012-12-31', '2012-12-31')
-        djx_data = self.m.constituents('DowJones', '2012-12-31', '2012-12-31')
+        spx_data = self.m.constituents('S&P 500', '2012-12-31', '2012-12-31')
+        djx_data = self.m.constituents('Dow Jones', '2012-12-31', '2012-12-31')
 
         self.assertTrue(len(spx_data) > 0, "Failed to retrieve SPX test data.")
         self.assertTrue(len(djx_data) > 0, "Failed to retrieve DJX test data.")
@@ -119,11 +119,11 @@ class TestMarketIndex(unittest.TestCase):
         """
         #TODO: this really needs a good mocking framework so that we don't
         # rely on open DB connections to perform the test. 
-        spx_data = self.m.constituents('SP500', '2012-12-31', '2012-12-31')
-        djx_data = self.m.constituents('DowJones', '2012-12-31', '2012-12-31')
+        spx_data = self.m.constituents('S&P 500', '2012-12-31', '2012-12-31')
+        djx_data = self.m.constituents('Dow Jones', '2012-12-31', '2012-12-31')
 
-        spx_gi = self.m['SP500', '2012-12-31':'2012-12-31']   
-        djx_gi = self.m['DowJones', '2012-12-31':'2012-12-31']
+        spx_gi = self.m['S&P 500', '2012-12-31':'2012-12-31']   
+        djx_gi = self.m['Dow Jones', '2012-12-31':'2012-12-31']
 
         try:
             assert_frame_equal(spx_data, spx_gi)

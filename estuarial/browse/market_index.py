@@ -6,7 +6,9 @@ Author: Ben Zaitlen and Ely Spears
 import pandas
 import numpy as np
 from estuarial.util.decorators import target_getitem
+from estuarial.util.config import market_index_config
 from estuarial.data.query_handler import QueryHandler
+
 
 @target_getitem('constituents', api_mapper='_constituents_signature')
 class MarketIndex(object):
@@ -16,11 +18,9 @@ class MarketIndex(object):
     _MARKET_INDEX_URL = "browse/market_index.yaml"
     
     # Map between convenience-function layer names and the functions and
-    # arguments needed for them.
-    _SUPPORTED_INDICES = {
-        "DowJones":("dowjones_universe", "DJX_IDX"),
-        "SP500":("spx_universe", "SPX_IDX")
-    }
+    # arguments needed for them. This is stored in a separate config file
+    # to maintain readability.
+    _SUPPORTED_INDICES = market_index_config._SUPPORTED_INDICES
 
 
     def __init__(self):
@@ -121,9 +121,9 @@ class MarketIndex(object):
 
 if __name__ == "__main__":
     m = MarketIndex()
-    tmp1 = m.constituents("SP500", '2012-12-31', '2012-12-31')
-    tmp2 = m['SP500', '2012-12-28':'2012-12-31']
+    tmp1 = m.constituents("S&P 500", '2012-12-31', '2012-12-31')
+    tmp2 = m["S&P 500", '2012-12-28':'2012-12-31']
 
-    tmp3 = m.constituents("DowJones", '2012-12-31', '2012-12-31')
-    tmp4 = m['DowJones', '2012-12-28':'2012-12-31']
+    tmp3 = m.constituents("Dow Jones", '2012-12-31', '2012-12-31')
+    tmp4 = m["Dow Jones", '2012-12-28':'2012-12-31']
 
