@@ -54,5 +54,14 @@ dt_list = (dt.datetime(2014,2,12), dt.datetime(2014,2,13))
 df = qad.datastream(dow.data.seccode.tolist(), dt_list)
 print df.head()
 
+from estuarial.query.raw_query import RAW_QUERY
+
+rquery = RAW_QUERY()
+sql = '''
+select * from idxinfo where code in (select distinct idxcode from idxspcmp)
+'''
+
+print rquery.raw_query(sql)
+
 
 
