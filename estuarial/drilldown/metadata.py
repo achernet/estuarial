@@ -6,6 +6,7 @@ from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
 from estuarial.util.config.config import Config
 from estuarial.array.arraymanagementclient import ArrayManagementClient
+from estuarial.util.dateparsing import parsedate
 
 class TRMETA(ArrayManagementClient):
 
@@ -13,9 +14,34 @@ class TRMETA(ArrayManagementClient):
         super(TRMETA, self).__init__()
 
     @property
-    def gics(self):
-        #empty select reads all
-        return self.aclient['/gicsec'].select()
+    def gicidx(self):
+        arr = self.aclient['/METADATA/gic_indices.yaml']
+        return arr.select(query_filter=None)
+
+
+    def gics(self,date,idx='LS&PCOMP'):
+        """
+        Function to return gics codes for a particular month for a particular index
+
+        :type date: string/datetime
+        :param date: end of month for a given month e.g. 2014-01-31
+
+        :type idx: string
+        :param idx: valid index parameter (default LS&PCOMP) for valid indices, check meta.gicidx
+
+        :rtype: `pandas.DataFrame`
+        :return: DataFrame of GICs codes for a particular month
+
+        """
+
+        arr = self.aclient['/METADATA/gic_date_select.yaml']
+        date = parsedate([date])[0]
+        data = arr.select(
+                and_(arr.indexlistmnem==idx,
+                     arr.date_ == date,
+                     )
+                )
+        return data
 
     def find_entity_id(self, entity=None, origin='us'):
         """

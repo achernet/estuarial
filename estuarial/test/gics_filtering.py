@@ -20,16 +20,18 @@ spx_date = '2013-12-04'
 qad = TRQAD()
 meta = TRMETA()
 
-# Testing worldscope data.
-some_ws_data = qad.worldscope(universe, metrics, dt_list)
 
 # Testing SPX universe creation.
-spx = UniverseBuilder.spx_idx('2013-12-04')
+spx = UniverseBuilder.spx_idx('2014-02-10')
+df = spx.data
 
 # Testing GICS meta data.
-gics_df = meta.gics
+print meta.gicidx
+gics_df = meta.gics('2014-01-31')
+print gics_df.head()
+
 gics_df.rename(columns={'SECCODE':'seccode'}, inplace=True)
 
 a = df.merge(gics_df,on=['seccode'])
-print a[a.SECTOR.str.contains('Information')],head().to_string()
+print a[a.SECTOR.str.contains('Information')].head().to_string()
 
