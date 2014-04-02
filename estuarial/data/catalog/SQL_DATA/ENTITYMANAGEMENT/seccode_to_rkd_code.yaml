@@ -1,0 +1,51 @@
+SQL:
+    sec:
+        type: conditional
+        conditionals:
+            - seccode
+            - ticker
+            - cntrycode
+
+        query: >
+            SELECT rkdinfo.code as RKD_CODE
+            , isr.IsrName
+            , isr.StartDate
+            , isr.EndDate
+            , rkdinfo.CntryCode
+            , rkdinfo.RegionCode
+            , Desc_
+            , SecCode
+            , VenCode
+            , IssueName
+            , rkdinfo.Ticker
+            , rkdinfo.Cusip
+            , rkdinfo.Sedol
+            , rkdinfo.ExchCode
+            , rkdinfo.ISIN
+            , rkdinfo.RIC
+
+            FROM prc.prcisr isr
+                  INNER JOIN prc.prciss iss
+                        ON isr.IsrCode=iss.IsrCode
+                        AND iss.Type_ <> 20
+                  INNER JOIN (
+                                    SELECT 1 AS Type_, SecCode, VenCode, Rank
+                                    FROM dbo.SecMapX
+                                    WHERE VenType=26
+                                          UNION
+                                    SELECT 6 AS Type_, SecCode, VenCode, Rank
+                                    FROM dbo.GSecMapX
+                                    WHERE VenType=26
+                              ) map
+                        ON map.Type_=iss.Type_
+                        AND map.SecCode=iss.Code
+                  INNER JOIN dbo.RkdFndCmpRefIssue rkdIss
+                        ON rkdIss.IssueCode=map.VenCode
+                  INNER JOIN dbo.RkdFndInfo rkdInfo
+                        ON rkdInfo.Code=rkdIss.Code
+                  INNER JOIN dbo.RkdFndCmpRef ref
+                        on ref.Code = rkdInfo.code
+                  INNER JOIN dbo.RkdFndCode rfc
+                        on (ref.dflag & rfc.code) = rfc.code
+                        and rfc.type_ = 59 and rfc.code = 64
+            WHERE EXISTS (SELECT 1 from dbo.rkdfndstdfinval _r WHERE _r.code = rkdInfo.code)

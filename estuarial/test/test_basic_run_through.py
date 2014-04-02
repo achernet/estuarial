@@ -65,3 +65,8 @@ print rquery.raw_query(sql)
 
 
 
+from estuarial.drilldown.metadata import TRMETA
+
+
+meta = TRMETA()
+meta.to_rkdcode([36799])

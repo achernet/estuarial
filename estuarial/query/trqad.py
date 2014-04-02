@@ -86,21 +86,36 @@ class TRQAD(ArrayManagementClient):
             dbs = ' '.join(valid_dbs)
             raise KeyError("Not a valid Database please use an approved DB: {}".format(dbs))
 
-        start, stop = parsedate(dt_list)
-        df_file = db_dict[DB]
-        url = pjoin('/FUNDAMENTALS',DB,df_file)
-        arr = self.aclient[url]
+        if DB=='WORLDSCOPE':
+            start, stop = parsedate(dt_list)
+            df_file = db_dict[DB]
+            url = pjoin('/FUNDAMENTALS',DB,df_file)
+            arr = self.aclient[url]
 
-        ws_data = arr.select(
-            and_(arr.seccode.in_(universe),
-                 arr.item.in_(metrics),
-                 arr.freq==freq),
-            date_1=start,
-            date_2=stop)
+            data = arr.select(
+                and_(arr.seccode.in_(universe),
+                     arr.item.in_(metrics),
+                     arr.freq==freq),
+                date_1=start,
+                date_2=stop)
 
-        if align:
-            ws_data = worldscope_align(ws_data)
-        return ws_data
+            if align:
+                data = worldscope_align(data)
+
+        if DB=='RKD':
+            start, stop = parsedate(dt_list)
+            df_file = db_dict[DB]
+            url = pjoin('/FUNDAMENTALS',DB,df_file)
+            arr = self.aclient[url]
+
+            data = arr.select(
+                and_(arr.code.in_(universe),
+                     arr.coa.in_(metrics),
+                     ),
+                sourcedate_1=start,
+                sourcedate_2=stop)
+
+        return data
 
 
     def datastream(self,universe,dt_list):

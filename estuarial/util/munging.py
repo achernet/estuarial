@@ -14,3 +14,12 @@ def worldscope_align(df):
             row['ddate'] = last_fisc_yr + relativedelta(months=3*row['seq'])
         df.loc[count, 'ddate'] = row['ddate']
     return df
+
+def lower_columns(df):
+        """
+        lower all column names
+        """
+
+        cols = [col.lower() for col in df.columns]
+        df.columns = cols
+        return df

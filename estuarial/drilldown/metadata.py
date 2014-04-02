@@ -6,6 +6,7 @@ from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
 from estuarial.util.config.config import Config
 from estuarial.array.arraymanagementclient import ArrayManagementClient
+from estuarial.util.munging import lower_columns
 
 class TRMETA(ArrayManagementClient):
 
@@ -84,6 +85,35 @@ class TRMETA(ArrayManagementClient):
             thisitem = items[items[index_name]==i]
             setattr(items,i,thisitem)
         return items
+
+    def to_rkdcode(self, seccodes=None, tickers=None, CntryCode='USA'):
+        """
+        :type seccodes: list
+        :param seccodes: list of seccodes
+
+        :type origin: string
+        :param origin: origin to search for: us or non-us
+
+        :rtype: `pandas.DataFrame`
+        :return: DataFrame of match
+        """
+
+        url = '/ENTITYMANAGEMENT/seccode_to_rkd_code.yaml'
+        arr = self.aclient[url]
+
+        if tickers is None:
+            data = arr.select(
+                and_(arr.seccode.in_(seccodes),
+                     arr.cntrycode==CntryCode),
+                    )
+
+        if seccodes is None:
+            data = arr.select(
+                and_(arr.ticker.in_(tickers),
+                     arr.cntrycode==CntryCode),
+                    )
+        data = lower_columns(data)
+        return data
 
     def tr_sql_parser(file_input):
         """

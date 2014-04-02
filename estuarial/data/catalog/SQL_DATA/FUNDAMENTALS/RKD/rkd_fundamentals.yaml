@@ -3,6 +3,7 @@ SQL:
         conditionals:
                 - code
                 - coa
+                - sourcedate
 
         query: >
                 select
@@ -11,7 +12,7 @@ SQL:
                 ,  prd.desc_ as period
                 ,  t.coa
                 ,  t.desc_ as item_name
-                ,  cast(s.perlen as varchar(10)) + s.perlencode as period
+                ,  cast(s.perlen as varchar(10)) + s.perlencode as perlencode_period
                 ,  s.flash
                 ,  f.FinalFiling
                 ,  case s.CompStmtCode
@@ -19,7 +20,7 @@ SQL:
                         when 0 then 'partial'
                     end as CompStmtCode
                 ,  f.origanncdt
-                ,  s.sourcedt
+                ,  s.sourcedt as sourcedate
                 ,  d.perenddt
                 ,  d.stmtdt
                 ,  case d.StmtTypeCode
@@ -66,5 +67,4 @@ SQL:
                         on f.currconvtocode = c.code
                         and c.type_ = 58
                 where d.pertypecode = 2
-                and  (s.Flash = 0 OR (s.Flash = 1 AND s.CompStmtCode = 1) OR f.FinalFiling = 1)  -- ignore flash updates
-                order by d.perenddt
+                and  (s.Flash = 0 OR (s.Flash = 1 AND s.CompStmtCode = 1) OR f.FinalFiling = 1)
