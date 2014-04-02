@@ -131,7 +131,7 @@ ConstituentQueries:
             JOIN PRC.IDXSEC S
                 ON  S.CODE = N.SECCODE
                 AND S.VENDOR = 2 -- Russell
-            JOIN DBO.SECMAPX M
+            JOIN DBO.SECMAP M
                 ON  M.SECCODE = S.PRCCODE
                 AND M.VENTYPE = 14 -- IDC Pricing
                 AND M.EXCHANGE = 1 -- US
@@ -141,7 +141,4 @@ ConstituentQueries:
                               FROM   PRC.PRCDLY
                               WHERE  CODE = D.CODE
                               AND    DATE_ <= N.DATE_)
-        
-
-
 

@@ -2,6 +2,33 @@
 Configuration and constants for MarketIndex.
 
 Author: Ben Zaitlen and Ely Spears
+
+
+Some raw queries useful for obtaining the info encoded below:
+
+-- S & P
+select * 
+from idxinfo 
+where code in (select distinct idxcode 
+               from idxspcmp)
+
+-- Russell
+select * 
+from idxinfo 
+where code in (select distinct idxcode 
+               from idxrlcmp)   
+
+-- Dow
+select * 
+from idxinfo 
+where code in (select distinct idxcode 
+               from idxdjcmp)   
+
+ -- S&P BMI
+select * 
+from idxbmiinfo 
+where idxcode in (select distinct idxcode 
+                  from IdxBMIConst)
 """
 
 # Dictionary that maps the exposed, convenience-function name of an index (as
@@ -13,9 +40,9 @@ _SUPPORTED_INDICES = {
     "Dow Jones": ("dowjones_universe", "DJX_IDX"),
 
     # Russell
-    "Russell 1000": ("russell_universe", "RUA_IDX"),
+    "Russell 1000": ("russell_universe", "RUI_IDX"),
     "Russell 2000": ("russell_universe", "RUT_IDX"),
-    "Russell 3000": ("russell_universe", "RUI_IDX"),            
+    "Russell 3000": ("russell_universe", "RUA_IDX"),            
 
     # S&P US indices
     "S&P 100":  ("spx_universe", "OEX_IDX"),        
