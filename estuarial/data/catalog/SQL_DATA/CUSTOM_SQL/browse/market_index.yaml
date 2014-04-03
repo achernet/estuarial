@@ -1,0 +1,143 @@
+ConstituentQueries:
+    # Query for S&P 500 membership
+    spx_universe:
+        doc: >
+            Parameterized query to select SPX_IDX from several tables, 
+            including IDXSPCMP, IDXINFO, SECMAP, PRC.IDXSEC, and PRC.PRCDLY.
+
+        conditionals: 
+            DATE_:   Date of constituent membership.
+            ITICKER: Ticker name describing the index, e.g. 'SPX_IDX'.
+
+        query: >
+            SELECT I.NAME as INAME
+                , I.TICKER as ITICKER
+                , S.TICKER
+                , S.CUSIP
+                , S.NAME
+                , N.DATE_
+                , D.CLOSE_
+                , N.SHARES
+                , M.SECCODE
+                , D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
+            FROM DBO.IDXSPCMP N
+            JOIN DBO.IDXINFO I
+                ON  I.CODE = N.IDXCODE
+            JOIN PRC.IDXSEC S
+                ON  S.CODE = N.SECCODE
+                AND S.VENDOR = 1 -- S&P
+            JOIN DBO.SECMAPX M
+                ON  M.SECCODE = S.PRCCODE
+                AND M.VENTYPE = 1 -- IDC Pricing for SECMAPX
+                AND M.EXCHANGE = 1 -- US
+            JOIN PRC.PRCDLY D
+                ON  D.CODE = M.VENCODE
+                AND D.DATE_ =(SELECT  MAX(DATE_)
+                              FROM    PRC.PRCDLY
+                              WHERE   CODE = D.CODE
+                              AND     DATE_ <= N.DATE_)   
+
+
+    # Query for Dow Jones membership
+    dowjones_universe:
+        doc: >
+            Parameterized query to select DJX_IDX from several tables, 
+            including IDXDJCMP, IDXINFO, SECMAPX, PRC.IDXSEC, and PRC.PRCDLY.
+
+        conditionals:
+            DATE_:   Date of constituent membership.
+            ITICKER: Ticker name describing the index, e.g. 'DJX_IDX'.
+
+        query: >
+            SELECT I.NAME as INAME
+                , I.TICKER as ITICKER
+                , S.TICKER
+                , S.CUSIP
+                , S.NAME
+                , N.DATE_
+                , D.CLOSE_
+                , N.SHARES
+                , M.SECCODE
+                , D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
+            FROM DBO.IDXDJCMP N
+            JOIN DBO.IDXINFO I
+                ON I.CODE = N.IDXCODE
+            JOIN PRC.IDXSEC S
+                ON  S.CODE = N.SECCODE
+                AND S.VENDOR = 4 -- Dow Jones
+            JOIN DBO.SECMAPX M
+                ON  M.SECCODE = S.PRCCODE
+                AND M.VENTYPE = 1 -- IDC Pricing for SECMAPX
+                AND M.EXCHANGE = 1 -- US
+            JOIN PRC.PRCDLY D
+                ON  D.CODE = M.VENCODE
+                AND D.DATE_ =(SELECT MAX(DATE_)
+                              FROM   PRC.PRCDLY
+                              WHERE  CODE = D.CODE
+                              AND    DATE_ <= N.DATE_)
+                              
+                             
+    # Query for S&P BMI index membership
+    bmi_universe:
+        doc: >
+            Parameterized query to select from many BMI indices from several 
+            tables, including IdxBMISecDaily, IdxBMIConst, IdxInfo, SECMAPX, 
+            PRC.IDXSEC, and PRC.PRCDLY.
+
+        conditionals: 
+            DATE_: Date of constituent membership.
+            ITICKER: Mnemonic identifying which BMI index to query.
+
+        query: >            
+            SELECT N.DATE_ as DATE_
+                , S.IndexMnem as ITICKER
+                , N.CLOSE_
+                , N.AdjClose
+                , N.MARKETCAP
+                , N.SECCODE
+                , S.NAME_
+            FROM DBO.IdxBMISecDaily N
+            JOIN DBO.IdxBMIConst I
+                ON I.SECCODE = N.SECCODE
+            JOIN DBO.IdxBMIInfo S
+                ON S.IDXCODE = I.IDXCODE
+
+
+    # Query for Russell index membership
+    russell_universe:
+        doc: >
+            Parameterized query to select from many Russell indices from 
+            several tables, including IdxBMISecDaily, IdxBMIConst, IdxInfo, 
+            SECMAPX, PRC.IDXSEC, and PRC.PRCDLY.
+
+        conditionals: 
+            DATE_: Date of constituent membership.
+            ITICKER: Mnemonic identifying which Russell index to query.
+
+        query: >            
+            SELECT I.NAME as INAME
+                , I.TICKER as ITICKER
+                , S.TICKER
+                , S.CUSIP
+                , S.NAME
+                , N.DATE_
+                , D.CLOSE_
+                , N.SHARES
+                , M.SECCODE
+                , D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP
+            FROM DBO.IDXRLCMP N
+            JOIN DBO.IDXINFO I
+                ON I.CODE = N.IDXCODE
+            JOIN PRC.IDXSEC S
+                ON  S.CODE = N.SECCODE
+                AND S.VENDOR = 2 -- Russell
+            JOIN DBO.SECMAPX M
+                ON  M.SECCODE = S.PRCCODE
+                AND M.VENTYPE = 1 -- IDC Pricing for SECMAPX
+                AND M.EXCHANGE = 1 -- US
+            JOIN PRC.PRCDLY D
+                ON  D.CODE = M.VENCODE
+                AND D.DATE_ =(SELECT MAX(DATE_)
+                              FROM   PRC.PRCDLY
+                              WHERE  CODE = D.CODE
+                              AND    DATE_ <= N.DATE_)
