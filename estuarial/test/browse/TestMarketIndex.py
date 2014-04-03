@@ -138,6 +138,20 @@ class TestMarketIndex(unittest.TestCase):
             message = ("Function call to `constituents` for getting DJX data "
                        "does not match `__getitem__`")
             raise AssertionError(message)
+
+    def test_available_indices(self):
+        """
+        Check that available indices correctly displays the keys of the
+        'hidden' variable _SUPPORTED_INDICES.
+        """
+        message = ("`available_indices` failed to provide the indices from "
+                   "_SUPPORTED_INDICES.")
+
+        self.assertEqual(
+            set(self.m._SUPPORTED_INDICES.keys()),
+            set(self.m.available_indices()),
+            message
+        )
         
             
 if __name__ == "__main__":

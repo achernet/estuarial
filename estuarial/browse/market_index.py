@@ -14,7 +14,16 @@ from estuarial.data.query_handler import QueryHandler
 class MarketIndex(object):
     """
     Provider for market index constituents.
+
+    Examples
+    --------
+        m = MarketIndex()
+        m.available_indices()
+        m.constituents("Russell 1000", '2012-12-28', '2012-12-31')
+        m["S&P 500", datetime.date(2012, 12, 28):datetime.date(2012, 12, 31)]
     """
+
+    # Location relative to CUSTOM_SQL for the necessary queries.
     _MARKET_INDEX_URL = "browse/market_index.yaml"
     
     # Map between convenience-function layer names and the functions and
@@ -117,6 +126,22 @@ class MarketIndex(object):
         function_handle = getattr(self._constituent_queries, index_function)
         return function_handle(date__between=(start_period, end_period),
                                iticker=index_iticker)
+
+    def available_indices(self):
+        """
+        Provides a tuple of the strings that can be used as index names when
+        using the constituent-retrieval abilities of this class.
+
+        Params
+        ------
+        None.
+
+        Returns
+        -------
+        Tuple of strings, each expressing a valid index name for constituent
+        data retrieval with this class's other functions.
+        """
+        return tuple(self._SUPPORTED_INDICES.keys())
 
 
 if __name__ == "__main__":
