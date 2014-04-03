@@ -1,0 +1,47 @@
+SQL:
+    gsec_month:
+        conditionals:
+            - date_
+            - indexlistmnem
+
+        query: >
+
+            SELECT      A.INDEXLISTDESC,
+                        X.SECCODE,
+                        C.DSQTNAME AS NAME,
+                        C.DSCODE,
+                        C.INFOCODE,
+                        Y.SEDOL,
+                        Y.CUSIP,
+                        G.DATE_,
+                        INDEXLISTMNEM,
+                        G.WEIGHT AS INDEX_WEIGHT,
+                              S2.DESC_ AS SECTOR,
+                              S3.DESC_ AS GROUP_,
+                              S4.DESC_ AS INDUSTRY,
+                              S5.DESC_ AS SUBINDUSTRY
+
+            FROM DS2INDEXLIST A
+                  JOIN DS2CONSTMTH B
+                        ON A.INDEXLISTINTCODE = B.INDEXLISTINTCODE
+                  JOIN DS2CTRYQTINFO C
+                        ON B.INFOCODE = C.INFOCODE
+                  JOIN DS2SECURITY D
+                        ON C.DSSECCODE = D.DSSECCODE
+                  JOIN DS2CONSTDATAMTH G
+                         ON G.INDEXLISTINTCODE = B.INDEXLISTINTCODE
+                         AND G.CONSTINTCODE = B.CONSTINTCODE
+                  JOIN  (SELECT *, 0 AS FLAG FROM SECMAPX UNION SELECT *, 1 AS FLAG FROM GSECMAPX) W
+                              ON C.INFOCODE = W.VENCODE AND W.VENTYPE = 33 AND W.RANK = 1
+                    JOIN      (SELECT *, 0 AS FLAG FROM SECMSTRX WHERE TYPE_ = 1 UNION SELECT *, 1 AS FLAG FROM GSECMSTRX WHERE TYPE_ = 10) Y
+                              ON W.SECCODE = Y.SECCODE AND W.FLAG = Y.FLAG
+                    JOIN   (SELECT *, 0 AS FLAG FROM SECMAPX UNION SELECT *, 1 AS FLAG FROM GSECMAPX) X
+                              ON W.SECCODE = X.SECCODE AND X.VENTYPE = 47 AND X.RANK = 1 AND W.FLAG = X.FLAG
+                    JOIN   SPG2SECINFO S ON X.VENCODE = S.CODE
+                    JOIN   SPG2HGICS S1 ON S1.GVKEY = S.GVKEY AND G.DATE_ BETWEEN S1.STARTDATE AND ISNULL (S1.ENDDATE, '20790101')
+                    JOIN SPG2CODE S2 ON S2.CODE = LEFT(S1.GSUBIND,2) AND S2.TYPE_ = 2
+                    JOIN SPG2CODE S3 ON S3.CODE = LEFT(S1.GSUBIND,4) AND S3.TYPE_ = 3
+                    JOIN SPG2CODE S4 ON S4.CODE = LEFT(S1.GSUBIND,6) AND S4.TYPE_ = 4
+                    JOIN SPG2CODE S5 ON S5.CODE = S1.GSUBIND AND S5.TYPE_ = 5
+
+            WHERE A.PERMITLEVELCODE = 'MWT'

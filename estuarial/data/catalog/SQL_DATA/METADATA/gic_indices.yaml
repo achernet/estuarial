@@ -1,0 +1,6 @@
+SQL:
+    gsecidx:
+        conditionals:
+
+        query: >
+            SELECT * FROM DS2INDEXLIST WHERE INDEXLISTDESC LIKE '%S&P 500%' -- FIND INDEXLISTMNEM BASED ON WILDCARD
