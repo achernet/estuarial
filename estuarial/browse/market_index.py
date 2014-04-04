@@ -141,7 +141,7 @@ class MarketIndex(object):
         Tuple of strings, each expressing a valid index name for constituent
         data retrieval with this class's other functions.
         """
-        return tuple(self._SUPPORTED_INDICES.keys())
+        return sorted(tuple(self._SUPPORTED_INDICES.keys()))
 
 
 if __name__ == "__main__":

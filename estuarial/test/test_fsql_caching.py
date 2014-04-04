@@ -46,21 +46,21 @@ df = tr.ws_meas([seccodes],[NI, CASH, EPS])[dt_begin:dt_end]
 tr.find_entity('AAPL')
 tr.gic
 
-def filter_df(df, **kwargs):
-  temp_df = df
-  for colname, values in kwargs.items():
-  #don't force users to wrap single item lists that are strings
-
-  if type(values) == type(""):
-  values = [values]
-  f_df1 = temp_df[colname]
-  f_df2 = f_df1.isin(values)
-  temp_df = temp_df[f_df2]
-  return temp_df
-
-filter_df(T_pg_b60_df, 
-          ProductGroup=['Energy', 
-                        'Agriculture', 
-                        'InterestRates', 
-                        'Equities'])
+# def filter_df(df, **kwargs):
+#   temp_df = df
+#   for colname, values in kwargs.items():
+#   #don't force users to wrap single item lists that are strings
+#
+#   if type(values) == type(""):
+#   values = [values]
+#   f_df1 = temp_df[colname]
+#   f_df2 = f_df1.isin(values)
+#   temp_df = temp_df[f_df2]
+#   return temp_df
+#
+# filter_df(T_pg_b60_df,
+#           ProductGroup=['Energy',
+#                         'Agriculture',
+#                         'InterestRates',
+#                         'Equities'])
 
