@@ -1,8 +1,13 @@
-.. _config:
 
-#############
+.. _installation:
+
+############
+Installation
+############
+
+
 Configuration
-#############
+-------------
 
 When loading estuarial for the first time, it will check if a `~/.estuarial` directory exists your home.  If it does not
 exist, one will automatically be created for you.  This directory houses credential files, configuration files for
