@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Estuarial
-=======
+=========
 
 .. _about:
 
@@ -26,11 +26,13 @@ CONTENTS
     :maxdepth: 2
 
     quickstart
-    universe
-    worldscope
-    datastream
-    config
-    about
+    installation
+    demos
+    user_guide
+    dev_guide
+    contributing
+    release_notes
+
 
 Requirements
 ------------
