@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Estuarial &mdash; estuarial 0.1 documentation</title>
+    <title>Configuration &mdash; estuarial 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -33,8 +33,9 @@
     <script type="text/javascript" src="_static/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="estuarial 0.1 documentation" href="#" />
-    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="top" title="estuarial 0.1 documentation" href="index.html" />
+    <link rel="next" title="Design" href="about.html" />
+    <link rel="prev" title="Datastream" href="datastream.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -58,7 +59,7 @@
         </button>
 
         <!--<a class="logo"> <img height="32" width="32" src="_static/a-logo.png" /></a>-->
-        <a class="navbar-brand" href="#">estuarial</a>
+        <a class="navbar-brand" href="index.html">estuarial</a>
         <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
       </div>
         <div class="collapse navbar-collapse nav-collapse">
@@ -67,11 +68,11 @@
             
             
               <li class="dropdown globaltoc-container">
-  <a href="#"
+  <a href="index.html"
      class="dropdown-toggle"
      data-toggle="dropdown">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
-    ><ul>
+    ><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#downloading-installing">Downloading/Installing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-estuarial">Using Estuarial</a></li>
@@ -88,7 +89,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="datastream.html">Datastream</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">Design</a></li>
 </ul>
 </ul>
@@ -97,13 +98,7 @@
                 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"><ul>
-<li><a class="reference internal" href="#">Estuarial</a></li>
-<li><a class="reference internal" href="#contents">CONTENTS</a><ul>
-<li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li><a class="reference internal" href="#release-notes">Release Notes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">Configuration</a></li>
 </ul>
 </ul>
 </li>
@@ -112,8 +107,10 @@
             
               
                 
-  <li><a href="quickstart.html"
-         title="Next Chapter: Quickstart">Quickstart &raquo;</a></li>
+  <li><a href="datastream.html"
+         title="Previous Chapter: Datastream">&laquo; Datastream</a></li>
+  <li><a href="about.html"
+         title="Next Chapter: Design">Design &raquo;</a></li>
               
             
             
@@ -139,17 +136,17 @@
 <div class="container">
   <div class="row">
       <div class="col-md-3">
-        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="universe.html">Universe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="worldscope.html">Worldscope</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datastream.html">Datastream</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">Design</a></li>
 </ul>
 
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/config.txt"
      rel="nofollow">Source</a>
 </div>
 <form action="search.html" method="get">
@@ -163,62 +160,27 @@
       </div>
     <div class="col-md-9">
       
-  <div class="section" id="estuarial">
-<h1>Estuarial<a class="headerlink" href="#estuarial" title="Permalink to this headline">¶</a></h1>
-<p id="about">Estuarial is an open-source API for Thomson Reuters&#8217; <a class="reference external" href="http://im.thomsonreuters.com/solutions/quantitative-research-tools/qa-direct/">QA Direct</a>.  The aim of Estuarial is help
-quants, financial researchers, and other domain experts fetch data from the various DBs within QAD in a complete,
-expressible, and efficient manner through Python.</p>
-<p>To get started quickly, follow the <a class="reference internal" href="quickstart.html#quickstart"><em>Quickstart</em></a>.</p>
-<p>A more detailed <em class="xref std std-ref">detailed about</em>.</p>
-<p>Visit the source repository: <a class="reference external" href="https://github.com/ContinuumIO/estuarial">https://github.com/ContinuumIO/estuarial</a></p>
+  <div class="section" id="configuration">
+<span id="config"></span><h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>When loading estuarial for the first time, it will check if a <cite>~/.estuarial</cite> directory exists your home.  If it does not
+exist, one will automatically be created for you.  This directory houses credential files, configuration files for
+Estuarial, as well as all logs.</p>
+<p>The Estuarial configuration relies on ODBC and as such requires connection info (stored in ini format) to be defined.  An
+example ODBC auth file is laid out below:</p>
+<p>The <tt class="docutils literal"><span class="pre">~/.estuarial/estuarial.ini</span></tt> file should look like:</p>
+<div class="highlight-python"><pre>[ESTUARIAL]
+Description = ODBC CONNECTION INFO FOR ESTUARIAL
+Trace      = Yes
+Port       = XXXX
+Server     = XX.XXX.XXX.XX
+Database   = XXX
+UserName   = XXXXXXX
+Password   = XXXXXXX
+Driver     = /opt/microsoft/sqlncli/lib64/libsqlncli-11.0.so.1790.0
+Threading  = 1
+UsageCount = 1</pre>
 </div>
-<div class="section" id="contents">
-<h1>CONTENTS<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#downloading-installing">Downloading/Installing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-estuarial">Using Estuarial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#example-ipython-notebooks">Example IPython Notebooks</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="universe.html">Universe</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="universe.html#source">Source</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="worldscope.html">Worldscope</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="worldscope.html#worldcope-access">Worldcope Access</a></li>
-<li class="toctree-l2"><a class="reference internal" href="worldscope.html#worldscope-metadata">Worldscope MetaData</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="datastream.html">Datastream</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">Design</a></li>
-</ul>
-</div>
-<div class="section" id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>python 2.7</li>
-<li>arraymanagement (&gt;=0.1)</li>
-<li>numpy (&gt;=1.7.1)</li>
-<li>pandas (== 0.12)</li>
-<li>pyodbc (&gt;= 3.0.7)</li>
-<li>sqlalchemy (&gt;= 0.9.1)</li>
-<li>pytables (==3.0.0)</li>
-</ul>
-</div>
-<div class="section" id="release-notes">
-<h2>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
+<p><em>Note: on Windows set **Driver = SQL Server*</em> *</p>
 </div>
 
 
@@ -235,7 +197,7 @@ expressible, and efficient manner through Python.</p>
         <br/>
         
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/config.txt"
      rel="nofollow">Source</a>
 </div>
       

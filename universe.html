@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Estuarial &mdash; estuarial 0.1 documentation</title>
+    <title>Universe &mdash; estuarial 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -33,8 +33,9 @@
     <script type="text/javascript" src="_static/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="estuarial 0.1 documentation" href="#" />
-    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="top" title="estuarial 0.1 documentation" href="index.html" />
+    <link rel="next" title="Worldscope" href="worldscope.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -58,7 +59,7 @@
         </button>
 
         <!--<a class="logo"> <img height="32" width="32" src="_static/a-logo.png" /></a>-->
-        <a class="navbar-brand" href="#">estuarial</a>
+        <a class="navbar-brand" href="index.html">estuarial</a>
         <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
       </div>
         <div class="collapse navbar-collapse nav-collapse">
@@ -67,19 +68,19 @@
             
             
               <li class="dropdown globaltoc-container">
-  <a href="#"
+  <a href="index.html"
      class="dropdown-toggle"
      data-toggle="dropdown">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
-    ><ul>
+    ><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#downloading-installing">Downloading/Installing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-estuarial">Using Estuarial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#example-ipython-notebooks">Example IPython Notebooks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="universe.html">Universe</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="universe.html#source">Source</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Universe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#source">Source</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="worldscope.html">Worldscope</a><ul>
@@ -97,13 +98,10 @@
                 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"><ul>
-<li><a class="reference internal" href="#">Estuarial</a></li>
-<li><a class="reference internal" href="#contents">CONTENTS</a><ul>
-<li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li><a class="reference internal" href="#release-notes">Release Notes</a></li>
+<li><a class="reference internal" href="#">Universe</a><ul>
+<li><a class="reference internal" href="#source">Source</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </ul>
 </li>
@@ -113,7 +111,9 @@
               
                 
   <li><a href="quickstart.html"
-         title="Next Chapter: Quickstart">Quickstart &raquo;</a></li>
+         title="Previous Chapter: Quickstart">&laquo; Quickstart</a></li>
+  <li><a href="worldscope.html"
+         title="Next Chapter: Worldscope">Worldscope &raquo;</a></li>
               
             
             
@@ -139,9 +139,12 @@
 <div class="container">
   <div class="row">
       <div class="col-md-3">
-        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="universe.html">Universe</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Universe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#source">Source</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="worldscope.html">Worldscope</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datastream.html">Datastream</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
@@ -149,7 +152,7 @@
 </ul>
 
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/universe.txt"
      rel="nofollow">Source</a>
 </div>
 <form action="search.html" method="get">
@@ -163,62 +166,24 @@
       </div>
     <div class="col-md-9">
       
-  <div class="section" id="estuarial">
-<h1>Estuarial<a class="headerlink" href="#estuarial" title="Permalink to this headline">¶</a></h1>
-<p id="about">Estuarial is an open-source API for Thomson Reuters&#8217; <a class="reference external" href="http://im.thomsonreuters.com/solutions/quantitative-research-tools/qa-direct/">QA Direct</a>.  The aim of Estuarial is help
-quants, financial researchers, and other domain experts fetch data from the various DBs within QAD in a complete,
-expressible, and efficient manner through Python.</p>
-<p>To get started quickly, follow the <a class="reference internal" href="quickstart.html#quickstart"><em>Quickstart</em></a>.</p>
-<p>A more detailed <em class="xref std std-ref">detailed about</em>.</p>
-<p>Visit the source repository: <a class="reference external" href="https://github.com/ContinuumIO/estuarial">https://github.com/ContinuumIO/estuarial</a></p>
+  <div class="section" id="universe">
+<span id="id1"></span><h1>Universe<a class="headerlink" href="#universe" title="Permalink to this headline">¶</a></h1>
+<p>Pre-defined universes are a great starting point for any financial analytic. We&#8217;ve created a number of convenience
+accessors to help get you started.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">spx</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">spx_idx</span><span class="p">(</span><span class="s">&#39;2013-12-04&#39;</span><span class="p">)</span>
+<span class="n">dow</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">djx_idx</span><span class="p">(</span><span class="s">&#39;2014-01-28&#39;</span><span class="p">)</span>
+<span class="n">us</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">us</span><span class="p">()</span>
+<span class="n">can</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">can</span><span class="p">()</span>
+</pre></div>
 </div>
-<div class="section" id="contents">
-<h1>CONTENTS<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#downloading-installing">Downloading/Installing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-estuarial">Using Estuarial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#example-ipython-notebooks">Example IPython Notebooks</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="universe.html">Universe</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="universe.html#source">Source</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="worldscope.html">Worldscope</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="worldscope.html#worldcope-access">Worldcope Access</a></li>
-<li class="toctree-l2"><a class="reference internal" href="worldscope.html#worldscope-metadata">Worldscope MetaData</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="datastream.html">Datastream</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">Design</a></li>
-</ul>
+<p>Estuarial Universe objects are built for easy exploration:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dow</span><span class="o">.</span><span class="n">cash</span><span class="p">[</span><span class="n">dt1</span><span class="p">:</span><span class="n">dt2</span><span class="p">]</span>
+<span class="n">dow</span><span class="o">.</span><span class="n">ohlc</span><span class="p">[</span><span class="s">&#39;2013-12-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-22&#39;</span><span class="p">]</span>
+</pre></div>
 </div>
-<div class="section" id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>python 2.7</li>
-<li>arraymanagement (&gt;=0.1)</li>
-<li>numpy (&gt;=1.7.1)</li>
-<li>pandas (== 0.12)</li>
-<li>pyodbc (&gt;= 3.0.7)</li>
-<li>sqlalchemy (&gt;= 0.9.1)</li>
-<li>pytables (==3.0.0)</li>
-</ul>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="release-notes">
-<h2>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
 </div>
 
 
@@ -235,7 +200,7 @@ expressible, and efficient manner through Python.</p>
         <br/>
         
 <div id="sourcelink">
-  <a href="_sources/index.txt"
+  <a href="_sources/universe.txt"
      rel="nofollow">Source</a>
 </div>
       
