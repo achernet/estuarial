@@ -2,6 +2,7 @@ import os
 import shutil
 import logging
 import datetime
+import estuarial.data as etdata
 from os.path import join as pjoin
 from os.path import dirname, split, realpath, exists
 
@@ -13,10 +14,9 @@ ESTUARIAL_DIR = pjoin(USER, '.estuarial')
 ESTUARIAL_LOG_DIR = pjoin(ESTUARIAL_DIR, 'estuarial-logs')
 now = datetime.datetime.utcnow().strftime('%Y-%m-%d')
 
-datalibdir = pjoin(dirname(__file__), 'SQL_DATA', 'datalib')
+datalibdir = pjoin(etdata.__file__), 'catalog', 'SQL_DATA', 'datalib')
 
 if not os.path.exists(ESTUARIAL_DIR):
-    print pjoin(dirname(__file__))
     shutil.copytree(datalibdir, pjoin(ESTUARIAL_DIR, 'datalib'))
     shutil.copyfile(pjoin(dirname(__file__), 'estuarial.ini'),
                     pjoin(ESTUARIAL_DIR,'estuarial.ini'))
