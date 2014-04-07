@@ -43,7 +43,7 @@ class _OHLCIndexer(_TRUniverseIndexer):
             start,stop = check_date([start,stop])
 
             universe = self.obj.data.seccode.tolist()
-            arr = self.obj.aclient['/DataStream/ohlc.yaml']
+            arr = self.obj.aclient['/DATASTREAM/ohlc.yaml']
             ohlc = arr.select(and_(arr.seccode.in_(universe)),
                                date_1 = start,
                                date_2 = stop,
