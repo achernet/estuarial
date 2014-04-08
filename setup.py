@@ -31,8 +31,9 @@ def get_sql_files():
 
 
 package_data = dict(estuarial=get_sql_files())
-package_data['estuarial'].append('trqadrc.ini')
-package_data['estuarial'].append('estuarial.ini')
+config_ini = os.path.join("util","config","estuarial.ini")
+
+package_data['estuarial'].append(config_ini)
 
 version = "0.0.1"
 setup(name='estuarial',
