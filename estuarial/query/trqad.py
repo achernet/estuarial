@@ -134,7 +134,7 @@ class TRQAD(ArrayManagementClient):
 
         """
 
-        arr = self.aclient['/DataStream/datastream_basic.yaml']
+        arr = self.aclient['/DATASTREAM/datastream_basic.yaml']
         start,stop = parsedate(dt_list)
 
         df = arr.select(and_(arr.seccode.in_(universe),

@@ -1,5 +1,6 @@
 import os
 import six
+from os.path import dirname
 from os.path import join as pjoin
 from six.moves import configparser
 
@@ -15,7 +16,8 @@ except (AttributeError, ImportError):
 
 # By default we use two locations for the estuarial configurations,
 # /etc/odbc.ini and ~/.estuarial/estuarial.ini (which works on Windows and Unix).
-EstuarialConfigPath = '/etc/odbc.ini'
+
+EstuarialConfigPath = pjoin(dirname(__file__), 'estuarial.ini')
 EstuarialConfigLocations = [EstuarialConfigPath]
 UserConfigPath = pjoin(expanduser('~'), '.estuarial', 'estuarial.ini')
 UserConfigDir = pjoin(expanduser('~'), '.estuarial')

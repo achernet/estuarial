@@ -36,10 +36,13 @@ spx.cash['2009-01-01':'2014-01-01']
 
 meta.find_entity_name('BMW')
 meta.find_entity_id(36799)
-gics = meta.gics
+print meta.gicidx
+gics = meta.gics(date='2014-03-31')
+print gics
 gics[gics.SECCODE==36799]
 
 us = UniverseBuilder.us()
+print us.data.head()
 can = UniverseBuilder.can()
 
 dow = UniverseBuilder.djx_idx('2014-01-28')

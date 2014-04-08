@@ -1,5 +1,6 @@
 from dateutil import parser
 import datetime as dt
+import calendar
 
 def parsedate(dates):
     """
@@ -21,6 +22,25 @@ def parsedate(dates):
             dt_list.append(date)
 
     return dt_list
+
+def end_of_month(date):
+    """
+    Check date is the end of the month
+
+    :type date: datetime
+    :param date: a given date with year, month, and day
+
+    :rtype: bool
+    :return: truth value of end of the month
+
+    """
+    month, day = calendar.monthrange(date.year,date.month)
+
+    eom_flag = True if day == date.day else False
+
+    return eom_flag
+
+
 
 
 def check_end(dates):
