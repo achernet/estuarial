@@ -54,3 +54,59 @@ Common values:
  - FreeTDS Driver: `/usr/local/lib/libtdsodbc.so.0.0.0`
  - Windows SQL Server Driver: `SQL Server`
 
+
+Installing FreeTDS
+------------------
+
+To install FreeTDS from source::
+
+    $wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-stable.tgz
+    $tar xzvf freetds-stable.tgz
+    $cd freetds-0.XX/
+
+
+    #linux
+    $./configure --with-unixodbc=/usr --with-tdsver=8.0
+
+    #OSX
+    $./configure --with-iodbc=/usr --with-tdsver=8.0
+
+    make -j4
+    sudo make install
+
+Driver will now be installed at `/usr/local/lib/libtdsodbc.so.0.0.0` on **linux** or `/usr/local/lib/libtdsodbc.so` on
+**OSX**
+
+Installing on Debian/Ubuntu::
+
+    $aptitude install libdbd-freetds freetds-dev freetds-bin
+
+    #debian
+    $ls /usr/lib/x86_64-linux-gnu/dbd/libdbdfreetds.so
+
+    #Ubuntu
+    $ls /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so
+
+
+To confirm FreeTDS is working properly start an ipython/python prompt::
+
+    >>> import pyodbc
+
+    >>> creds = {
+        "Uid": USERNAME,
+        "Pwd": PASSOWRD,
+        "driver": THE DRIVER LISTED ABOVE,
+        "server": ADDR,
+        "port": 1433,
+        }
+
+    >>> conn = pyodbc.connect('Driver=%s;Server=%s;Database=qai;Uid=%s;Pwd=%s;\
+                               TDS_VERSION=8.0;PORT=%s'%\
+                               (creds['driver'], creds['server'],\
+                               creds['Uid'],creds['Pwd'],creds['port']))
+
+    >>> cur = conn.cursor()
+
+    >>> cur.execute('select top 10 * from dbo.wsndata').fetchall()
+
+
