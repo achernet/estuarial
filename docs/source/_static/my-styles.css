@@ -6,3 +6,38 @@ a.logo {float:left; margin:9px 5px 0 0}
 
 .col-md-12 {padding-right:80px; /* this makes sure text stays clear of the fork me ribbon*/
 }
+
+tt.descname {
+    background-color: blueviolet;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+tt.descname {
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+tt.descclassname {
+    background-color: transparent;
+}
+
+tt.xref, a tt {
+    background-color: transparent;
+    font-weight: bold;
+}
+
+div.admonition dt {
+    font-weight: bold;
+
+}
+
+dl.glossary dt {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+dl.method {
+    padding-left: 5em;
+}
