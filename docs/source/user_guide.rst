@@ -29,29 +29,34 @@ come to estuarial with a list of known entities, dates, etc.  To query for end o
 
     >>> df = qad.datastream(universe, dt_list)
 
-
-import datetime as dt
-from estuarial.query.trqad import TRQAD
-from estuarial.drilldown.metadata import TRMETA
-from estuarial.browse.metrics_manager import MetricsManager
-from estuarial.browse.universe_builder import UniverseBuilder
+.. autoclass:: estuarial.query.trqad.TRQAD
+   :members:
+   :undoc-members:
 
 
-.. include:: includes/databases/datastream.rst
-.. include:: includes/databases/datastream.rst
-.. include:: includes/databases/datastream.rst
-.. include:: includes/databases/datastream.rst
+..
+    import datetime as dt
+    from estuarial.query.trqad import TRQAD
+    from estuarial.drilldown.metadata import TRMETA
+    from estuarial.browse.metrics_manager import MetricsManager
+    from estuarial.browse.universe_builder import UniverseBuilder
 
 
-Catalogue
-    Custom Queries
-        Yaml Syntax
-universe
-fundamentals
-datastream
-metadata
-styles
-    query
-    drilldown
-    browse
-        Market Indices
+    .. include:: includes/databases/datastream.rst
+    .. include:: includes/databases/datastream.rst
+    .. include:: includes/databases/datastream.rst
+    .. include:: includes/databases/datastream.rst
+
+
+    Catalogue
+        Custom Queries
+            Yaml Syntax
+    universe
+    fundamentals
+    datastream
+    metadata
+    styles
+        query
+        drilldown
+        browse
+            Market Indices
