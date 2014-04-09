@@ -3,3 +3,5 @@
 =====
 Demos
 =====
+
+.. notebook:: demo_market_index.ipynb

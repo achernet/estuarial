@@ -86,8 +86,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">User Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#exploration">Exploration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#production">Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#browse">Browse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#drilldown">Drilldown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#query">Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-estuarial-interacts-with-sql-queries">How Estuarial Interacts with SQL Queries</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_guide.html">Developer Guide</a><ul>
@@ -108,12 +110,21 @@
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"><ul>
 <li><a class="reference internal" href="#">User Guide</a><ul>
-<li><a class="reference internal" href="#exploration">Exploration</a><ul>
-<li><a class="reference internal" href="#entity-creation">Entity Creation</a></li>
-<li><a class="reference internal" href="#metadata">Metadata</a></li>
+<li><a class="reference internal" href="#browse">Browse</a><ul>
+<li><a class="reference internal" href="#index-constituents">Index Constituents</a></li>
+<li><a class="reference internal" href="#universe-constituents">Universe Constituents</a></li>
+<li><a class="reference internal" href="#retrieving-metrics-aligned-to-universe-constituents">Retrieving Metrics Aligned to Universe Constituents</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#production">Production</a></li>
+<li><a class="reference internal" href="#drilldown">Drilldown</a></li>
+<li><a class="reference internal" href="#query">Query</a></li>
+<li><a class="reference internal" href="#how-estuarial-interacts-with-sql-queries">How Estuarial Interacts with SQL Queries</a><ul>
+<li><a class="reference internal" href="#singleton-yaml-documents">Singleton Yaml Documents</a></li>
+<li><a class="reference internal" href="#composite-yaml-documents">Composite Yaml Documents</a></li>
+<li><a class="reference internal" href="#introduction-to-queryhandler">Introduction to <tt class="code docutils literal"><span class="pre">QueryHandler</span></tt></a></li>
+<li><a class="reference internal" href="#using-queryhandler">Using <tt class="code docutils literal"><span class="pre">QueryHandler</span></tt></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -158,8 +169,10 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">User Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#exploration">Exploration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#production">Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#browse">Browse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#drilldown">Drilldown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#query">Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-estuarial-interacts-with-sql-queries">How Estuarial Interacts with SQL Queries</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_guide.html">Developer Guide</a></li>
@@ -185,88 +198,185 @@
       
   <div class="section" id="user-guide">
 <span id="userguide"></span><h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
-<p>Estuarial comes preloaded with a catalog of SQL queries designed to help users explore and fetch the data from
-TRQAD.  The queries are written with a bit of markup (YAML) and are exposed through python &#8211; offering several
-conveniences over simple wrapped raw SQL.  As Estuarial develops the catalog will also develop and become more
-comprehensive overtime.  The time series data we can currently can fetch is limited to fundamental data (Worldscope and
-RKD) and end of day data (Datastream).  We also have built-out a number of mechanisms to help navigate metadata
-vital for filtering time series and understand the financial world.</p>
-<p>There are three styles/methods of using estuarial: <em>query</em>, <em>drilldown</em>, and <em>browse</em>.  These three styles map to
-the three modes of analysis: production, exploration, debugging.</p>
-<div class="section" id="exploration">
-<h2>Exploration<a class="headerlink" href="#exploration" title="Permalink to this headline">¶</a></h2>
-<p>The beginning of any analytic work flow starts with exploring the data.  Exploration conveys a sense of immediacy and
-limited scope.  For Estuarial, this means building common starting points, attaching convenience methods whenever
+<p>Estuarial is an open-source financial data analysis platform developed for
+use with ad-hoc data sets as well as pre-configured data sets supplied from
+Thomson Reuters QAD. The goal of Estuarial is to solve many of the data access,
+array computing, caching, and software engineering roadblocks that currently
+result in quantitative analysts spending more time preparing the data than
+performing research.</p>
+<p>There are three major modes of use for Estuarial: raw querying, browsing pre-
+configured data sources, and drilling down to get specific information about a
+particular query or piece of data (usually for debugging). These are organized
+into the top-level sub-packages of the project, <tt class="code docutils literal"><span class="pre">query</span></tt>, <tt class="code docutils literal"><span class="pre">browse</span></tt>,
+and <tt class="code docutils literal"><span class="pre">drilldown</span></tt>.</p>
+<ul class="simple">
+<li><tt class="code docutils literal"><span class="pre">query</span></tt>: Contains facilities to perform raw queries contained in Python
+strings. Future development will include methods for mirroring parts
+of the available data infrastructure directly in Python.</li>
+<li><tt class="code docutils literal"><span class="pre">browse</span></tt>: Contains convenience functions that perform commonly-needed
+data access patterns against pre-configured data sources. New data sources
+can be added to the configuration so that <tt class="code docutils literal"><span class="pre">browse</span></tt> tools can be used
+even with custom data sets.</li>
+<li><tt class="code docutils literal"><span class="pre">drilldown</span></tt>: Contains metadata access code for introspecting available
+items, learning how entities are mapped between data locations, and debugging
+the pieces of some data access pipeline when it gives unexpected results.</li>
+</ul>
+<p>In addition to the three main sub-packages, a few other sub-packages exist:</p>
+<ul class="simple">
+<li><tt class="code docutils literal"><span class="pre">data</span></tt>: Location for software to handle connections to the data and to
+interpret special markup (Yaml documents) that extend a database access
+pattern into Python.</li>
+<li><tt class="code docutils literal"><span class="pre">util</span></tt>: Location for odds and ends code needed to be centrally
+maintained and tested together, but which is used frequently in the rest of
+the library.</li>
+<li><tt class="code docutils literal"><span class="pre">array</span></tt>: Contains adapters which allow the library to connect to
+different array computing backend tools.</li>
+<li><tt class="code docutils literal"><span class="pre">test</span></tt>: Location of the projects tests.</li>
+</ul>
+<p>Partial support exists for convenience-layer queries and metadata for the
+following vendors: DataStream, WorldScope, RKD, and IDC &#8211; with increasing and
+extended support for more vendors and data sets being added continuously.</p>
+<div class="section" id="browse">
+<h2>Browse<a class="headerlink" href="#browse" title="Permalink to this headline">¶</a></h2>
+<p>The beginning of many analytic work flows is browsing the data.  Exploration
+conveys a sense of immediacy and limited scope.  For Estuarial, this means
+building common starting points, attaching convenience methods whenever
 possible, and metadata browsing.</p>
-<div class="section" id="entity-creation">
-<h3>Entity Creation<a class="headerlink" href="#entity-creation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="index-constituents">
+<h3>Index Constituents<a class="headerlink" href="#index-constituents" title="Permalink to this headline">¶</a></h3>
+<p>One basic operation is retrieving a set of point-in-time constituents
+belonging to a particular market index. The <tt class="code docutils literal"><span class="pre">MarketIndex</span></tt> class
+encapsulates this functionality as in the following examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">estuarial.browse.market_index</span> <span class="kn">import</span> <span class="n">MarketIndex</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">=</span> <span class="n">MarketIndex</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">constituents</span><span class="p">(</span><span class="s">&quot;Russell 1000&quot;</span><span class="p">,</span> <span class="s">&#39;2012-12-28&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="p">[</span><span class="s">&quot;S&amp;P 500&quot;</span><span class="p">,</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-02-01&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MarketIndex</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">constituents</span><span class="p">(</span><span class="s">&quot;Russell 1000&quot;</span><span class="p">,</span> <span class="s">&#39;2014-01-01&#39;</span><span class="p">,</span> <span class="s">&#39;2014-02-01&#39;</span><span class="p">)</span>
+
+<span class="go">&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="go">Int64Index: 21294 entries, 0 to 21293</span>
+<span class="go">Data columns (total 10 columns):</span>
+<span class="go">INAME                  21294  non-null values</span>
+<span class="go">ITICKER                21294  non-null values</span>
+<span class="go">TICKER                 21294  non-null values</span>
+<span class="go">CUSIP                  21294  non-null values</span>
+<span class="go">NAME                   21294  non-null values</span>
+<span class="go">DATE_                  21294  non-null values</span>
+<span class="go">CLOSE_                 21294  non-null values</span>
+<span class="go">SHARES                 21292  non-null values</span>
+<span class="go">SECCODE                21294  non-null values</span>
+<span class="go">RELATIVE_MARKET_CAP    21292  non-null values</span>
+<span class="go">dtypes: datetime64[ns](1), float64(3), int64(1), object(5)</span>
+
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="p">[</span><span class="s">&quot;S&amp;P 500&quot;</span><span class="p">,</span> <span class="s">&#39;2012-12-28&#39;</span><span class="p">]</span>
+
+<span class="go">&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="go">Int64Index: 500 entries, 0 to 499</span>
+<span class="go">Data columns (total 10 columns):</span>
+<span class="go">INAME                  500  non-null values</span>
+<span class="go">ITICKER                500  non-null values</span>
+<span class="go">TICKER                 500  non-null values</span>
+<span class="go">CUSIP                  500  non-null values</span>
+<span class="go">NAME                   500  non-null values</span>
+<span class="go">DATE_                  500  non-null values</span>
+<span class="go">CLOSE_                 500  non-null values</span>
+<span class="go">SHARES                 500  non-null values</span>
+<span class="go">SECCODE                500  non-null values</span>
+<span class="go">RELATIVE_MARKET_CAP    500  non-null values</span>
+<span class="go">dtypes: datetime64[ns](1), float64(3), int64(1), object(5)</span>
 </pre></div>
 </div>
+<p>Currently there is support for the S&amp;P BMI country and regional indices, the
+S&amp;P 100, 500, and 1000, the Russell 1000, 2000, and 3000, and Dow Jones.</p>
 <dl class="class">
 <dt id="estuarial.browse.market_index.MarketIndex">
-<em class="property">class </em><tt class="descclassname">estuarial.browse.market_index.</tt><tt class="descname">MarketIndex</tt><a class="headerlink" href="#estuarial.browse.market_index.MarketIndex" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">estuarial.browse.market_index.</tt><tt class="descname">MarketIndex</tt><a class="reference internal" href="_modules/estuarial/browse/market_index.html#MarketIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estuarial.browse.market_index.MarketIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provider for market index constituents.</p>
 <blockquote>
 <div>m = MarketIndex()
 m.available_indices()
 m.constituents(&#8220;Russell 1000&#8221;, &#8216;2012-12-28&#8217;, &#8216;2012-12-31&#8217;)
 m[&#8220;S&amp;P 500&#8221;, datetime.date(2012, 12, 28):datetime.date(2012, 12, 31)]</div></blockquote>
-<dl class="method">
-<dt id="estuarial.browse.market_index.MarketIndex.available_indices">
-<tt class="descname">available_indices</tt><big>(</big><big>)</big><a class="headerlink" href="#estuarial.browse.market_index.MarketIndex.available_indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a tuple of the strings that can be used as index names when
-using the constituent-retrieval abilities of this class.</p>
-<p>None.</p>
-<p>Tuple of strings, each expressing a valid index name for constituent
-data retrieval with this class&#8217;s other functions.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="estuarial.browse.market_index.MarketIndex.constituents">
-<tt class="descname">constituents</tt><big>(</big><em>index</em>, <em>start_period</em>, <em>end_period</em><big>)</big><a class="headerlink" href="#estuarial.browse.market_index.MarketIndex.constituents" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve constituents for a given index across a date range.</p>
-<p>index: String naming one of the supported indices for which data will
-be fetched.</p>
-<p>start_period: String or datetime naming a period for the beginning of
-the date range over which data will be fetched.</p>
-<p>end_period: String or datetime naming a period for the end of the date
-range over which data will be fetched.</p>
-<p>pandas DataFrame containing the requested data.</p>
-</dd></dl>
-
-</dd></dl>
-
-<p><em>Note Universe Builder is experimental</em>.  Entities limited to SP500, Dow Jones, currently trade US stocks, and
-currently traded CAN stocks:</p>
+</div>
+<div class="section" id="universe-constituents">
+<h3>Universe Constituents<a class="headerlink" href="#universe-constituents" title="Permalink to this headline">¶</a></h3>
+<p>Aside from pre-existing indices, analysts often want to look at baskets of
+financial instruments grouped by geographic, industrial, or other common
+categorical information.</p>
+<p>The <tt class="code docutils literal"><span class="pre">Universe</span></tt> exists to encapsulate the point-in-time membership for
+these categories. The returned <tt class="code docutils literal"><span class="pre">Universe</span></tt> object stores a
+<tt class="code docutils literal"><span class="pre">pandas.DataFrame</span></tt> in the attribute <tt class="code docutils literal"><span class="pre">data</span></tt> attribute, with entity
+information about each returned security. Below is an example for the current
+list of all U.S. stocks.:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">estuarial.browse.universe_builder</span> <span class="kn">import</span> <span class="n">UniverseBuilder</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span> <span class="o">=</span> <span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">spx_idx</span><span class="p">(</span><span class="s">&quot;2013-12-04&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us_constituents</span> <span class="o">=</span> <span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">us</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us_constituents</span><span class="o">.</span><span class="n">data</span>
+
+<span class="go">Int64Index: 28052 entries, 0 to 28051</span>
+<span class="go">Data columns (total 11 columns):</span>
+<span class="go">infocode        28052  non-null values</span>
+<span class="go">isocurrcode     28052  non-null values</span>
+<span class="go">isprimexchqt    28052  non-null values</span>
+<span class="go">exchintcode     28052  non-null values</span>
+<span class="go">ctrytradedin    28052  non-null values</span>
+<span class="go">statuscode      28052  non-null values</span>
+<span class="go">typecode        28052  non-null values</span>
+<span class="go">seccode         28052  non-null values</span>
+<span class="go">ctryofissuer    28052  non-null values</span>
+<span class="go">ventype         28052  non-null values</span>
+<span class="go">vencode         28052  non-null values</span>
+</pre></div>
+</div>
+<p><tt class="code docutils literal"><span class="pre">Universe</span></tt> can also be used to retrieve market index information, similar
+to <tt class="code docutils literal"><span class="pre">MarketIndex</span></tt> but with optional ability to align and retrieve other
+metrics (described in the next section).:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span> <span class="o">=</span> <span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">spx_idx</span><span class="p">(</span><span class="s">&quot;2013-12-04&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span> <span class="o">=</span> <span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">spx_idx</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">data</span>
+
+<span class="go">&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="go">Int64Index: 500 entries, 0 to 499</span>
+<span class="go">Data columns (total 10 columns):</span>
+<span class="go">iname                  500  non-null values</span>
+<span class="go">iticker                500  non-null values</span>
+<span class="go">ticker                 500  non-null values</span>
+<span class="go">cusip                  500  non-null values</span>
+<span class="go">name                   500  non-null values</span>
+<span class="go">date_                  500  non-null values</span>
+<span class="go">close_                 500  non-null values</span>
+<span class="go">shares                 500  non-null values</span>
+<span class="go">seccode                500  non-null values</span>
+<span class="go">relative_market_cap    500  non-null values</span>
+<span class="go">dtypes: datetime64[ns](1), float64(3), int64(1), object(5)</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">TR</span> <span class="pre">Universe</span></tt> object stores dataframe in <tt class="docutils literal"><span class="pre">data</span></tt> attribute.  Attached are also several methods for querying data
-with the universe as a set of entities:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">ohlc</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span> <span class="c">#return Open, High, Low, Close between dt1:dt2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">cash</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span> <span class="c">#return CASH fundamental from Worlscope between dt1:dt2</span>
+</div>
+<div class="section" id="retrieving-metrics-aligned-to-universe-constituents">
+<h3>Retrieving Metrics Aligned to Universe Constituents<a class="headerlink" href="#retrieving-metrics-aligned-to-universe-constituents" title="Permalink to this headline">¶</a></h3>
+<p>From the example above, the <tt class="code docutils literal"><span class="pre">Universe</span></tt> object has several methods for
+querying data aligned to the universe as a set of entities:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">ohlc</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span> <span class="c">#return Open, High, Low, Close</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">cash</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span> <span class="c">#return CASH fundamental from WorldScope</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span>   <span class="c">#return Net Income from WordlScope</span>
 </pre></div>
 </div>
+<p>The implementation of attributes such as <tt class="code docutils literal"><span class="pre">ohlc</span></tt> and <tt class="code docutils literal"><span class="pre">cash</span></tt> is
+easily extendable, both as part of new release updates that work with the pre-
+configured data sets and also derived from user-defined queries. See the
+section on extended the tool with custom queries for more information.</p>
+<p><em>Note</em> <tt class="code docutils literal"><span class="pre">UniverseBuilder</span></tt> <em>is experimental</em>.  Entities limited to S&amp;P 500,
+Dow Jones, currently traded US or Canadian stocks. Expect some functionality
+between <tt class="code docutils literal"><span class="pre">MarketIndex</span></tt> and <tt class="code docutils literal"><span class="pre">UniverseBuilder</span></tt> to be refactored.</p>
 <dl class="class">
 <dt id="estuarial.browse.universe_builder.UniverseBuilder">
-<em class="property">class </em><tt class="descclassname">estuarial.browse.universe_builder.</tt><tt class="descname">UniverseBuilder</tt><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">estuarial.browse.universe_builder.</tt><tt class="descname">UniverseBuilder</tt><a class="reference internal" href="_modules/estuarial/browse/universe_builder.html#UniverseBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>universe builder and pre-defined universes
 These funcs should belong in the catalogue?
 check</p>
 <dl class="classmethod">
-<dt id="estuarial.browse.universe_builder.UniverseBuilder.can">
-<em class="property">classmethod </em><tt class="descname">can</tt><big>(</big><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.can" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="classmethod">
 <dt id="estuarial.browse.universe_builder.UniverseBuilder.djx_idx">
-<em class="property">classmethod </em><tt class="descname">djx_idx</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.djx_idx" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">djx_idx</tt><big>(</big><em>dt</em><big>)</big><a class="reference internal" href="_modules/estuarial/browse/universe_builder.html#UniverseBuilder.djx_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.djx_idx" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -281,7 +391,7 @@ check</p>
 
 <dl class="classmethod">
 <dt id="estuarial.browse.universe_builder.UniverseBuilder.spx_idx">
-<em class="property">classmethod </em><tt class="descname">spx_idx</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.spx_idx" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">spx_idx</tt><big>(</big><em>dt</em><big>)</big><a class="reference internal" href="_modules/estuarial/browse/universe_builder.html#UniverseBuilder.spx_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.spx_idx" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -294,121 +404,327 @@ check</p>
 </table>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="estuarial.browse.universe_builder.UniverseBuilder.us">
-<em class="property">classmethod </em><tt class="descname">us</tt><big>(</big><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.us" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
-<div class="section" id="metadata">
-<h3>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="drilldown">
+<h2>Drilldown<a class="headerlink" href="#drilldown" title="Permalink to this headline">¶</a></h2>
+<p>One important time-cost to analysts is inspecting data schema or architecture
+information. The <tt class="code docutils literal"><span class="pre">drilldown</span></tt> sub-package allows for quick,
+<em>within-Python</em> inspection of schema information, such as what item names or
+codes are available from different vendors.:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">estuarial.browse.metrics_manager</span> <span class="kn">import</span> <span class="n">MetricsManager</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">MetricsManager</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">ws</span><span class="o">.&lt;</span><span class="n">tab</span><span class="o">&gt;&lt;</span><span class="n">tab</span><span class="o">&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">rkd</span><span class="o">.&lt;</span><span class="n">tab</span><span class="o">&gt;&lt;</span><span class="n">tab</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>leverage ipython</dt>
-<dd><div class="first last highlight-python"><pre>&gt;&gt;&gt; metrics.rkd.*Restaurants*?
+<p>An immediate advantage is seen by leveraging IPython tab completion and pattern
+matching to view available items:</p>
+<div class="highlight-python"><pre>&gt;&gt;&gt; metrics.rkd.*Restaurants*?
 &gt;&gt;&gt; metrics.ws.*DEBT*?</pre>
 </div>
-</dd>
-</dl>
-<dl class="class">
-<dt id="estuarial.browse.metrics_manager.WS">
-<em class="property">class </em><tt class="descclassname">estuarial.browse.metrics_manager.</tt><tt class="descname">WS</tt><a class="headerlink" href="#estuarial.browse.metrics_manager.WS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
-</div>
-<div class="section" id="production">
-<h2>Production<a class="headerlink" href="#production" title="Permalink to this headline">¶</a></h2>
-<p>The Query object aims to represent the most generalized form of queries.  Most functions take 3 arguments: a list of
-entities, a list of metrics, and a date range:</p>
+<div class="section" id="query">
+<h2>Query<a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="code docutils literal"><span class="pre">query</span></tt> sub-package aims to represent the most generalized form of
+queries reflected in Python. The API restricts functions to take three arguments:
+a list of entities, a list of metrics, and a date range:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">estuarial.query.trqad</span> <span class="kn">import</span> <span class="n">TRQAD</span>
-
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qad</span> <span class="o">=</span> <span class="n">TRQAD</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qad</span><span class="o">.</span><span class="n">fundamentals</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span><span class="n">metrics_list</span><span class="p">,</span><span class="n">dt_list</span><span class="p">,</span><span class="n">DB</span><span class="o">=</span><span class="s">&quot;WORLDSCOPE&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qad</span><span class="o">.</span><span class="n">fundamentals</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span> <span class="n">metrics_list</span><span class="p">,</span> <span class="n">dt_list</span><span class="p">,</span> <span class="n">DB</span><span class="o">=</span><span class="s">&quot;WORLDSCOPE&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Data is automatically cached in HDF5 and returned back as a Pandas DataFrame.  For production queries, users often
-come to Estuarial with a list of known entities, dates, etc.  To query for end of day data:</p>
+<p>Data is automatically cached using advanced features of the Python PyTables
+library and the HDF5 data format. Data is returned back as a
+<tt class="code docutils literal"><span class="pre">pandas.DataFrame</span></tt>.  To query for end of day data from DataStream:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">qad</span><span class="o">.</span><span class="n">datastream</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span> <span class="n">dt_list</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>And to query fundamentals data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">qad</span><span class="o">.</span><span class="n">fundamentals</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span><span class="n">metrics_list</span><span class="p">,</span><span class="n">dt_list</span><span class="p">,</span><span class="n">DB</span><span class="o">=</span><span class="s">&quot;WORLDSCOPE&quot;</span><span class="p">)</span>
+<p>and to query fundamentals data from WorldScope:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">qad</span><span class="o">.</span><span class="n">fundamentals</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span> <span class="n">metrics_list</span><span class="p">,</span> <span class="n">dt_list</span><span class="p">,</span> <span class="n">DB</span><span class="o">=</span><span class="s">&quot;WORLDSCOPE&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="class">
 <dt id="estuarial.query.trqad.TRQAD">
-<em class="property">class </em><tt class="descclassname">estuarial.query.trqad.</tt><tt class="descname">TRQAD</tt><big>(</big><em>path=None</em><big>)</big><a class="headerlink" href="#estuarial.query.trqad.TRQAD" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">estuarial.query.trqad.</tt><tt class="descname">TRQAD</tt><big>(</big><em>path=None</em><big>)</big><a class="reference internal" href="_modules/estuarial/query/trqad.html#TRQAD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estuarial.query.trqad.TRQAD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Functional style interface into TR&#8217;s DB.  Most functions take 3 arguments:</p>
 <ul class="simple">
 <li>Universe (list of entities)</li>
 <li>Metrics (list of measurements)</li>
 <li>Date Range</li>
 </ul>
-<dl class="method">
-<dt id="estuarial.query.trqad.TRQAD.datastream">
-<tt class="descname">datastream</tt><big>(</big><em>universe</em>, <em>dt_list</em><big>)</big><a class="headerlink" href="#estuarial.query.trqad.TRQAD.datastream" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query the Datastream DB for Open, High, Low, Close
-with a given universe (convenience function)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>universe</strong> (<em>list</em>) &#8211; list of securities</li>
-<li><strong>dt_list</strong> (<em>list/tuple</em>) &#8211; Beginning and end market dates for query</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><cite>pandas.DataFrame</cite></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">DataFrame of Securities with a TimeSeries of OHLC</p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
-<dl class="method">
-<dt id="estuarial.query.trqad.TRQAD.fundamentals">
-<tt class="descname">fundamentals</tt><big>(</big><em>universe</em>, <em>metrics</em>, <em>dt_list</em>, <em>DB</em>, <em>freq='Q'</em>, <em>align=False</em><big>)</big><a class="headerlink" href="#estuarial.query.trqad.TRQAD.fundamentals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query A Fundmentals DB for metrics defined by the user
-with a given universe.  Metrics are fundamentals commonly
-found in balance sheets for equities data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>universe</strong> (<em>list</em>) &#8211; list of securities</li>
-<li><strong>metrics</strong> (<em>list</em>) &#8211; list of metrics to pull from DB: (EPS, CASH, NI, etc.)</li>
-<li><strong>dt_list</strong> (<em>list/tuple</em>) &#8211; Beginning and end market dates for query</li>
-<li><strong>DB</strong> (<em>string</em>) &#8211; Name of the fundamentals database &#8211; Worldscope, RKD, etc</li>
-<li><strong>freq</strong> (<em>string</em>) &#8211; Frequency</li>
-<li><strong>align</strong> (<em>bool</em>) &#8211; date align ddate</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><cite>pandas.DataFrame</cite></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">DataFrame of Securities with a TimeSeries of OHLC</p>
-</td>
-</tr>
-</tbody>
-</table>
+</div>
+<div class="section" id="how-estuarial-interacts-with-sql-queries">
+<h2>How Estuarial Interacts with SQL Queries<a class="headerlink" href="#how-estuarial-interacts-with-sql-queries" title="Permalink to this headline">¶</a></h2>
+<p>Estuarial is designed to work with pre-configured SQL query documents as well as
+those created and added to the tool by the end users. This process involves
+storing a query in a specially marked-up format as part of a Yaml document,
+with some extra annotations regarding documentation and the names of components
+of the returned data that should be contrainable for controlling the scope of
+the query.</p>
+<div class="section" id="singleton-yaml-documents">
+<h3>Singleton Yaml Documents<a class="headerlink" href="#singleton-yaml-documents" title="Permalink to this headline">¶</a></h3>
+<p>For working with a single SQL query, Estuarial uses a markup format known as Yaml
+to contain a name for the query, some documentation, the query string itself, and
+annotations about which fields in the query should serve as keyword arguments
+that can be used from Python to generate <tt class="code docutils literal"><span class="pre">WHERE</span></tt> statements for restricting
+the result set of the query.</p>
+<p>We have see the <tt class="code docutils literal"><span class="pre">ohlc</span></tt> functionality in the sections above; here is the Yaml
+document that contains the SQL statements needed for this query.:</p>
+<div class="highlight-python"><pre>SQL:
+    ohlc:
+        doc: Some OHLC documentation.
+
+        conditionals:
+            - seccode
+            - marketdate
+
+        query: &gt;
+            select m.seccode
+              , marketdate
+              , Open_
+              , high
+              , low
+              , Close_
+              , q.ISOCurrCode
+              , case priceunit
+                           when 'E+02' then 100
+                     else 1
+                    end as CumAdjFactor
+            from Ds2PrimQtPrc q
+            join secmapx m
+                on m.vencode = q.infocode
+                and m.ventype = 33 and rank = 1
+            join ds2Adj a
+                on a.infocode = q.infocode
+                and q.marketdate between adjdate and isnull(endadjdate, '2079-06-06')
+                and AdjType = 2
+            join ds2exchqtinfo e
+                on e.infocode = q.infocode
+               and e.startdate &lt; q.marketdate
+               and q.exchintcode = e.exchintcode</pre>
+</div>
+<p>The <tt class="code docutils literal"><span class="pre">doc</span></tt> section provides a string describing the query. This string
+can serve as the documentation string within the resulting Python code as well
+so it is important to provide descriptive documentation.</p>
+<p>The <tt class="code docutils literal"><span class="pre">conditionals</span></tt> section declares columns that will result in the data
+fetched by the query &#8211; these columns will act as keyword arguments in Python to
+allow for on-the-fly <tt class="code docutils literal"><span class="pre">WHERE</span></tt> clause constraints placed on them.</p>
+<p>Finally, the <tt class="code docutils literal"><span class="pre">query</span></tt> section is a multi-line string containing the actual
+SQL query itself. This is where user-supplied SQL code can be pasted to
+automatically generate Python structures that will perform the query.</p>
+</div>
+<div class="section" id="composite-yaml-documents">
+<h3>Composite Yaml Documents<a class="headerlink" href="#composite-yaml-documents" title="Permalink to this headline">¶</a></h3>
+<p>Much like the singleton Yaml document described above, composite Yaml documents
+contain <tt class="code docutils literal"><span class="pre">doc</span></tt>, <tt class="code docutils literal"><span class="pre">conditionals</span></tt>, and <tt class="code docutils literal"><span class="pre">query</span></tt> sections that work
+the same way. The difference is that at the top-level of the document, a name
+is given instead of the keyword &#8220;SQL&#8221;. This name will be the name of a
+constructed Python class.</p>
+<p>The other major difference is that the file can contain more than one SQL query.
+Each of the provided queries will become a different member function belonging
+to the constructed class. You can thinking of the constructed class as a
+convenience object meant to hold a bundle of releated SQL queries (in their
+Python function form).</p>
+<p>See the section below on using <tt class="code docutils literal"><span class="pre">QueryHandler</span></tt> for an example of a composite
+Yaml document and guidelines for how to use them.</p>
+</div>
+<div class="section" id="introduction-to-queryhandler">
+<h3>Introduction to <tt class="code docutils literal"><span class="pre">QueryHandler</span></tt><a class="headerlink" href="#introduction-to-queryhandler" title="Permalink to this headline">¶</a></h3>
+<p>Within the <tt class="code docutils literal"><span class="pre">data</span></tt> sub-package exists the class <tt class="code docutils literal"><span class="pre">QueryHandler</span></tt> for
+ingesting composite Yaml documents as described above and translating them into
+Python classes with queries exposed as if they were user-defined functions.</p>
+<dl class="class">
+<dt id="estuarial.data.query_handler.QueryHandler">
+<em class="property">class </em><tt class="descclassname">estuarial.data.query_handler.</tt><tt class="descname">QueryHandler</tt><a class="reference internal" href="_modules/estuarial/data/query_handler.html#QueryHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#estuarial.data.query_handler.QueryHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides method <cite>create_type_from_yaml</cite> which converts a composite yaml
+query definition file into a new Python class. The created class will
+have functions available corresponding to each named query in the yaml.</p>
+<p>The keyword arguments for these functions will include any conditional
+arguments given in the yaml, as well as augmented keyword arguments that
+allow for SQL operations to be performed on the conditional argument names.</p>
+<p>Review the <cite>query_handler_doc.md</cite> documentation file for a more extended
+explanation of the uses and conventions of <cite>QueryHandler</cite>.</p>
 </dd></dl>
 
-</dd></dl>
+</div>
+<div class="section" id="using-queryhandler">
+<h3>Using <tt class="code docutils literal"><span class="pre">QueryHandler</span></tt><a class="headerlink" href="#using-queryhandler" title="Permalink to this headline">¶</a></h3>
+<p>Consider the following sample composite query file which is saved in
+&#8220;/test/test_example.yaml&#8221; relative to <tt class="code docutils literal"><span class="pre">QueryHandler._FILE_DIR</span></tt>.:</p>
+<div class="highlight-python"><pre>AccountingData:
+    inventory:
+        doc: This is a query for inventory.
+        conditionals:
+            account_id: A customer's account number.
+            shipping_date: The shipping date.
+        query: &gt;
+            SELECT
+                  a.account_id as account_id
+                , b.shipping_id as shipping_id
+                , a.customer_name
+                , b.shipping_date
+                , b.order_volume
+                , b.total_sales
+            FROM account_table a
+            JOIN shipping_table b
+                ON a.account_id = b.shipping_id
 
+    payroll:
+        doc: This is a payroll query.
+        conditionals:
+            branch_id: A branch id number
+            city: A city name
+        query: &gt;
+            SELECT
+                  a.branch_id
+                , b.city
+                , a.total_payroll as branch_payroll
+                , b.total_payroll as city_payroll
+            FROM branch_table a
+            JOIN branch_location_table b
+                ON a.branch_id = b.branch_id</pre>
+</div>
+<p>The <tt class="code docutils literal"><span class="pre">QueryHandler.create_type_from_yaml</span></tt> function will create a new
+Python class, <tt class="code docutils literal"><span class="pre">AccountingData</span></tt> that has two functions::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># These return pandas.DataFrame representations of the data returned</span>
+<span class="c"># from the query.</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">inventory</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">payroll</span>
+</pre></div>
+</div>
+<p>and will have attributes for the known conditional arguments and the query
+strings as well::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># The file location of a generated yaml file that stores just the</span>
+<span class="c"># &quot;inventory&quot; section from the composite yaml file.</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">__inventory_file</span>
+
+<span class="c"># A string of the raw query for the inventory function.</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">__inventory_query</span>
+
+<span class="c"># A list of strings naming the different conditional arguments that</span>
+<span class="c"># were listed for the inventory function.</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">__inventory_kwargs</span>
+
+<span class="c"># These are repeated for any other functions as well:</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">__payroll_file</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">__payroll_query</span>
+<span class="n">AccountingData</span><span class="o">.</span><span class="n">__payroll_kwargs</span>
+</pre></div>
+</div>
+<p>Let&#8217;s look at the <tt class="code docutils literal"><span class="pre">inventory</span></tt> query. Because the file declares
+<tt class="code docutils literal"><span class="pre">accounting_id</span></tt> as a conditional name, that name will be interpreted as
+something that should be available as an argument for the <tt class="code docutils literal"><span class="pre">inventory</span></tt>
+function, such as <tt class="code docutils literal"><span class="pre">inventory(accounting_id=10)</span></tt>.</p>
+<p>Under the hood, this will generate a SQL <tt class="code docutils literal"><span class="pre">WHERE</span></tt> condition (as in,
+<tt class="code docutils literal"><span class="pre">WHERE</span> <span class="pre">accounting_id</span> <span class="pre">=</span> <span class="pre">10</span></tt>) that will get applied to the base results of
+whatever plain query was given for the inventory entry in the yaml file.</p>
+<p>In this manner, the function inventory acts like a specifier for <tt class="code docutils literal"><span class="pre">WHERE</span></tt>
+conditions for the query it was given, such that only the items listed as
+conditionals can appear in the <tt class="code docutils literal"><span class="pre">WHERE</span></tt> statements.</p>
+<p>So if we wanted to see the result of the inventory query where
+<tt class="code docutils literal"><span class="pre">account_id</span></tt> is 10 and <tt class="code docutils literal"><span class="pre">shipping_date</span></tt> is &#8216;2012-12-31&#8217;, we could
+say::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">qh</span> <span class="o">=</span> <span class="n">QueryHandler</span><span class="p">()</span>
+<span class="n">AccountingData</span> <span class="o">=</span> <span class="n">qh</span><span class="o">.</span><span class="n">create_type_from_yaml</span><span class="p">(</span><span class="s">&#39;test/test_example.yaml&#39;</span><span class="p">)</span>
+<span class="n">ad</span> <span class="o">=</span> <span class="n">AccountingData</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">accounting_id</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">shipping_date</span><span class="o">=</span><span class="s">&#39;2012-12-31&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But what about more options for the arguments?</p>
+<p>This is handled with special keyword arguments that extend the given
+conditional names to include other operations, like <tt class="code docutils literal"><span class="pre">BETWEEN</span></tt> or
+<tt class="code docutils literal"><span class="pre">&gt;=</span></tt> or <tt class="code docutils literal"><span class="pre">IS</span> <span class="pre">NOT</span></tt>. These are shown below::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># No use of any WHERE conditions</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">()</span>
+
+<span class="c"># WHERE account_id = 10</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># WHERE account_id != 10</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_not_equal</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># WHERE account_id &gt; 10</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_greater_than</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># WHERE account_id &gt;= 10</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_greater_than_or_equal</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># WHERE account_id &lt; 10</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_less_than</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># WHERE account_id &lt;= 10</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_less_than_or_equal</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c"># WHERE account_id BETWEEN 10 AND 20</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_between</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+
+<span class="c"># WHERE account_id IN (10, 11, 12)</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_in</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+<span class="c"># WHERE account_id NOT IN (10, 11, 12)</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_not_in</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+<span class="c"># WHERE account_id IS NULL</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_is</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="c"># WHERE account_id IS NOT NULL</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_is_not</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">(</span><span class="n">account_id_not_equal</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To demonstrate string operations, we&#8217;ll use the <tt class="code docutils literal"><span class="pre">city</span></tt> variable from the
+<tt class="code docutils literal"><span class="pre">payroll</span></tt> function::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># WHERE city LIKE &#39;%York%&#39;</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">payroll</span><span class="p">(</span><span class="n">city_like</span><span class="o">=</span><span class="s">&quot; &#39;%York%&#39; &quot;</span><span class="p">)</span>
+
+<span class="c"># WHERE city NOT LIKE &#39;%York%&#39;</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">payroll</span><span class="p">(</span><span class="n">city_not_like</span><span class="o">=</span><span class="s">&quot; &#39;%York%&#39; &quot;</span><span class="p">)</span>
+
+<span class="c"># WHERE city ILIKE &#39;%york%&#39;</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">payroll</span><span class="p">(</span><span class="n">city_ilike</span><span class="o">=</span><span class="s">&quot; &#39;%york%&#39; &quot;</span><span class="p">)</span>
+
+<span class="c"># WHERE city NOT ILIKE &#39;%york%&#39;</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">payroll</span><span class="p">(</span><span class="n">city_not_ilike</span><span class="o">=</span><span class="s">&quot; &#39;%york%&#39; &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And some string conveniences are defined for matching the start or end of
+a string, and also checking if a string contains something. The appropriate
+SQL equivalent is given, assuming <tt class="code docutils literal"><span class="pre">&lt;pattern&gt;</span></tt> represents the text to be
+matched.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># WHERE city LIKE &#39;%&lt;pattern&gt;%&#39;</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">payroll</span><span class="p">(</span><span class="n">city_contains</span><span class="o">=</span><span class="s">&quot;&lt;pattern&gt;&quot;</span><span class="p">)</span>
+
+<span class="c"># WHERE city LIKE &#39;&lt;pattern&gt;%&#39;</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">payroll</span><span class="p">(</span><span class="n">city_startswith</span><span class="o">=</span><span class="s">&quot;&lt;pattern&gt;&quot;</span><span class="p">)</span>
+
+<span class="c"># WHERE city LIKE &#39;%&lt;pattern&gt;&#39;</span>
+<span class="n">ad</span><span class="o">.</span><span class="n">payroll</span><span class="p">(</span><span class="n">city_endswith</span><span class="o">=</span><span class="s">&quot;&lt;pattern&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The &#8220;doc&#8221; keyword that appeared in the yaml file will create the function&#8217;s
+documentation, along with the keyword arguments::</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">help</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ad</span><span class="o">.</span><span class="n">inventory</span><span class="o">.</span><span class="n">__doc__</span>
+</pre></div>
+</div>
+<p>These will display::</p>
+<div class="highlight-python"><pre>This is a query for inventory.
+
+Params
+------
+account_id: A customer's account number.
+shipping_date: The shipping date.</pre>
+</div>
+<p>By mimicking this example composite Yaml document and placing it in the
+the location for custom SQL queries, a user can automatically generate a Python
+class which embodies as functions whatever queries are desired , with keyword
+arguments to control the <tt class="code docutils literal"><span class="pre">WHERE</span></tt> statements.</p>
+</div>
 </div>
 </div>
 
