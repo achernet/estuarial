@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; estuarial 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.0.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="estuarial 0.1 documentation" href="index.html" />
+    <link rel="next" title="Demos" href="demos.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+<a href="https://github.com/ContinuumIO/estuarial"><img style="position: absolute; top: 45px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+
+    <div class="container">
+
+      <div class="navbar-header">
+
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <!--<a class="logo"> <img height="32" width="32" src="_static/a-logo.png" /></a>-->
+        <a class="navbar-brand" href="index.html">estuarial</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a href="index.html"
+     class="dropdown-toggle"
+     data-toggle="dropdown">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+    ><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#downloading-installing">Downloading/Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-estuarial">Using Estuarial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#example-ipython-notebooks">Example IPython Notebooks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-freetds">Installing FreeTDS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_guide.html">Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_guide.html#architecture-overview">Architecture Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#v0-1-apri-2014">v0.1 (Apri 2014)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html#roadmap-todo-list">Roadmap &amp; TODO List</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"><ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#installing-freetds">Installing FreeTDS</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li><a href="quickstart.html"
+         title="Previous Chapter: Quickstart">&laquo; Quickstart</a></li>
+  <li><a href="demos.html"
+         title="Next Chapter: Demos">Demos &raquo;</a></li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-freetds">Installing FreeTDS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_guide.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html#roadmap-todo-list">Roadmap &amp; TODO List</a></li>
+</ul>
+
+<div id="sourcelink">
+  <a href="_sources/installation.txt"
+     rel="nofollow">Source</a>
+</div>
+<form action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="col-md-9">
+      
+  <div class="section" id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Installing Estuarial is quite simple and has minimal dependencies.  We recommend installing with conda:</p>
+<div class="highlight-python"><pre>$conda install estuarial</pre>
+</div>
+<p>Alternatively, you can also pull the repo and install from source:</p>
+<div class="highlight-python"><pre>$git clone https://github.com/ContinuumIO/estuarial.git
+$cd estuarial; python setup.py install</pre>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>When loading estuarial for the first time, it will check if a <cite>~/.estuarial</cite> directory exists your home.  If it does not
+exist, one will automatically be created for you.  This directory houses credential files, configuration and log files,
+as well as cache data.</p>
+<p>Estuarial configuration relies on ODBC and as such requires connection info (stored in ini format) to be defined.  An
+example ODBC auth file is laid out below:</p>
+<p>Estuarial needs authentication and driver information to properly connect and execute queries against the DB.  By
+default, Estuarial will load an INI file found here: <tt class="docutils literal"><span class="pre">install_path/site-packages/estuarial/util/config/estuarial.ini</span></tt>.
+You can override the default authentication/configuration by placing a similar file with the appropriate values in
+<tt class="docutils literal"><span class="pre">~/.estuarial/estuarial.ini</span></tt></p>
+<p>The <cite>estuarial.ini`</cite> file should look like the following:</p>
+<div class="highlight-python"><pre>[ESTUARIAL]
+Description = ODBC CONNECTION INFO FOR ESTUARIAL
+Trace      = Yes
+Port       = XXXX
+Server     = XX.XXX.XXX.XX
+Database   = XXX
+UserName   = XXXXXXX
+Password   = XXXXXXX
+Driver     = /XXXX/XXXX/XXXX.X.X
+Threading  = 1
+UsageCount = 1</pre>
+</div>
+<p>Common values:</p>
+<ul class="simple">
+<li>PORT: <cite>1433</cite> (Standard SQL Server DB Port)</li>
+<li>Database: <cite>qai</cite></li>
+<li>Driver</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Centos/Redhat SQL Server Driver: <cite>/opt/microsoft/sqlncli/lib64/libsqlncli-11.0.so.1790.0</cite></li>
+<li>FreeTDS Driver: <cite>/usr/local/lib/libtdsodbc.so.0.0.0</cite></li>
+<li>Windows SQL Server Driver: <cite>SQL Server</cite></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="installing-freetds">
+<h2>Installing FreeTDS<a class="headerlink" href="#installing-freetds" title="Permalink to this headline">¶</a></h2>
+<p>To install FreeTDS from source:</p>
+<div class="highlight-python"><pre>$wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-stable.tgz
+$tar xzvf freetds-stable.tgz
+$cd freetds-0.XX/
+
+
+#linux
+$./configure --with-unixodbc=/usr --with-tdsver=8.0
+
+#OSX
+$./configure --with-iodbc=/usr --with-tdsver=8.0
+
+make -j4
+sudo make install</pre>
+</div>
+<p>Driver will now be installed at <cite>/usr/local/lib/libtdsodbc.so.0.0.0</cite> on <strong>linux</strong> or <cite>/usr/local/lib/libtdsodbc.so</cite> on
+<strong>OSX</strong></p>
+<p>Installing on Debian/Ubuntu:</p>
+<div class="highlight-python"><pre>$aptitude install libdbd-freetds freetds-dev freetds-bin
+
+#debian
+$ls /usr/lib/x86_64-linux-gnu/dbd/libdbdfreetds.so
+
+#Ubuntu
+$ls /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so</pre>
+</div>
+<p>To confirm FreeTDS is working properly start an ipython/python prompt:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyodbc</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">creds</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">    &quot;Uid&quot;: USERNAME,</span>
+<span class="go">    &quot;Pwd&quot;: PASSOWRD,</span>
+<span class="go">    &quot;driver&quot;: THE DRIVER LISTED ABOVE,</span>
+<span class="go">    &quot;server&quot;: ADDR,</span>
+<span class="go">    &quot;port&quot;: 1433,</span>
+<span class="go">    }</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">pyodbc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;Driver=</span><span class="si">%s</span><span class="s">;Server=</span><span class="si">%s</span><span class="s">;Database=qai;Uid=</span><span class="si">%s</span><span class="s">;Pwd=</span><span class="si">%s</span><span class="s">;</span><span class="se">\</span>
+<span class="go">                           TDS_VERSION=8.0;PORT=%s&#39;%\</span>
+<span class="go">                           (creds[&#39;driver&#39;], creds[&#39;server&#39;],\</span>
+<span class="go">                           creds[&#39;Uid&#39;],creds[&#39;Pwd&#39;],creds[&#39;port&#39;]))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;select top 10 * from dbo.wsndata&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/installation.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, Continuum Analytics.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.<br/>
+    </p>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-27761864-7', 'pydata.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+  </body>
+</html>
