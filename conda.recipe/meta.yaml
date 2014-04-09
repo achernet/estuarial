@@ -1,9 +1,9 @@
 package:
-  name: feldman 
+  name: estuarial 
   version: 0.0.1
 
 source:
-  git_url: git@github.com:ContinuumIO/feldman.git
+  git_url: git@github.com:ContinuumIO/estuarial.git
 
 requirements:
   build:
@@ -11,7 +11,14 @@ requirements:
 
   run:
     - python
-    - arraymanagement >= 0.1
-    - pydobc >= 3.0.7
-    - pytables == 3.0.0
-    - pandas == 0.12.0
+    - arraymanagement >=0.1
+    - pyodbc >=3.0.7
+    - pytables
+    - pandas
+    - yaml
+    - pyyaml
+    - sqlalchemy >=0.9.1
+
+about: 
+   home: https://github.com/ContinuumIO/estuarial
+   license: BSD
