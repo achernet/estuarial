@@ -86,6 +86,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#exploration">Exploration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#production">Production</a></li>
 </ul>
 </li>
@@ -107,6 +108,11 @@
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"><ul>
 <li><a class="reference internal" href="#">User Guide</a><ul>
+<li><a class="reference internal" href="#exploration">Exploration</a><ul>
+<li><a class="reference internal" href="#entity-creation">Entity Creation</a></li>
+<li><a class="reference internal" href="#metadata">Metadata</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#production">Production</a></li>
 </ul>
 </li>
@@ -152,6 +158,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#exploration">Exploration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#production">Production</a></li>
 </ul>
 </li>
@@ -186,6 +193,137 @@ RKD) and end of day data (Datastream).  We also have built-out a number of mecha
 vital for filtering time series and understand the financial world.</p>
 <p>There are three styles/methods of using estuarial: <em>query</em>, <em>drilldown</em>, and <em>browse</em>.  These three styles map to
 the three modes of analysis: production, exploration, debugging.</p>
+<div class="section" id="exploration">
+<h2>Exploration<a class="headerlink" href="#exploration" title="Permalink to this headline">¶</a></h2>
+<p>The beginning of any analytic work flow starts with exploring the data.  Exploration conveys a sense of immediacy and
+limited scope.  For Estuarial, this means building common starting points, attaching convenience methods whenever
+possible, and metadata browsing.</p>
+<div class="section" id="entity-creation">
+<h3>Entity Creation<a class="headerlink" href="#entity-creation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">estuarial.browse.market_index</span> <span class="kn">import</span> <span class="n">MarketIndex</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">=</span> <span class="n">MarketIndex</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">constituents</span><span class="p">(</span><span class="s">&quot;Russell 1000&quot;</span><span class="p">,</span> <span class="s">&#39;2012-12-28&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="p">[</span><span class="s">&quot;S&amp;P 500&quot;</span><span class="p">,</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-02-01&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="estuarial.browse.market_index.MarketIndex">
+<em class="property">class </em><tt class="descclassname">estuarial.browse.market_index.</tt><tt class="descname">MarketIndex</tt><a class="headerlink" href="#estuarial.browse.market_index.MarketIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provider for market index constituents.</p>
+<blockquote>
+<div>m = MarketIndex()
+m.available_indices()
+m.constituents(&#8220;Russell 1000&#8221;, &#8216;2012-12-28&#8217;, &#8216;2012-12-31&#8217;)
+m[&#8220;S&amp;P 500&#8221;, datetime.date(2012, 12, 28):datetime.date(2012, 12, 31)]</div></blockquote>
+<dl class="method">
+<dt id="estuarial.browse.market_index.MarketIndex.available_indices">
+<tt class="descname">available_indices</tt><big>(</big><big>)</big><a class="headerlink" href="#estuarial.browse.market_index.MarketIndex.available_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a tuple of the strings that can be used as index names when
+using the constituent-retrieval abilities of this class.</p>
+<p>None.</p>
+<p>Tuple of strings, each expressing a valid index name for constituent
+data retrieval with this class&#8217;s other functions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="estuarial.browse.market_index.MarketIndex.constituents">
+<tt class="descname">constituents</tt><big>(</big><em>index</em>, <em>start_period</em>, <em>end_period</em><big>)</big><a class="headerlink" href="#estuarial.browse.market_index.MarketIndex.constituents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve constituents for a given index across a date range.</p>
+<p>index: String naming one of the supported indices for which data will
+be fetched.</p>
+<p>start_period: String or datetime naming a period for the beginning of
+the date range over which data will be fetched.</p>
+<p>end_period: String or datetime naming a period for the end of the date
+range over which data will be fetched.</p>
+<p>pandas DataFrame containing the requested data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p><em>Note Universe Builder is experimental</em>.  Entities limited to SP500, Dow Jones, currently trade US stocks, and
+currently traded CAN stocks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">estuarial.browse.universe_builder</span> <span class="kn">import</span> <span class="n">UniverseBuilder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span> <span class="o">=</span> <span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">spx_idx</span><span class="p">(</span><span class="s">&quot;2013-12-04&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span> <span class="o">=</span> <span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">spx_idx</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">TR</span> <span class="pre">Universe</span></tt> object stores dataframe in <tt class="docutils literal"><span class="pre">data</span></tt> attribute.  Attached are also several methods for querying data
+with the universe as a set of entities:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">ohlc</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span> <span class="c">#return Open, High, Low, Close between dt1:dt2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spx</span><span class="o">.</span><span class="n">cash</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span> <span class="c">#return CASH fundamental from Worlscope between dt1:dt2</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="estuarial.browse.universe_builder.UniverseBuilder">
+<em class="property">class </em><tt class="descclassname">estuarial.browse.universe_builder.</tt><tt class="descname">UniverseBuilder</tt><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>universe builder and pre-defined universes
+These funcs should belong in the catalogue?
+check</p>
+<dl class="classmethod">
+<dt id="estuarial.browse.universe_builder.UniverseBuilder.can">
+<em class="property">classmethod </em><tt class="descname">can</tt><big>(</big><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.can" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="estuarial.browse.universe_builder.UniverseBuilder.djx_idx">
+<em class="property">classmethod </em><tt class="descname">djx_idx</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.djx_idx" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt</strong> &#8211; DateTime</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dow Jones Universe on a given date</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="estuarial.browse.universe_builder.UniverseBuilder.spx_idx">
+<em class="property">classmethod </em><tt class="descname">spx_idx</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.spx_idx" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt</strong> &#8211; DateTime</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SP500 Universe on a given date</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="estuarial.browse.universe_builder.UniverseBuilder.us">
+<em class="property">classmethod </em><tt class="descname">us</tt><big>(</big><big>)</big><a class="headerlink" href="#estuarial.browse.universe_builder.UniverseBuilder.us" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="metadata">
+<h3>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">estuarial.browse.metrics_manager</span> <span class="kn">import</span> <span class="n">MetricsManager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">MetricsManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">ws</span><span class="o">.&lt;</span><span class="n">tab</span><span class="o">&gt;&lt;</span><span class="n">tab</span><span class="o">&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">rkd</span><span class="o">.&lt;</span><span class="n">tab</span><span class="o">&gt;&lt;</span><span class="n">tab</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>leverage ipython</dt>
+<dd><div class="first last highlight-python"><pre>&gt;&gt;&gt; metrics.rkd.*Restaurants*?
+&gt;&gt;&gt; metrics.ws.*DEBT*?</pre>
+</div>
+</dd>
+</dl>
+<dl class="class">
+<dt id="estuarial.browse.metrics_manager.WS">
+<em class="property">class </em><tt class="descclassname">estuarial.browse.metrics_manager.</tt><tt class="descname">WS</tt><a class="headerlink" href="#estuarial.browse.metrics_manager.WS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
 <div class="section" id="production">
 <h2>Production<a class="headerlink" href="#production" title="Permalink to this headline">¶</a></h2>
 <p>The Query object aims to represent the most generalized form of queries.  Most functions take 3 arguments: a list of
@@ -196,9 +334,13 @@ entities, a list of metrics, and a date range:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qad</span><span class="o">.</span><span class="n">fundamentals</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span><span class="n">metrics_list</span><span class="p">,</span><span class="n">dt_list</span><span class="p">,</span><span class="n">DB</span><span class="o">=</span><span class="s">&quot;WORLDSCOPE&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Date is automatically cached in HDF5 and returned back as a Pandas DataFrame.  For production queries, users often
-come to estuarial with a list of known entities, dates, etc.  To query for end of day data:</p>
+<p>Data is automatically cached in HDF5 and returned back as a Pandas DataFrame.  For production queries, users often
+come to Estuarial with a list of known entities, dates, etc.  To query for end of day data:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">qad</span><span class="o">.</span><span class="n">datastream</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span> <span class="n">dt_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And to query fundamentals data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">qad</span><span class="o">.</span><span class="n">fundamentals</span><span class="p">(</span><span class="n">universe</span><span class="p">,</span><span class="n">metrics_list</span><span class="p">,</span><span class="n">dt_list</span><span class="p">,</span><span class="n">DB</span><span class="o">=</span><span class="s">&quot;WORLDSCOPE&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="class">
@@ -264,11 +406,6 @@ found in balance sheets for equities data.</p>
 </tbody>
 </table>
 </dd></dl>
-
-<dl class="method">
-<dt id="estuarial.query.trqad.TRQAD.ibes_detail_actuals">
-<tt class="descname">ibes_detail_actuals</tt><big>(</big><em>universe</em>, <em>measures</em>, <em>dt_list</em>, <em>freq='Q'</em><big>)</big><a class="headerlink" href="#estuarial.query.trqad.TRQAD.ibes_detail_actuals" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

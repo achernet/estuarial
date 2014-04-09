@@ -7,7 +7,9 @@ ecosystem.  Our main goal is to reduce the time and cost for our clients to assi
 
 We provide a modular framework for exposing federated data and metadata with a consistent API.  Estuarial currently
 handles a variety of data formats including csv, hdf5, json, xml, and SQL databases.  Estuarial comes
-'batteries included' with a library of pre-built functions for accessing QADirect.
+'batteries included' with a catalogue of SQL queries wrapped into Python objects for accessing QADirect.
+Additionally, Estuarial provides a YAML-based markup language for auto-magically transforming queries to Python objects
+on load.
 
 Our design emphasizes performance for quant workflows involving extremely large datasets.  Estuarial applies constraints
 and transformations as near to the data storage as possible. This allows users to work with datasets that would
