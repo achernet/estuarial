@@ -148,7 +148,3 @@ def pandas_rolling_ols(single_id_dataframe,
         df["Beta_tstat"] = np.NaN
         
     return df
-    
-
-
-
