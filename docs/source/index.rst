@@ -40,15 +40,10 @@ Requirements
 * python 2.7
 * arraymanagement (>=0.1)
 * numpy (>=1.7.1)
-* pandas (== 0.12)
+* pandas (>= 0.12)
 * pyodbc (>= 3.0.7)
 * sqlalchemy (>= 0.9.1)
 * pytables (==3.0.0)
-
-
-Release Notes
--------------
-
 
 
 Indices and tables
