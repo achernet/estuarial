@@ -35,7 +35,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="top" title="estuarial 0.1 documentation" href="index.html" />
     <link rel="next" title="Release Notes" href="release_notes.html" />
-    <link rel="prev" title="Developer Guide" href="dev_guide.html" />
+    <link rel="prev" title="User Guide" href="user_guide.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -84,7 +84,11 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installing-freetds">Installing FreeTDS</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="demos.html#creating-market-indicies">Creating Market Indicies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos.html#beta-calculations">Beta Calculations</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#browse">Browse</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#drilldown">Drilldown</a></li>
@@ -92,16 +96,16 @@
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#how-estuarial-interacts-with-sql-queries">How Estuarial Interacts with SQL Queries</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dev_guide.html">Developer Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dev_guide.html#architecture-overview">Architecture Overview</a></li>
-</ul>
-</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="release_notes.html#v0-1-apri-2014">v0.1 (Apri 2014)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#v0-1-april-2014">v0.1 (April 2014)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="release_notes.html#roadmap-todo-list">Roadmap &amp; TODO List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html#roadmap-todo-list">Roadmap &amp; TODO List</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#v0-2-goal-july-2014">v0.2 (Goal: July 2014)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#long-term-todo-list">Long-term TODO list</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -118,8 +122,8 @@
             
               
                 
-  <li><a href="dev_guide.html"
-         title="Previous Chapter: Developer Guide">&laquo; Developer Guide</a></li>
+  <li><a href="user_guide.html"
+         title="Previous Chapter: User Guide">&laquo; User Guide</a></li>
   <li><a href="release_notes.html"
          title="Next Chapter: Release Notes">Release Notes &raquo;</a></li>
               
@@ -152,7 +156,6 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev_guide.html">Developer Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="release_notes.html#roadmap-todo-list">Roadmap &amp; TODO List</a></li>
@@ -175,7 +178,31 @@
       
   <div class="section" id="contributing">
 <span id="id1"></span><h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
-<p>akdsjf;alsdkj;lasdkjfs;adj</p>
+<dl class="docutils">
+<dt>Contributing to Estuarial is extremely appreciated and we want to add to the</dt>
+<dd>already thriving an open-source community around financial data .</dd>
+</dl>
+<p>If you have a set of SQL queries you think are particularly useful for fetching
+time-series or metadata around time-series and/or entities, come to talk us
+or submit a PR</p>
+<p>If you are Python Dev dealing with large-ish and large sql queries &#8211; come talk
+to us.  We are trying to solve similar problems</p>
+<p>Specific areas we’d like to get help on:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>Comprehensive coverage of TRs databases</dt>
+<dd><ul class="first last simple">
+<li>Defining SQL Catalog</li>
+<li>Optimizing SQL Queries</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Entity Management</p>
+</li>
+</ul>
+</div></blockquote>
 </div>
 
 

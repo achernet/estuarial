@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Worldscope &mdash; estuarial 0.1 documentation</title>
+    <title>&lt;no title&gt; &mdash; estuarial 0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -110,12 +110,7 @@
               
                 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"><ul>
-<li><a class="reference internal" href="#">Worldscope</a><ul>
-<li><a class="reference internal" href="#worldcope-access">Worldcope Access</a></li>
-<li><a class="reference internal" href="#worldscope-metadata">Worldscope MetaData</a></li>
-</ul>
-</li>
+  <ul class="dropdown-menu localtoc"><ul class="simple">
 </ul>
 </ul>
 </li>
@@ -160,7 +155,7 @@
 </ul>
 
 <div id="sourcelink">
-  <a href="../../_sources/includes/databases/fundamentals.txt"
+  <a href="../../_sources/includes/notebooks/demo_market_index.txt"
      rel="nofollow">Source</a>
 </div>
 <form action="../../search.html" method="get">
@@ -174,47 +169,200 @@
       </div>
     <div class="col-md-9">
       
-  <div class="section" id="worldscope">
-<span id="fundamentals"></span><h1>Worldscope<a class="headerlink" href="#worldscope" title="Permalink to this headline">¶</a></h1>
-<p>Worldscope contains standardized presentations of publicly reported financial statements (balance sheets, income
-and cash flow statements) for 57,000 companies globally.</p>
-<div class="section" id="worldcope-access">
-<h2>Worldcope Access<a class="headerlink" href="#worldcope-access" title="Permalink to this headline">¶</a></h2>
-<p>Exploratory Style:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">spx</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">UniverseBuilder</span><span class="o">.</span><span class="n">spx_idx</span><span class="p">(</span><span class="s">&#39;2013-12-04&#39;</span><span class="p">)</span>
-<span class="n">spx</span><span class="o">.</span><span class="n">cash</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span>
-<span class="n">spx</span><span class="o">.</span><span class="n">ni</span><span class="p">[</span><span class="s">&#39;2009-01-01&#39;</span><span class="p">:</span><span class="s">&#39;2014-01-01&#39;</span><span class="p">]</span>
-<span class="o">....</span>
+  <div class="code python highlight-python"><pre># Some basic imports for numerics, plotting, and displaying tables.
+import pandas
+import numpy as np
+import matplotlib.pyplot as plt
+from IPython.display import HTML
+%matplotlib inline</pre>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Import the part of estuarial that provides a look at index constituents.</span>
+<span class="kn">from</span> <span class="nn">estuarial.browse.market_index</span> <span class="kn">import</span> <span class="n">MarketIndex</span>
 </pre></div>
 </div>
-<p>Functional Style:</p>
-<div class="highlight-python"><pre>universe = #some universe of seccodes
-dt_list = ('2000-01-01, '2014-01-01')
-metrics = [NI,CASH,TL]
-tr.worldscope(universe,metrics,dt_list)</pre>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Create an instance of the MarketIndex class.</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">MarketIndex</span><span class="p">()</span>
+
+<span class="c"># &quot;Slice&quot; the data along the dimensions you&#39;d like.</span>
+<span class="c"># In this case, it&#39;s along the S&amp;P 500 index, for the date 2012-12-28.</span>
+<span class="n">dec2012_sp500</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s">&#39;S&amp;P 500&#39;</span><span class="p">,</span> <span class="s">&#39;2012-12-28&#39;</span><span class="p">]</span>
+</pre></div>
 </div>
-<p>To get a full list of metrics for worldscope please see</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Display a table of the first 5 fetched results.</span>
+<span class="n">dec2012_sp500</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
 </div>
-<div class="section" id="worldscope-metadata">
-<h2>Worldscope MetaData<a class="headerlink" href="#worldscope-metadata" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><pre>estuarial.metrics.ws.&lt;tab&gt;&lt;tab&gt;
-#or
-metrics.ws.find_metrics('DEBT')
-         Number                                               Name
-197    18282                                   CONVERTIBLE DEBT
-215    18232                  CURRENT PORTION OF LONG TERM DEBT
-817     1251                           INTEREST EXPENSE ON DEBT
-929     3251                                     LONG TERM DEBT
-930     8226                     LONG TERM DEBT % COMMON EQUITY
-931     8277              LONG TERM DEBT % COMMON EQUITY (GAAP)
-932     8279  LONG TERM DEBT % COMMON EQUITY (GAAP) - 3 YEAR...
-933     8281  LONG TERM DEBT % COMMON EQUITY (GAAP) - 5 YEAR...
-934     8230          LONG TERM DEBT % COMMON EQUITY - 5 YR AVG
-...
-...</pre>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>INAME</th>
+      <th>ITICKER</th>
+      <th>TICKER</th>
+      <th>CUSIP</th>
+      <th>NAME</th>
+      <th>DATE_</th>
+      <th>CLOSE_</th>
+      <th>SHARES</th>
+      <th>SECCODE</th>
+      <th>RELATIVE_MARKET_CAP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td> S&amp;P 500 INDEX</td>
+      <td> SPX_IDX</td>
+      <td> ADBE</td>
+      <td> 00724F10</td>
+      <td>     Adobe Systems Inc</td>
+      <td>2012-12-28 00:00:00</td>
+      <td> 36.900002</td>
+      <td>  495.055</td>
+      <td> 2099</td>
+      <td> 18267.530255</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td> S&amp;P 500 INDEX</td>
+      <td> SPX_IDX</td>
+      <td>  ADI</td>
+      <td> 03265410</td>
+      <td>    Analog Devices Inc</td>
+      <td>2012-12-28 00:00:00</td>
+      <td> 41.470001</td>
+      <td>  301.359</td>
+      <td> 5689</td>
+      <td> 12497.358098</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td> S&amp;P 500 INDEX</td>
+      <td> SPX_IDX</td>
+      <td>  AGN</td>
+      <td> 01849010</td>
+      <td>          Allergan Inc</td>
+      <td>2012-12-28 00:00:00</td>
+      <td> 90.129997</td>
+      <td>  307.535</td>
+      <td> 3122</td>
+      <td> 27718.128705</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td> S&amp;P 500 INDEX</td>
+      <td> SPX_IDX</td>
+      <td> ALTR</td>
+      <td> 02144110</td>
+      <td>           Altera Corp</td>
+      <td>2012-12-28 00:00:00</td>
+      <td> 34.009998</td>
+      <td>  320.573</td>
+      <td> 3788</td>
+      <td> 10902.687192</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td> S&amp;P 500 INDEX</td>
+      <td> SPX_IDX</td>
+      <td> AMAT</td>
+      <td> 03822210</td>
+      <td> Applied Materials Inc</td>
+      <td>2012-12-28 00:00:00</td>
+      <td> 11.260000</td>
+      <td> 1197.660</td>
+      <td> 6088</td>
+      <td> 13485.651874</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Display a histogram of the stock-level market cap values.</span>
+<span class="n">dec2012_sp500</span><span class="o">.</span><span class="n">RELATIVE_MARKET_CAP</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+</pre></div>
 </div>
+<div class="highlight-python"><pre>&lt;matplotlib.axes.AxesSubplot at 0x524e510&gt;</pre>
 </div>
+<img alt="../../_images/demo_market_index_4_1.png" src="../../_images/demo_market_index_4_1.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Get data for the S&amp;P Belgium BMI index across December 2012</span>
+<span class="n">bmi_belgium</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="s">&#39;S&amp;P Belgium BMI&#39;</span><span class="p">,</span> <span class="s">&#39;2012-12-01&#39;</span><span class="p">:</span><span class="s">&#39;2012-12-31&#39;</span><span class="p">]</span>
+<span class="n">bmi_belgium</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
 </div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>DATE_</th>
+      <th>ITICKER</th>
+      <th>CLOSE_</th>
+      <th>AdjClose</th>
+      <th>MARKETCAP</th>
+      <th>SECCODE</th>
+      <th>NAME_</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2012-12-03 00:00:00</td>
+      <td> SPCBMICBEUSD</td>
+      <td> 79.96</td>
+      <td> 79.96</td>
+      <td> 612172000</td>
+      <td> 13601</td>
+      <td> S&amp;P Belgium BMI (US Dollar)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2012-12-04 00:00:00</td>
+      <td> SPCBMICBEUSD</td>
+      <td> 79.55</td>
+      <td> 79.55</td>
+      <td> 609732000</td>
+      <td> 13601</td>
+      <td> S&amp;P Belgium BMI (US Dollar)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2012-12-05 00:00:00</td>
+      <td> SPCBMICBEUSD</td>
+      <td> 79.75</td>
+      <td> 79.75</td>
+      <td> 610401000</td>
+      <td> 13601</td>
+      <td> S&amp;P Belgium BMI (US Dollar)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2012-12-06 00:00:00</td>
+      <td> SPCBMICBEUSD</td>
+      <td> 80.15</td>
+      <td> 80.15</td>
+      <td> 609636000</td>
+      <td> 13601</td>
+      <td> S&amp;P Belgium BMI (US Dollar)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2012-12-07 00:00:00</td>
+      <td> SPCBMICBEUSD</td>
+      <td> 80.50</td>
+      <td> 80.50</td>
+      <td> 609540000</td>
+      <td> 13601</td>
+      <td> S&amp;P Belgium BMI (US Dollar)</td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Get a time-series plot of the total index market cap for each day in December 2012.</span>
+<span class="n">bmi_belgium</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">&quot;DATE_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s">&quot;MARKETCAP&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.axes.AxesSubplot at 0x5ec86d0&gt;</pre>
+</div>
+<img alt="../../_images/demo_market_index_6_1.png" src="../../_images/demo_market_index_6_1.png" />
 
 
     </div>
@@ -230,7 +378,7 @@ metrics.ws.find_metrics('DEBT')
         <br/>
         
 <div id="sourcelink">
-  <a href="../../_sources/includes/databases/fundamentals.txt"
+  <a href="../../_sources/includes/notebooks/demo_market_index.txt"
      rel="nofollow">Source</a>
 </div>
       
