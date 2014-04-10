@@ -1,8 +1,8 @@
 .. _universe:
 
-##########
+########
 Universe
-##########
+########
 
 Pre-defined universes are a great starting point for any financial analytic. We've created a number of convenience
 accessors to help get you started.::
@@ -22,6 +22,6 @@ Estuarial Universe objects are built for easy exploration::
 
 Source
 ------
-.. autoclass:: estuarial.UniverseBuilder
+.. autoclass:: estuarial.browse.universe_builder
    :members:
    :undoc-members:
