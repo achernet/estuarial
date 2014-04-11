@@ -5,6 +5,7 @@ Author: Ben Zaitlen and Ely Spears
 """
 import pandas
 import numpy as np
+import os.path.join as pjoin
 from estuarial.util.decorators import target_getitem
 from estuarial.util.config import market_index_config
 from estuarial.data.query_handler import QueryHandler
@@ -24,7 +25,7 @@ class MarketIndex(object):
     """
 
     # Location relative to CUSTOM_SQL for the necessary queries.
-    _MARKET_INDEX_URL = "browse/market_index.yaml"
+    _MARKET_INDEX_URL = pjoin("browse", "market_index.yaml")
     
     # Map between convenience-function layer names and the functions and
     # arguments needed for them. This is stored in a separate config file
