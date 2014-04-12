@@ -286,7 +286,7 @@ def make_function_yaml(name, table, doc, conditonals):
 
     per_function_yaml="""
     {name}:
-        doc: >
+        doc: |
             {doc}
         conditionals:
             {conditionals}
@@ -314,36 +314,68 @@ def make_composite_schema_yaml():
     base_yaml = "QADSchema:\n"
     table_names = get_active_table_names()
     num_tables = len(table_names)
+    num_succeeded = 0
+    num_failed = 0
 
     for i, table in enumerate(table_names):
         print "Running for table: {}...\n".format(table)
         st_time = time.time()
 
-        sp_help_results = execute_sp_help(table)
-        column_type_dictionary = get_column_names_and_types(sp_help_results)
-        primary_keys, foreign_keys = get_key_columns(sp_help_results)
-        conditonals_dictionary = make_conditionals_dictionary(
-            column_type_dictionary, 
-            primary_keys, 
-            foreign_keys
-        )
 
-        doc = make_function_documentation(sp_help_results, table)
-        name = table.replace(".", "_")
-        conditionals_doc = make_conditionals_yaml_block(conditonals_dictionary)
-        function_yaml = make_function_yaml(name, table, doc, conditionals_doc)
-        base_yaml += function_yaml + "\n"
+        try:
+            sp_help_results = execute_sp_help(table)
+            column_type_dictionary = get_column_names_and_types(
+                sp_help_results
+            )
 
+            primary_keys, foreign_keys = get_key_columns(sp_help_results)
+            conditonals_dictionary = make_conditionals_dictionary(
+                column_type_dictionary, 
+                primary_keys, 
+                foreign_keys
+            )
 
-        ed_time = time.time()
-        elapsed = round(ed_time - st_time, 3)
-        print "Completed for table name '{}' in {}s. {}/{}\n=====\n".format(
-            table, elapsed, i, num_tables
-        )
+            doc = make_function_documentation(sp_help_results, table)
+            name = table.replace(".", "_")
+            conditionals_doc = make_conditionals_yaml_block(
+                conditonals_dictionary
+            )
 
+            function_yaml = make_function_yaml(
+                name, 
+                table, 
+                doc, 
+                conditionals_doc
+            )
+
+            base_yaml += function_yaml + "\n"
+
+            ed_time = time.time()
+            elapsed = round(ed_time - st_time, 3)
+            print (
+                "Completed for table name '{}' in {}s. {}/{}\n=====\n".format(
+                    table, 
+                    elapsed, 
+                    i, 
+                    num_tables
+                )
+            )
+            num_succeeded +=1
+            
+        except:
+            print (
+                "Failed (skipping) for table name '{}'. {}/{}\n=====\n".format(
+                    table,
+                    i,
+                    num_tables
+                )
+            )
+            num_failed += 1
+
+    print "Num succeeded: {}\n".format(num_succeeded)
+    print "Num failed: {}\n".format(num_failed)
     return base_yaml
         
-
 if __name__ == "__main__":
 
     import time
