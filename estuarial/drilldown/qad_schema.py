@@ -11,10 +11,21 @@ def get_active_table_names():
     Grab list of all table names on the database. Do some filtering to remove
     tables from deprecated schemas and to prepend the correct schema prefix.
     """
+    rq = RAW_QUERY()
     tables = rq.raw_query("SELECT * FROM sys.tables")
+    schemas = (
+        rq.raw_query("SELECT * FROM sys.schemas")
+        .rename(columns={"name":"schema_name"})
+    )
 
-    # TODO: add processing to filter out deprecated tables and to
-    # affix the correct schema prefix (dbo, prc, etc.)
+    tables = pandas.merge(
+        tables, 
+        schemas.set_index("schema_id")[["schema_name"]], 
+        left_on="schema_id", 
+        right_index=True
+    )
+
+    tables["name"] = tables["schema_name"] + "." + tables["name"]
     return tables.name.values.tolist()
 
 
@@ -299,12 +310,15 @@ def make_composite_schema_yaml():
     very large composite Yaml document with all of the tables mapped as 
     functions.
     """
+    import time
     base_yaml = "QADSchema:\n"
-    #table_names = get_active_table_names()
-    table_names = ['prc.PrcDly', 'dbo.DS2PrimQtRI', 'dbo.DS2ScdQtRI']
+    table_names = get_active_table_names()
+    num_tables = len(table_names)
 
-    for table in table_names:
-        
+    for i, table in enumerate(table_names):
+        print "Running for table: {}...\n".format(table)
+        st_time = time.time()
+
         sp_help_results = execute_sp_help(table)
         column_type_dictionary = get_column_names_and_types(sp_help_results)
         primary_keys, foreign_keys = get_key_columns(sp_help_results)
@@ -314,20 +328,31 @@ def make_composite_schema_yaml():
             foreign_keys
         )
 
-
         doc = make_function_documentation(sp_help_results, table)
         name = table.replace(".", "_")
         conditionals_doc = make_conditionals_yaml_block(conditonals_dictionary)
         function_yaml = make_function_yaml(name, table, doc, conditionals_doc)
         base_yaml += function_yaml + "\n"
 
+
+        ed_time = time.time()
+        elapsed = round(ed_time - st_time, 3)
+        print "Completed for table name '{}' in {}s. {}/{}\n=====\n".format(
+            table, elapsed, i, num_tables
+        )
+
     return base_yaml
         
 
 if __name__ == "__main__":
 
+    import time
+    st_time = time.time()
     tmp = make_composite_schema_yaml()
-    print tmp
+    with open("/home/ely/test_all.yaml", "w") as fl:
+        fl.write(tmp)
+    ed_time = time.time()
+    print ed_time - st_time
 
 
 
