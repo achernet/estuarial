@@ -1,0 +1,21 @@
+package: estuarial
+
+platform:
+  - linux-64
+
+engine:
+   - python=2
+
+before_script:
+  - python -V
+  - conda install -q pytables=3.0.0 pyodbc=3.0.7 pandas=0.12.0 sqlalchemy=0.9.1
+  - conda install -c https://conda.binstar.org/hugo arraymanagement
+
+test:
+  - python -c 'import estuarial';
+  - python estuarial/test/util/TestDecorators.py
+
+script:
+  - conda build conda.recipe
+
+build_targets: conda
