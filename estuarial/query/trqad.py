@@ -4,12 +4,12 @@ import os
 import sys
 import datetime as dt
 from dateutil import parser
-from os.path import join as pjoin
 from sqlalchemy.sql import column, and_, or_
 from estuarial.util.config.config import Config
 from estuarial.util.munging import worldscope_align
 from estuarial.util.dateparsing import parsedate
 from estuarial.array.arraymanagementclient import ArrayManagementClient
+import posixpath
 
 class TRQAD(ArrayManagementClient):
     '''
@@ -89,7 +89,8 @@ class TRQAD(ArrayManagementClient):
         if DB=='WORLDSCOPE':
             start, stop = parsedate(dt_list)
             df_file = db_dict[DB]
-            url = pjoin('/FUNDAMENTALS',DB,df_file)
+            url = posixpath.join('/FUNDAMENTALS',DB,df_file)
+            print('the url: {}'.format(url))
             arr = self.aclient[url]
 
             data = arr.select(
@@ -105,7 +106,7 @@ class TRQAD(ArrayManagementClient):
         if DB=='RKD':
             start, stop = parsedate(dt_list)
             df_file = db_dict[DB]
-            url = pjoin('/FUNDAMENTALS',DB,df_file)
+            url = posixpath.join('/FUNDAMENTALS',DB,df_file)
             arr = self.aclient[url]
 
             data = arr.select(
