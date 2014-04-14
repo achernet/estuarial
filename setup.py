@@ -12,6 +12,11 @@ config_suffix_list = ["*.ini"]
 catalog_suffix_list = ('.py',
                        '.yaml')
 
+if sys.platform == 'win32':
+    dir_sep = '\\'
+else:
+    dir_sep = '/'
+
 def get_sql_files():
     data_files = []
 
@@ -24,7 +29,7 @@ def get_sql_files():
             if fs.endswith(catalog_suffix_list):
 
                 #remove estuarial from path name
-                install_path = '/'.join(path.split('/')[1:])
+                install_path = dir_sep.join(path.split(dir_sep)[1:])
                 data_files.append(os.path.join(install_path,fs))
 
     return data_files
