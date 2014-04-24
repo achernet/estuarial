@@ -17,6 +17,6 @@ test:
   - python estuarial/test/util/TestDecorators.py
 
 script:
-  - conda build conda.recipe
+  - python setup.py install
 
-build_targets: [conda]
+build_targets: conda
