@@ -2,6 +2,9 @@ package:
   name: estuarial 
   version: 0.0.1
 
+build:
+  number: {{environ.get('BINSTAR_BUILD', 1)}}
+
 source:
   git_url: git@github.com:ContinuumIO/estuarial.git
 

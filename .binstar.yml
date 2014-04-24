@@ -12,10 +12,13 @@ before_script:
   - conda install -c https://conda.binstar.org/hugo arraymanagement
 
 test:
+  - python setup.py install
   - python -c 'import estuarial';
   - python estuarial/test/util/TestDecorators.py
 
 script:
   - conda build conda.recipe
+  - mkdir dist
+  - cp `conda build conda.recipe --output` dist/
 
-build_targets: conda
+build_targets: dist/*
