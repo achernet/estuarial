@@ -18,7 +18,5 @@ test:
 
 script:
   - conda build conda.recipe
-  - mkdir dist
-  - cp `conda build conda.recipe --output` dist/
 
-build_targets: dist/*
+build_targets: [conda]
