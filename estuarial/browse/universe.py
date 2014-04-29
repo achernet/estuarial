@@ -22,7 +22,7 @@ class Universe(ArrayManagementClient):
         return ("TR Universe")
 
     @classmethod
-    def _create_metrics(cls, name, metric_class):
+    def _create_metrics(cls, name, metric_class, item):
         """
         fancy method of instantiating object
         """
@@ -34,11 +34,23 @@ class Universe(ArrayManagementClient):
             def _metric_loader(self):
                 i = getattr(self, underscore_name)
                 if i is None:
-                    i = metric_class(self, name)
+                    i = metric_class(self, name, item)
                     setattr(self, underscore_name, i)
                 return i
 
             setattr(cls, name, property(_metric_loader))
 
-for _name, _metric_class in indexing.get_metrics_list():
-    Universe._create_metrics(_name, _metric_class)
+for _name, _metric_class, item in indexing.get_metrics_list():
+    Universe._create_metrics(_name, _metric_class, item)
+
+
+if __name__ == "__main__":
+    from estuarial.browse.universe_builder import UniverseBuilder
+    spx = UniverseBuilder.spx_idx('2013-12-04')
+    df =  spx.data
+    spx.data = df[df.name.str.contains("Machine")]
+    # spx.ohlc['2009-01-01':'2014-01-01']
+    print(spx.cash['2013-01-01':'2014-01-01'].head())
+    print(spx.ni['2012-01-01':'2014-01-01'].head())
+
+

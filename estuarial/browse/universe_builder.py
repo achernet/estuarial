@@ -5,6 +5,7 @@ from arraymanagement.client import ArrayClient
 from estuarial.browse.universe import Universe
 from estuarial.array.arraymanagementclient import ArrayManagementClient
 from estuarial.util.munging import lower_columns
+from estuarial.browse.market_index import MarketIndex
 
 class UniverseBuilder(ArrayManagementClient):
     """
@@ -15,6 +16,10 @@ class UniverseBuilder(ArrayManagementClient):
 
     def __init__(self):
         super(UniverseBuilder, self).__init__()
+        m = MarketIndex()
+        for k,v in m._SUPPORTED_INDICES.iteritems():
+            # classmethod(cls, )
+            pass
 
     @classmethod
     def us(self):
