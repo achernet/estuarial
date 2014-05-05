@@ -90,7 +90,6 @@ class TRQAD(ArrayManagementClient):
             start, stop = parsedate(dt_list)
             df_file = db_dict[DB]
             url = posixpath.join('/FUNDAMENTALS',DB,df_file)
-            print('the url: {}'.format(url))
             arr = self.aclient[url]
 
             data = arr.select(
@@ -115,7 +114,6 @@ class TRQAD(ArrayManagementClient):
                      ),
                 sourcedate_1=start,
                 sourcedate_2=stop)
-
         return data
 
 
