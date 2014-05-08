@@ -19,7 +19,7 @@ class UniverseBuilder(ArrayManagementClient):
     @classmethod
     def us(self):
         conn = ArrayManagementClient()
-        arr = conn.aclient['/UNIVERSE_SQL/country_universe.yaml']
+        arr = conn.aclient['/DATASTREAM/equity_master.yaml']
         df = arr.select(and_(arr.ctrytradedin=='US',
 			     arr.statuscode=='A',
 			     arr.typecode=='EQ'))
@@ -30,9 +30,18 @@ class UniverseBuilder(ArrayManagementClient):
     @classmethod
     def can(self):
         conn = ArrayManagementClient()
-        arr = conn.aclient['/UNIVERSE_SQL/country_universe.yaml']
+        arr = conn.aclient['/DATASTREAM/equity_master.yaml']
         df = arr.select(and_(arr.ctrytradedin=='CA',
 			     arr.statuscode=='A',
+			     arr.typecode=='EQ'))
+        query = arr.query
+        df = lower_columns(df)
+        return Universe(df,query)
+
+    def world(self):
+        conn = ArrayManagementClient()
+        arr = conn.aclient['/DATASTREAM/equity_master.yaml']
+        df = arr.select(and_(arr.statuscode=='A',
 			     arr.typecode=='EQ'))
         query = arr.query
         df = lower_columns(df)
@@ -63,6 +72,3 @@ class UniverseBuilder(ArrayManagementClient):
         query = arr.query
         df = lower_columns(df)
         return Universe(df,query)
-
-
-

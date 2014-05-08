@@ -116,6 +116,57 @@ class TRMETA(ArrayManagementClient):
             setattr(items,i,thisitem)
         return items
 
+    def ventypes(self):
+        return {'idc': 1,
+                'ibes_us': 2,
+                'ibes_canada': 3,
+                'compustat': 4,
+                'compustat_pit': 5,
+                'first_call': 6,
+                'msci': 7,
+                'multex': 8,
+                'multex_forecast_pro': 9,
+                'worldscope_company': 10,
+                'toyo_keizai': 13,
+                'msci_barra': 14,
+                'msci_barra_gemm': 15,
+                'datastream_legacy': 16,
+                'sp_gics_history': 17,
+                'sp_gics_direct': 18,
+                'ford_equity': 19,
+                'topas': 20,
+                'ownership': 21,
+                'idc_fixedincome': 22,
+                'starmine2_daily': 23,
+                'starmine2_monthly': 24,
+                'worldscope_security': 25,
+                'rkd': 26,
+                'topas_id': 27,
+                'sp_bmi': 28,
+                'lancer': 29,
+                'global_entity_master': 30,
+                'toyo_keizai_2': 31,
+                'sp_asx': 32,
+                'datastream2': 33,
+                'ford_equity2': 34,
+                'worldscope_pit': 35,
+                'northfield': 36,
+                'deals': 37,
+                'qsg_factors': 39,
+                'data_explorers': 40,
+                'hamweck_options': 41,
+                'ibes': 42,
+                'wspts': 43,
+                'tr_indices': 44,
+                'ejv': 45,
+                'asset4': 46,
+                'sp_gics2': 47,
+                'msci2': 48,
+                'trbc': 49,
+                'axioma': 51
+                }
+
+
     def to_rkdcode(self, seccodes=None, tickers=None, CntryCode='USA'):
         """
         :type seccodes: list
