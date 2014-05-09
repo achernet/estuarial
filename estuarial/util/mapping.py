@@ -1,12 +1,9 @@
 from __future__ import print_function, division, absolute_import
 
-from sqlalchemy.sql import column, and_, or_
-from arraymanagement.client import ArrayClient
-from estuarial.browse.universe import Universe
+from sqlalchemy.sql import and_
 from estuarial.array.arraymanagementclient import ArrayManagementClient
-from estuarial.util.munging import lower_columns
 
-def ven_to_seccode(vencodes,ventype):
+def ven_to_seccode(vencodes, ventype):
     """
     :param vencodes: list of vencodes
     :param ventype: QADirect ventype of supplied vencodes
@@ -15,9 +12,10 @@ def ven_to_seccode(vencodes,ventype):
     conn = ArrayManagementClient()
     arr = conn.aclient['/ENTITYMANAGEMENT/allsecmap.yaml']
     df = arr.select(and_(arr.ventype == ventype, arr.vencode.in_(vencodes)))
+
     return df
 
-def sec_to_vencode(seccodes, ventype, allranks=False):
+def sec_to_vencode(seccodes, ventype):
     """
     :param seccodes: list of vencodes
     :param ventype: QADirect ventype of supplied vencodes
