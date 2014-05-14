@@ -1,0 +1,13 @@
+SQL:
+    ventypes:
+        conditionals:
+            - VenType
+            - VenID
+
+        query: >
+
+            SELECT
+                    VenType
+                ,   VenID
+                ,   VenName
+            FROM dbo.SecVenType
