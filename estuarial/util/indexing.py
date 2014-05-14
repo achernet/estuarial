@@ -7,7 +7,8 @@ from estuarial.util.dateparsing import check_date
 def get_metrics_list():
     return [('ohlc', _OHLCIndexer),
             ('cash', _CASHIndexer),
-            ('ni', _NIIndexer)]
+            ('ni', _NIIndexer),
+            ('rkd', _RKDIndexer)]
 
 class _TRUniverseIndexer(ArrayManagementClient):
 
@@ -100,3 +101,36 @@ class _NIIndexer(_TRUniverseIndexer):
             return cash
         else:
             raise TypeError("index must be datetime slice")
+
+class _RKDIndexer(_TRUniverseIndexer):
+
+    def __getitem__(self, indexes):
+        coa, timeslice = indexes
+        if isinstance(timeslice, slice) & isinstance(coa, str):
+            start = timeslice.start
+            stop = timeslice.stop
+
+            start, stop = check_date([start, stop])
+            universe = self.obj.to_vencodetype(26)
+            perlencode_period = '3M'
+            arr = self.obj.aclient['/FUNDAMENTALS/RKD/rkd_fundamentals']
+
+            df = arr.select(and_(arr.code.in_(universe),
+                                   arr.coa == coa,
+                                   arr.perlencode_period == '3M'),
+                               date_1 = start,
+                               date_2 = stop,
+                             )
+            return df
+        else:
+            raise TypeError("index must be [int, datetime slice]")
+
+
+
+if __name__ == "__main__":
+    import estuarial as et
+    ub = et.browse.universe_builder.UniverseBuilder()
+    us = ub.us()
+    us.data = us.data.head(100)
+    df = us.rkd['RNTS','2014-01-01':'2014-05-01']
+    print(us)

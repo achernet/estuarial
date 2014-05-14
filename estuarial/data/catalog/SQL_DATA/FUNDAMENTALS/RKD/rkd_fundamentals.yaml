@@ -3,7 +3,8 @@ SQL:
         conditionals:
                 - code
                 - coa
-                - sourcedate
+                - date
+                - perlencode_period
 
         query: >
                 select
@@ -20,7 +21,7 @@ SQL:
                         when 0 then 'partial'
                     end as CompStmtCode
                 ,  f.origanncdt
-                ,  s.sourcedt as sourcedate
+                ,  s.sourcedt as date
                 ,  d.perenddt
                 ,  d.stmtdt
                 ,  case d.StmtTypeCode
