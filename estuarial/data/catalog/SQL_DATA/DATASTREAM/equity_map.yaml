@@ -4,8 +4,6 @@ SQL:
         conditionals:
             - infocode
             - seccode
-            - CtryTradedIn
-            - StatusCode
+            - ventype
         query: >
-            SELECT * FROM trqa.DS2EqMstr
-            WHERE TypeCode = 'EQ'
+            SELECT * FROM trqa.DS2SecMapX

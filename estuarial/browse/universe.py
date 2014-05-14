@@ -40,5 +40,17 @@ class Universe(ArrayManagementClient):
 
             setattr(cls, name, property(_metric_loader))
 
+    def to_vencodetype(self, ventype):
+        """
+        :param ventype: QADirect ventype of supplied vencodes
+        :return: df mapping vencode to infocode
+        """
+        codes_in = [int(x) for x in self.data.infocode]
+        conn = ArrayManagementClient()
+        arr = conn.aclient['/DATASTREAM/equity_map.yaml']
+        df = arr.select(and_(arr.ventype == ventype, arr.infocode.in_(codes_in)))
+        return [int(x) for x in df.vencode]
+
+
 for _name, _metric_class in indexing.get_metrics_list():
     Universe._create_metrics(_name, _metric_class)

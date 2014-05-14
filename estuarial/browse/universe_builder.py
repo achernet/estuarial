@@ -21,8 +21,7 @@ class UniverseBuilder(ArrayManagementClient):
         conn = ArrayManagementClient()
         arr = conn.aclient['/DATASTREAM/equity_master.yaml']
         df = arr.select(and_(arr.ctrytradedin=='US',
-			     arr.statuscode=='A',
-			     arr.typecode=='EQ'))
+			     arr.statuscode=='A'))
         query = arr.query
         df = lower_columns(df)
         return Universe(df,query)
@@ -32,17 +31,16 @@ class UniverseBuilder(ArrayManagementClient):
         conn = ArrayManagementClient()
         arr = conn.aclient['/DATASTREAM/equity_master.yaml']
         df = arr.select(and_(arr.ctrytradedin=='CA',
-			     arr.statuscode=='A',
-			     arr.typecode=='EQ'))
+			     arr.statuscode=='A'))
         query = arr.query
         df = lower_columns(df)
         return Universe(df,query)
 
+    @classmethod
     def world(self):
         conn = ArrayManagementClient()
         arr = conn.aclient['/DATASTREAM/equity_master.yaml']
-        df = arr.select(and_(arr.statuscode=='A',
-			     arr.typecode=='EQ'))
+        df = arr.select(arr.statuscode=='A')
         query = arr.query
         df = lower_columns(df)
         return Universe(df,query)
