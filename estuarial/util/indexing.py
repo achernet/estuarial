@@ -113,7 +113,7 @@ class _RKDIndexer(_TRUniverseIndexer):
             start, stop = check_date([start, stop])
             universe = self.obj.to_vencodetype(26)
             perlencode_period = '3M'
-            arr = self.obj.aclient['/FUNDAMENTALS/RKD/rkd_fundamentals']
+            arr = self.obj.aclient['/FUNDAMENTALS/RKD2/rkd2']
 
             # code_filter = literal_column(
             #     "code IN (select * from trqa.CSVToTable('%s', ','))" % ','.join([str(x) for x in universe]))
