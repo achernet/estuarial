@@ -1,8 +1,7 @@
 from os.path import join, relpath
 import pandas as pd
 from pandas.io import sql
-from arraymanagement.nodes.hdfnodes import (get_pandas_from_cursor,
-                                            write_pandas,
+from arraymanagement.nodes.hdfnodes import (write_pandas,
                                             override_hdf_types,
                                             write_pandas_hdf_from_cursor
                                             )
