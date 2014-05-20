@@ -153,3 +153,5 @@ if __name__ == "__main__":
     tmp3 = m.constituents("Dow Jones", '2012-12-31', '2012-12-31')
     tmp4 = m["Dow Jones", '2012-12-28':'2012-12-31']
 
+    seccodes = tmp3['SECCODE']
+

@@ -1,0 +1,18 @@
+SQL:
+  spx_universe:
+    conditionals: {DATE_: Date of constituent membership., ITICKER: 'Ticker name describing
+        the index, e.g. ''SPX_IDX''.'}
+    doc: 'Parameterized query to select SPX_IDX from several tables,  including IDXSPCMP,
+      IDXINFO, SECMAP, PRC.IDXSEC, and PRC.PRCDLY.
+
+      '
+    query: "SELECT I.NAME as INAME\n    , I.TICKER as ITICKER\n    , S.TICKER\n  \
+      \  , S.CUSIP\n    , S.NAME\n    , N.DATE_\n    , D.CLOSE_\n    , N.SHARES\n\
+      \    , M.SECCODE\n    , D.CLOSE_ * N.SHARES AS RELATIVE_MARKET_CAP\nFROM DBO.IDXSPCMP\
+      \ N JOIN DBO.IDXINFO I\n    ON  I.CODE = N.IDXCODE\nJOIN PRC.IDXSEC S\n    ON\
+      \  S.CODE = N.SECCODE\n    AND S.VENDOR = 1 -- S&P\nJOIN DBO.SECMAPX M\n   \
+      \ ON  M.SECCODE = S.PRCCODE\n    AND M.VENTYPE = 1 -- IDC Pricing for SECMAPX\n\
+      \    AND M.EXCHANGE = 1 -- US\nJOIN PRC.PRCDLY D\n    ON  D.CODE = M.VENCODE\n\
+      \    AND D.DATE_ =(SELECT  MAX(DATE_)\n                  FROM    PRC.PRCDLY\n\
+      \                  WHERE   CODE = D.CODE\n                  AND     DATE_ <=\
+      \ N.DATE_)   \n"

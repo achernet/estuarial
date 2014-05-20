@@ -9,3 +9,4 @@ SQL:
         query: >
             SELECT * FROM trqa.DS2EqMstr
             WHERE TypeCode = 'EQ'
+            AND IsPrimExchQt = 'Y'

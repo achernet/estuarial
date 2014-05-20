@@ -102,6 +102,39 @@ CREATE VIEW trqa.ds2secmapx AS
 
 GO
 
+--turns a csv list into a table that can be used inline e.g. as part of an IN clause
+--this is useful for bypassing the 2100 parameter limit for sql server
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CSVToTable]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[CSVToTable]
+GO
+
+CREATE FUNCTION [dbo].[CSVToTable] (
+	 @StringInput NVARCHAR(MAX),
+	 @Delimiter nvarchar(1))
+RETURNS @OutputTable TABLE ( [String] VARCHAR(10) )
+AS
+BEGIN
+
+    DECLARE @String    VARCHAR(10)
+
+    WHILE LEN(@StringInput) > 0
+    BEGIN
+        SET @String      = LEFT(@StringInput,
+                                ISNULL(NULLIF(CHARINDEX(@Delimiter, @StringInput) - 1, -1),
+                                LEN(@StringInput)))
+        SET @StringInput = SUBSTRING(@StringInput,
+                                     ISNULL(NULLIF(CHARINDEX(@Delimiter, @StringInput), 0),
+                                     LEN(@StringInput)) + 1, LEN(@StringInput))
+
+        INSERT INTO @OutputTable ( [String] )
+        VALUES ( @String )
+    END
+
+    RETURN
+END
+
+GO
+
 --Country Code Map
 IF OBJECT_ID('trqa.CountryCodeMap', 'U') IS NOT NULL
   DROP TABLE trqa.CountryCodeMap

@@ -1,0 +1,12 @@
+SQL:
+  bmi_universe:
+    conditionals: {DATE_: Date of constituent membership., ITICKER: Mnemonic identifying
+        which BMI index to query.}
+    doc: 'Parameterized query to select from many BMI indices from several  tables,
+      including IdxBMISecDaily, IdxBMIConst, IdxInfo, SECMAPX,  PRC.IDXSEC, and PRC.PRCDLY.
+
+      '
+    query: "SELECT N.DATE_ as DATE_\n    , S.IndexMnem as ITICKER\n    , N.CLOSE_\n\
+      \    , N.AdjClose\n    , N.MARKETCAP\n    , N.SECCODE\n    , S.NAME_\nFROM DBO.IdxBMISecDaily\
+      \ N JOIN DBO.IdxBMIConst I\n    ON I.SECCODE = N.SECCODE\nJOIN DBO.IdxBMIInfo\
+      \ S\n    ON S.IDXCODE = I.IDXCODE\n"

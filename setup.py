@@ -10,7 +10,8 @@ else:
 curdir = os.path.abspath(os.path.dirname(__file__))
 config_suffix_list = ["*.ini"]
 catalog_suffix_list = ('.py',
-                       '.yaml')
+                       '.yaml',
+                        '.qad')
 
 if sys.platform == 'win32':
     dir_sep = '\\'

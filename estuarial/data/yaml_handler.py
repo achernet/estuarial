@@ -337,14 +337,15 @@ if __name__ == "__main__":
     y_handler = YamlHandler()
 
     test_single_yaml = os.path.abspath(
-        "./catalog/SQL_DATA/UNIVERSE_SQL/dowjones_universe.yaml")
+        "./catalog/SQL_DATA/FUNDAMENTALS/RKD2/rkd_fundamentals.qad")
     with open(test_single_yaml, 'r') as single_file:
         single_data = yaml.load(stream=single_file, Loader=yaml.CLoader)
 
-    test_composite_yaml = os.path.abspath("../test/data/test_yaml.yaml")
-    with open(test_composite_yaml, 'r') as composite_file:
-        composite_data = yaml.load(stream=composite_file, Loader=yaml.CLoader)
+    # test_composite_yaml = os.path.abspath("../test/data/test_yaml.yaml")
+    # with open(test_composite_yaml, 'r') as composite_file:
+    #     composite_data = yaml.load(stream=composite_file, Loader=yaml.CLoader)
 
     
-    #print y_handler.valid_sql_singleton(single_data)
-    print y_handler.valid_sql_composite(composite_data)
+    print y_handler.valid_sql_singleton(single_data)
+    # print y_handler.valid_sql_composite(composite_data)
+#

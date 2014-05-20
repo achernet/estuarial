@@ -1,9 +1,9 @@
 package:
-  name: feldman 
+  name: estuarial
   version: 0.0.1
 
 source:
-  git_url: git@github.com:ContinuumIO/feldman.git
+  git_url: git@github.com:ContinuumIO/estuarial.git
 
 requirements:
   build:

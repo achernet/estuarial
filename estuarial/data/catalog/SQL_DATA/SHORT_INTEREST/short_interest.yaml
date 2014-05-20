@@ -1,0 +1,9 @@
+SQL:
+    short_interest:
+        type: conditional
+        conditionals:
+            - seccode
+            - exchange
+
+        query: >
+            select seccode, exchange, shares, volume from dbo.ShortInt2Data

@@ -20,8 +20,7 @@ class UniverseBuilder(ArrayManagementClient):
     def us(self):
         conn = ArrayManagementClient()
         arr = conn.aclient['/DATASTREAM/equity_master.yaml']
-        df = arr.select(and_(arr.ctrytradedin=='US',
-			     arr.statuscode=='A'))
+        df = arr.select(and_(arr.ctrytradedin=='US',"IsPrimExchQt='Y'"))
         query = arr.query
         df = lower_columns(df)
         return Universe(df,query)
