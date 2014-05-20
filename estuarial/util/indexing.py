@@ -134,6 +134,6 @@ if __name__ == "__main__":
     ub = et.browse.universe_builder.UniverseBuilder()
 
     us = ub.us()
-    # us.data = us.data.head(20272)
-    df = us.rkd['RNTS', '2011-01-01':'2013-12-01']
+    # us.data = us.data.head(12000)
+    df = us.rkd['RNTS', '2006-01-01':'2006-05-01']
     print(df.describe())

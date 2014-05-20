@@ -1,5 +1,6 @@
 SQL:
     rkd_fundamentals:
+        code_column: code
         conditionals:
                 - code
                 - coa
