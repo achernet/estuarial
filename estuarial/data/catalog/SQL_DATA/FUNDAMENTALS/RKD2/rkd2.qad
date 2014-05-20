@@ -1,7 +1,6 @@
 SQL:
     rkd2:
-        doc: >
-            blah blah
+        code_column: code
         conditionals:
                 code: code
                 coa: coa
