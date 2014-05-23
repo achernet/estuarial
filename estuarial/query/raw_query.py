@@ -35,6 +35,9 @@ class RAW_QUERY(ArrayManagementClient):
         cols = [col[0] for col in cur.description]
 
         data = cur.fetchall()
+        if not data:
+            df = pd.DataFrame(columns=cols,index=data)
+            return df
 
         df = pd.DataFrame.from_records(data)
         df.columns = cols
