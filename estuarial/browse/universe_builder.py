@@ -1,7 +1,6 @@
 from __future__ import print_function, division, absolute_import
 
-from sqlalchemy.sql import column, and_, or_
-from arraymanagement.client import ArrayClient
+from sqlalchemy.sql import and_
 from estuarial.browse.universe import Universe
 from estuarial.array.arraymanagementclient import ArrayManagementClient
 from estuarial.util.munging import lower_columns

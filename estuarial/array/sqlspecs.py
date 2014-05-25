@@ -71,21 +71,23 @@ class QADirectSqlCaching(YamlSqlDateCaching):
             if hasattr(q.whereclause.clauses[i], 'clauses'):
                 if str(q.whereclause.clauses[i].clauses[0].left) == self.code_column:
                     code_index = i
+                    codes = [x.effective_value for x in q.whereclause.clauses[0].clauses[0].right.element.clauses]
                     break
             else:
                 if str(q.whereclause.clauses[i].left) == self.code_column:
                     code_index = i
+                    codes = [x.effective_value for x in q.whereclause.clauses[0].right.element.clauses]
                     break
 
         df_out = None
 
         # get list of codes
-        codes = [x.effective_value for x in q.whereclause.clauses[0].clauses[0].right.element.clauses]
+        # codes = [x.effective_value for x in q.whereclause.clauses[0].clauses[0].right.element.clauses]
         total_elements = len(codes)
 
         # open transaction
         #create temp table and insert codes
-        self.session.execute("if exists (select 1 where object_id('tempdb.dbo.#tmp') is not null) drop table #mytemp")
+        self.session.execute("if exists (select 1 where object_id('tempdb.dbo.#tmp') is not null) drop table #tmp")
         self.session.execute("create table #tmp (id int)")
         self.session.execute("create clustered index IX on #tmp(id)")
         for i in range(0, int(round(total_elements / float(BATCH_SIZE) + 1))):

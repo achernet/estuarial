@@ -3,9 +3,6 @@ import pyodbc
 import collections
 import datetime as dt
 from estuarial.util.config import Config
-from arraymanagement.nodes.sql import SimpleQueryTable
-from arraymanagement.nodes.csvnodes import PandasCSVNode
-from arraymanagement.nodes.hdfnodes import PandasHDFNode
 from arraymanagement.nodes.sqlcaching import YamlSqlDateCaching
 from estuarial.array.sqlspecs import QADirectSqlCaching
 
@@ -45,9 +42,13 @@ else:
                                                         passwd,
                                                         port)
     else:
-        connstring = 'DSN=estuarial;UID={};PWD={}'.format(username, passwd)
+       connstring = ('Driver={};Server={};Database=qai;Uid={};Pwd={};PORT={}').format(driver,
+                                                        server,
+                                                        username,
+                                                        passwd,
+                                                        port)
 
-loaders = collections.OrderedDict([("*.yaml", QADirectSqlCaching)])
+loaders = collections.OrderedDict([("*.yaml", YamlSqlDateCaching), ("*.qad", QADirectSqlCaching)])
 
 global_config = dict(is_dataset=False,
                      csv_options={},

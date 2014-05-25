@@ -44,10 +44,10 @@ class _OHLCIndexer(_TRUniverseIndexer):
             start, stop = check_date([start, stop])
 
             universe = self.obj.data.seccode.tolist()
-            arr = self.obj.aclient['/DATASTREAM/ohlc.yaml']
-            ohlc = arr.select(and_(arr.seccode.in_(universe)),
-                              date_1 = start,
-                              date_2 = stop,
+            arr = self.obj.aclient['/DATASTREAM/pricing']
+            ohlc = arr.select(arr.infocode.in_(universe),
+                              date_1=start,
+                              date_2=stop,
             )
             return ohlc
         else:
@@ -125,15 +125,26 @@ class _RKDIndexer(_TRUniverseIndexer):
             )
             return df
         else:
-            raise TypeError("index must be [int, datetime slice]")
+            raise TypeError("index must be [string, datetime slice]")
 
 
 if __name__ == "__main__":
+    import time
+    start_time = time.time()
+
     import estuarial as et
 
     ub = et.browse.universe_builder.UniverseBuilder()
 
     us = ub.us()
-    # us.data = us.data.head(12000)
-    df = us.rkd['RNTS', '2006-01-01':'2006-05-01']
-    print(df.describe())
+    print "got universe"
+    print time.time() - start_time
+
+    us.data = us.data.head(2000)
+    start_time = time.time()
+
+    df = us.ohlc['2010-01-01':'2014-03-01']
+    # df = us.rkd['RNTS', '2006-01-01':'2010-05-02']
+    print "got data"
+    print time.time() - start_time
+    # print(df.describe())
