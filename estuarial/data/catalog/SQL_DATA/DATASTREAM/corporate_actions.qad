@@ -1,0 +1,80 @@
+SQL:
+    cap_events:
+        code_column: InfoCode
+        conditionals:
+            InfoCode:   Datastream security int identifier
+            date:   effective date of corporate action
+            ActionTypeCode: code indicating the type of corporate action.
+            NewInfoCode:    resulting infocode (if applicable)
+        query: >
+                SELECT
+                        e.InfoCode
+                ,       e.EffectiveDate as date
+                ,       x.CODE as ActionTypeCode
+                ,       x.Desc_ as Description
+                ,       e.NumOldShares
+                ,       e.NumNewShares
+                ,       e.ResInfoCode as NewInfoCode
+
+                FROM
+                    dbo.ds2capevent e LEFT JOIN dbo.ds2xref x ON e.ActionTypeCode=x.Code AND x.type_=6
+    dividends:
+        code_column: InfoCode
+        conditionals:
+        query: >
+                SELECT
+                    X.InfoCode
+                ,   V.DivTypeCode
+                ,   V.TaxMarker
+                ,   V.PayDate
+                ,   V.PayDateEstFlag
+                ,   V.AnnouncedDate
+                ,   V.AnnDateEstFlag
+                ,   V.RecordDate
+                ,   V.RecDateEstFlag
+                ,   V.EffectiveDate
+                ,   V.EffDateEstFlag
+                ,   CASE R1.MIDRATE
+                        WHEN 0 THEN NULL
+                        ELSE ((V.DIVRATE / R1.MIDRATE) * R2.MIDRATE)
+                        END AS DivRate
+                    FROM
+                        dbo.Ds2Div V
+                        INNER JOIN (
+                                        SELECT InfoCode, IsoCurrCode
+                                        FROM dbo.Ds2ExchQtInfo
+                                                WHERE IsPrimExchQt='Y'
+                                                AND IsoCurrCode IS NOT NULL) X
+                            ON    V.INFOCODE = X.INFOCODE
+                        LEFT JOIN dbo.Ds2FxCode C1
+                            ON    C1.FROMCURRCODE = V.ISOCURRCODE
+                            AND    C1.TOCURRCODE = 'GBP'
+                            AND    C1.RATETYPECODE = 'SPOT'
+                        LEFT JOIN dbo.Ds2FxRate R1
+                            ON    R1.EXRATEINTCODE = C1.EXRATEINTCODE
+                            AND    R1.EXRATEDATE = (SELECT MAX(EXRATEDATE) FROM dbo.Ds2FxRate WHERE EXRATEINTCODE = R1.EXRATEINTCODE AND EXRATEDATE <= V.EFFECTIVEDATE)
+                        LEFT JOIN dbo.Ds2FxCode C2
+                            ON    C2.FROMCURRCODE = X.ISOCURRCODE
+                            AND    C2.TOCURRCODE = 'GBP'
+                            AND    C2.RATETYPECODE = 'SPOT'
+                        LEFT JOIN dbo.Ds2FxRate R2
+                            ON    R2.EXRATEINTCODE = C2.EXRATEINTCODE
+                            AND    R2.EXRATEDATE = (SELECT MAX(EXRATEDATE) FROM dbo.Ds2FxRate WHERE EXRATEINTCODE = R2.EXRATEINTCODE AND EXRATEDATE <= V.EFFECTIVEDATE)
+    share_holdings:
+        code_column: InfoCode
+        conditionals:
+        query: >
+                SELECT
+                    InfoCode
+                ,   ValDate as date
+                ,   FreeFloatPct
+                ,   GovtHeldPct
+                ,   EmplyHeldPct
+                ,   CmpyHeldPct
+                ,   PensionFundHeldPct
+                ,   InvstCmpHeldPct
+                ,   ForeignHeldPct
+                ,   OtherHeldPct
+                ,   StratHoldPct
+                ,   FreeFloatAltPct
+                FROM Ds2ShareHldgs

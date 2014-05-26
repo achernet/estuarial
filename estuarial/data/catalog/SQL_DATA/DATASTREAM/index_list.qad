@@ -1,0 +1,103 @@
+SQL:
+    index_list:
+        code_column: IndexListIntCode
+        query: >
+                SELECT
+                    IndexListIntCode
+                ,   IndexListMnem
+                ,   IndexListDesc
+                ,   ListStatusCode
+                FROM DS2IndexList
+
+    index_constituent_weights:
+        code_column: IndexListIntCode
+        conditionals:
+            IndexListIntCode: Datastream index int code
+            date: as-of date
+        query: >
+                SELECT
+                    IndexListIntCode
+                ,   InfoCode
+                ,   Date_ as date
+                ,   Weight
+                ,   Shares as IdxNumShares
+                FROM dbo.ds2constdatadly
+
+                 UNION ALL
+
+                 SELECT
+                    IndexListIntCode
+                 ,  InfoCode
+                 ,  dateadd( mm, 1, DateAdd(Day, 1, Date_ - Day(Date_) + 1)-1) AS date
+                 ,  Weight
+                 ,  Shares AS IdxNumShares
+                 FROM dbo.ds2constdatamth
+                    WHERE indexlistintcode NOT IN (SELECT DISTINCT indexlistintcode FROM dbo.ds2constdly)
+                 UNION
+				 SELECT
+				    IndexListIntCode
+                 ,  InfoCode
+                 ,  dateadd( mm, 1, DateAdd(Day, 1, Date_ - Day(Date_) + 1)-1) AS Date_
+                 ,  Weight
+                 ,  Shares AS IdxNumShares
+                 FROM dbo.ds2constdatamth m
+                    WHERE   indexlistintcode in (select distinct indexlistintcode from dbo.ds2constdly)
+                    AND     m.date_ < (SELECT MIN(date_)
+                                        FROM dbo.ds2constdatadly
+						                    WHERE indexlistintcode = m.indexlistintcode)
+    index_constituents:
+        code_column: IndexListIntCode
+        conditionals:
+            IndexListIntCode: Datastream index int code
+            StartDate:  StartDate is the first date the constituent appears in the index.
+            EndDate:    Last date the constituent appears in the index, or NULL if currently part of the index.
+            InfoCode:   Datastream security int identifier
+        query: >
+                SELECT DISTINCT info.InfoCode
+                ,   im_1.infocode AS PrimInfoCode
+                ,   im_1.isPrimQt
+                ,   const.StartDate
+                ,   const.EndDate
+                ,   const.IndexListIntCode
+                FROM dbo.ds2ctryqtinfo info
+                LEFT JOIN dbo.ds2constmth const
+                    ON info.infocode=const.infocode
+                JOIN dbo.ds2ctryqtinfo im_1
+                    ON (im_1.dscode=info.dscode
+                            AND (im_1.isPrimQt = 1 OR im_1.dscode IN (
+                                                                    SELECT dscode
+                                                                    FROM dbo.ds2ctryqtinfo
+                                                                    GROUP BY dscode HAVING COUNT(*) = 1))
+                                                                    )
+
+                UNION ALL
+
+                SELECT DISTINCT info.InfoCode
+                ,   im_1.InfoCode AS PrimInfoCode
+                ,   im_1.isPrimQt
+                ,   const.StartDate
+                ,   const.EndDate
+                ,   const.IndexListIntCode
+                FROM dbo.ds2ctryqtinfo info
+                LEFT JOIN dbo.ds2constmth const
+                    ON info.infocode=const.infocode
+                JOIN dbo.ds2ctryqtinfo im_1
+                    ON (im_1.dscode=info.dscode
+                            AND (im_1.isPrimQt = 1 OR im_1.dscode IN (
+                                                                    SELECT dscode
+                                                                    FROM dbo.ds2ctryqtinfo
+                                                                    GROUP BY dscode HAVING COUNT(*) = 1))
+                                                                    )
+    index_data:
+        code_column: IndexListIntCode
+        conditionals:
+            IndexListIntCode: Datastream index int code
+            Date: date of the pricing index value
+        query: >
+                SELECT
+                    DSIndexCode as IndexListIntCode
+                ,   ValueDate as date
+                ,   PI as PriceIndex
+                ,   RI as TotalReturnIndex
+                ,   MV as MarketValue
+                FROM Ds2IndexData
