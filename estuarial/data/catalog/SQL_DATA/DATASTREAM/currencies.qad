@@ -1,0 +1,30 @@
+SQL:
+    currency_list:
+        code_column: ISOCurrCode
+        conditionals:
+        query: >
+            SELECT DISTINCT
+                ISOCurrCode
+            FROM (
+                SELECT FromCurrCode AS ISOCurrCode
+                FROM dbo.Ds2FxCode
+                UNION
+                SELECT ToCurrCode as ISOCurrCode
+                FROM dbo.Ds2FxCode) x
+    currency_cross:
+        code_column: ISOCurrCode
+        conditionals:
+            ISOCurrCode: From currency code
+            ToCurrCode: Target currency code
+            date:   date of the historical exchange rate data.
+        query: >
+            SELECT
+                  FromCurrCode as ISOCurrCode
+            ,   ToCurrCode
+            ,   ExRateDate as date
+            ,   MidRate
+            ,   BidRate
+            ,   OfferRate
+            FROM Ds2FxCode c
+            INNER JOIN Ds2FxRate r
+                ON c.ExRateIntCode = r.ExRateIntCode
