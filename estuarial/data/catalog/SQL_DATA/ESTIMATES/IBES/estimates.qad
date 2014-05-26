@@ -1,0 +1,30 @@
+SQL:
+    qfs_adj_factor:
+        code_column: IbesCode
+        query: >
+                SELECT
+                    s1.codeas IbesCode,
+                    isnull(max(s2.exdate),'1960-01-01') as startdate,
+                    cast (s1.factor as float) as factor,
+                    s1.exdate as EndDate
+                FROM   (
+                          SELECT  S1.CODE, S1.EXDATE, 1/ EXP(SUM(LOG(S2.SPLITFACTOR))) AS FACTOR
+                          FROM    DBO.ibqSPL S1, DBO.ibqSPL S2
+                          WHERE   S1.CODE = S2.CODE
+                          AND   S1.EXDATE <= S2.EXDATE
+                          AND S2.SPLITFACTOR <> 0
+                          GROUP BY S1.CODE, S1.EXDATE
+                          ) S1
+                LEFT OUTER JOIN
+                          DBO.ibqSPL S2
+                    ON  S1.CODE = S2.CODE
+                    AND S1.EXDATE > S2.EXDATE
+                GROUP BY  S1.CODE, S1.EXDATE,S1.FACTOR
+                UNION ALL
+                SELECT
+                    code,
+                    max(exdate) as startdate,
+                    cast (1 as float) as factor,
+                    null as EndDate
+                FROM  DBO.ibqSPL
+                GROUP BY CODE

@@ -1,0 +1,34 @@
+SQL:
+    fundamentals:
+        code_column: WsCode
+        conditionals:
+            date: date
+            WsCode: worldscope code
+        query: >
+            SELECT
+                n.code as WsCode
+            ,   n.freq
+            ,   n.item
+            ,   isnull(n.date_, CAST(FLOOR(CAST(GETDATE() AS FLOAT)) AS smalldatetime)) as date_
+            ,   n.value_
+            ,   case when n.item in (9502,9402,20028,20128,20228,20328,20428,20528,20628,9202,9203,9205,9242,9243,9245,8217,9006,9007,9026,9005,9001,9016,9011,9021,8652,8372) then '%'
+                when n.item in (5474,5302,20020,20120,20220,20320,20420,20520,20620) then 'shares'
+                when n.item in (5480,5478,5510,5145,20025,20125,20225,20325,20425,20525,20625,5257,5255,20024,20124,20224,20324,20424,20524,20624,5190,5091,5092,5006,20021,20121,20221,20321,20421,20521,20621,5007,5008) then curr.isoused + '/share'
+                when n.item in (9803,9802,9342,9142,9143,9145,9343,9345,9302,20027,20127,20227,20327,20427,20527,20627,9602,9102,20026,20126,20226,20326,20426,20526,20626,9103,9105,5450,6103) then ''
+                when n.item in (7221,7211) then 'USD'
+                else curr.isoused end as units
+            ,   curr.isoused as currency_
+
+            FROM DBO.WSNDATA N
+            JOIN	DBO.WSITEM I
+                ON N.ITEM = I.NUMBER
+
+            JOIN	DBO.WSIDATA C
+                ON	C.CODE = N.CODE
+                AND C.ITEM = 6027
+                AND C.FREQ = 'C'
+
+            JOIN	DBO.WSCURR CURR
+                ON	CURR.NATCODE = C.VALUE_
+
+            WHERE N.ITEM IN (SELECT NUMBER FROM DBO.WSITEM WHERE FREQUENCY = 'C' AND TABLE_ = 'N' AND NUMBER NOT IN (11013, 11313, 11113) )
