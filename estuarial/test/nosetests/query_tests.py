@@ -1,15 +1,13 @@
 from nose.tools import assert_dict_equal
-
-import datetime as dt
-from estuarial.query.trqad import TRQAD
-from estuarial.query.raw_query import RAW_QUERY
 import pandas as pd
 import numpy as np
 import os
 import shutil
-from estuarial.drilldown.metadata import TRMETA
-from estuarial.browse.metrics_manager import MetricsManager
-from estuarial.browse.universe_builder import UniverseBuilder
+import datetime as dt
+
+from estuarial.query.trqad import TRQAD
+from estuarial.query.raw_query import RAW_QUERY
+
 
 qad = TRQAD()
 
@@ -37,7 +35,7 @@ def test_fundamentals():
     dt_list = [dt.datetime(2000,1,1), dt.datetime(2014,1,1)]
     metrics_list = [NI, CASH, TL]
     df = qad.fundamentals(universe,metrics_list,dt_list,DB="WORLDSCOPE")
-    df_sort = df.sort(['date','item'])
+    df_sort = df.sort(['date','item','seq'])
 
     locFirst = \
         {'date': pd.Timestamp('2000-06-30 00:00:00', tz=None),
@@ -53,12 +51,12 @@ def test_fundamentals():
 
     locLast = \
         {'date': pd.Timestamp('2013-12-31 00:00:00', tz=None),
-         'ddate': pd.Timestamp('2013-09-30 00:00:00', tz=None),
+         'ddate': pd.Timestamp('2013-12-31 00:00:00', tz=None),
          'freq': 'Q',
          'item': 3351,
          'seccode': 36799,
-         'seq': 3,
-         'value_': 94155000000.0,
+         'seq': 4,
+         'value_': 100243000000.0,
          'year_': 2013}
 
     assert_dict_equal(locLast,df_sort.iloc[-1].to_dict())
@@ -66,7 +64,7 @@ def test_fundamentals():
     df = qad.fundamentals(universe,metrics_list,dt_list,DB="WORLDSCOPE",
                           align=True)
 
-    df_sort = df.sort(['date','item'])
+    df_sort = df.sort(['date','item','seq'])
 
     locFirst = \
         {'date': pd.Timestamp('2000-06-30 00:00:00', tz=None),
@@ -84,12 +82,12 @@ def test_fundamentals():
 
     locLast = \
         {'date': pd.Timestamp('2013-12-31 00:00:00', tz=None),
-         'ddate': pd.Timestamp('2013-09-30 00:00:00', tz=None),
+         'ddate': pd.Timestamp('2013-12-31 00:00:00', tz=None),
          'freq': 'Q',
          'item': 3351,
          'seccode': 36799,
-         'seq': 3,
-         'value_': 94155000000.0,
+         'seq': 4,
+         'value_': 100243000000.0,
          'year_': 2013}
 
     assert_dict_equal(locLast,df_sort.iloc[-1].to_dict())
