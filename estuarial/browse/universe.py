@@ -49,8 +49,9 @@ if __name__ == "__main__":
     spx = UniverseBuilder.spx_idx('2013-12-04')
     df =  spx.data
     spx.data = df[df.name.str.contains("Machine")]
-    # spx.ohlc['2009-01-01':'2014-01-01']
     print(spx.cash['2013-01-01':'2014-01-01'].head())
-    print(spx.ni['2012-01-01':'2014-01-01'].head())
+    print(spx.ni['2009-01-01':'2010-01-01'].head())
+    print(spx.ohlc['2009-01-01':'2010-01-01'])
+
 
 
